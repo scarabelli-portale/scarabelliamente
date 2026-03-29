@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCHIVIO SILVESTRINI - Sergio Silvestrini</title>
+    <style>
+        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; line-height: 1.4; }
+        .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 280px; overflow: hidden; border-bottom: 5px solid #0056b3; }
+        .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+        #scritta-animata { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 2.2rem; font-weight: 900; color: #ffffff; text-shadow: 2px 2px 10px rgba(0,0,0,1); text-transform: uppercase; letter-spacing: 4px; white-space: nowrap; z-index: 10; }
+        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .btn-home-container { text-align: center; margin: 20px 0; }
+        .btn-home { background: #0056b3; color: white; padding: 10px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; transition: 0.3s; }
+        .box-articolo { background: white; border: 3px solid #0056b3; padding: 25px; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; }
+        h1 { color: #0056b3; font-size: 1.8rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        .galleria-foto { display: flex; flex-wrap: wrap; gap: 15px; margin: 20px 0; justify-content: center; }
+        .foto-item { width: 250px; height: 180px; object-fit: cover; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+        #overlay-foto { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 40, 80, 0.9); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; cursor: zoom-out; }
+        #foto-ingrandita { max-width: 90%; max-height: 85%; border: 5px solid white; border-radius: 4px; }
+        .titolo-sezione { border-bottom: 2px solid #0056b3; color: #0056b3; font-size: 1.2rem; text-transform: uppercase; margin-top: 40px; padding-bottom: 5px; }
+        .griglia-archivio { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; padding-bottom: 40px; }
+        .card-archivio { background: white; border: 1px solid #ddd; padding: 12px; cursor: pointer; text-align: center; border-radius: 8px; transition: 0.3s; }
+        .img-miniatura { width: 100%; height: 140px; object-fit: cover; background-color: #f9f9f9; border-radius: 4px; }
+        @media (max-width: 850px) { .copertina-container { height: 150px; } #scritta-animata { font-size: 1.2rem; } }
+    </style>
+</head>
+<body>
+    <div id="overlay-foto" onclick="this.style.display='none'">
+        <img id="foto-ingrandita" src="">
+    </div>
+
+    <div class="copertina-container">
+        <img src="immagini/_scuola.JPG" class="foto-scuola">
+        <div id="scritta-animata"></div> 
+    </div>
+
+    <div class="btn-home-container">
+        <a href="index.html" class="btn-home">← TORNA ALLA HOME</a>
+    </div>
+
+    <div class="main-container">
+        <div style="text-align: center; background: white; padding: 15px; border-radius: 12px; border: 3px solid #0056b3; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); max-width: 300px; margin-left: auto; margin-right: auto;">
+    <img src="immagini/sergio.jpg" style="width: 75px; height: 100px; object-fit: cover; border: 2px solid #0056b3; border-radius: 8px; margin-bottom: 5px;" onerror="this.src='immagini/_scuola.jpg'">
+    <h3 style="color: #0056b3; margin: 0; text-transform: uppercase; font-size: 1rem;">Sergio Silvestrini</h3>
+    <p style="font-style: italic; color: #666; font-size: 0.8rem; margin: 2px 0;">Curatore dell'Archivio Storico</p>
+</div>
+
+        <div id="articolo-protagonista"><p style="text-align:center; padding: 50px;">Caricamento documenti in corso...</p></div>
+        <h2 class="titolo-sezione">📜 ALTRI DOCUMENTI IN ARCHIVIO</h2>
+        <div id="lista-archivio" class="griglia-archivio"></div>
+    </div>
+        </div>
+        <h2 class="titolo-sezione">📜 ALTRI DOCUMENTI IN ARCHIVIO</h2>
+        <div id="lista-archivio" class="griglia-archivio"></div>
+    </div><script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9enZdjEVxZLic",
+            authDomain: "sito-sergio-b19ce.firebaseapp.com",
+            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "sito-sergio-b19ce",
+            storageBucket: "sito-sergio-b19ce.firebasestorage.app",
+            messagingSenderId: "194311505630",
+            appId: "1:194311505630:web:ceb9aead0f020c3697a44f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const archivioRef = ref(db, 'archivioSergio');
+
+        // FUNZIONE DIAGNOSTICA: Se la foto non si vede, stampa l'errore in console
+        function aggiustaLink(url) {
+            if(!url) return "";
+            // Prende solo il nome finale del file (es: miafoto.jpg)
+            let nomeFile = url.split('/').pop().trim();
+            return "immagini/" + nomeFile;
+        }
+
+        window.apriZoom = function(src) {
+            document.getElementById('foto-ingrandita').src = src;
+            document.getElementById('overlay-foto').style.display = 'flex';
+        };
+
+        let articoliGlobali = [];
+
+        window.leggiArticolo = function(index) {
+            const art = articoliGlobali[index];
+            if(!art) return;
+            const container = document.getElementById("articolo-protagonista");
+            let galleriaHtml = '<div class="galleria-foto">';
+            
+            if (art.foto) {
+                const elenco = art.foto.split(",");
+                elenco.forEach(f => {
+                    const urlFoto = aggiustaLink(f);
+                    // Se la foto fallisce, mostriamo un bordo rosso per capire che il file manca
+                    galleriaHtml += `<img src="${urlFoto}" class="foto-item" onclick="apriZoom('${urlFoto}')" onerror="this.style.border='3px solid red'; console.log('Errore caricamento:', this.src);">`;
+                });
+            }
+            galleriaHtml += '</div>';
+
+            container.innerHTML = `
+                <div class="box-articolo">
+                    <h1>${art.titolo}</h1>
+                    <div style="font-style: italic;">Curato da: ${art.autore || 'Sergio Silvestrini'}</div>
+                    ${galleriaHtml}
+                    <div style="font-size:1.1rem; text-align:justify; white-space:pre-wrap; margin-top:15px;">${art.testo}</div>
+                </div>`;
+        };
+
+        onValue(archivioRef, (snapshot) => {
+            const data = snapshot.val();
+            const gridContainer = document.getElementById("lista-archivio");
+            if (data) {
+                articoliGlobali = Object.values(data).reverse();
+                leggiArticolo(0);
+                gridContainer.innerHTML = "";
+                articoliGlobali.forEach((art, index) => {
+                    const primaFoto = art.foto ? aggiustaLink(art.foto.split(",")[0]) : "";
+                    gridContainer.innerHTML += `
+                        <div class="card-archivio" onclick="leggiArticolo(${index})">
+                            <img src="${primaFoto}" class="img-miniatura" onerror="this.src='immagini/_scuola.JPG'">
+                            <h3 style="font-size:0.9rem;">${art.titolo}</h3>
+                        </div>`;
+                });
+            }
+        });
+
+        // Animazione Titolo
+        const testoScritta = "ARCHIVIO SILVESTRINI";
+        let j = 0;
+        function animaTitolo() {
+            if (j < testoScritta.length) {
+                document.getElementById("scritta-animata").innerHTML += testoScritta.charAt(j);
+                j++;
+                setTimeout(animaTitolo, 100);
+            }
+        }
+        window.onload = animaTitolo;
+    </script>
+
+    
