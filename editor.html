@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Pubblica il tuo articolo - Scarabellianamente</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .admin-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 650px; width: 100%; border-top: 6px solid #e67e22; }
+        .header-editor { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; color: #444; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        select { background-color: #fffaf0; border: 2px solid #e67e22; font-weight: bold; color: #d35400; }
+        textarea { height: 160px; resize: vertical; }
+        .btn-pubblica { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.1rem; margin-top: 10px; }
+        .btn-modifica { width: 100%; padding: 15px; background: #2980b9; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: none; margin-top: 10px; }
+        .btn-annulla { width: 100%; padding: 10px; background: #95a5a6; color: white; border: none; border-radius: 6px; cursor: pointer; display: none; margin-top: 10px; }
+        .item-articolo { background: white; padding: 12px; margin-top: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #3498db; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-azione { padding: 6px 10px; border: none; border-radius: 4px; color: white; cursor: pointer; margin-left: 4px; font-size: 0.8rem; }
+        #messaggio { display:none; text-align:center; color:#27ae60; font-weight:bold; margin-top:10px; padding:10px; background:#e8f5e9; border-radius:4px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-card">
+    <div class="header-editor">
+        <span style="font-weight: bold; color: #e67e22;">✍️ PUBBLICA IL TUO ARTICOLO</span>
+        <a href="index.html" style="color: #7f8c8d; text-decoration: none; font-size: 0.8rem;">Esci / Home</a>
+    </div>
+
+    <div class="form-group">
+        <label>Scegli il tuo Archivio:</label>
+        <select id="destinazione" onchange="cambiaArchivio()">
+            <option value="archivioSergio">📁 Archivio di Sergio</option>
+            <option value="archivioMariani">🏛️ Archivio di Francesco</option>
+            <option value="archivioFausto">✍️ Archivio di Fausto</option>
+            <option value="archivioCinzia">🌸 Archivio di Cinzia</option>
+            <option value="archivioCarlo">📷 Archivio di Carlo</option>
+        </select>
+    </div>
+
+    <div class="form-group"><input type="text" id="titolo" placeholder="Titolo del tuo ricordo..."></div>
+    <div class="form-group"><textarea id="testo" placeholder="Scrivi qui il contenuto dell'articolo..."></textarea></div>
+    <div class="form-group"><label>Foto (nomi file separati da virgola):</label><input type="text" id="linkFoto" placeholder="Es: foto1.jpg, foto2.jpg"></div>
+
+    <button id="btn-pubblica" class="btn-pubblica" onclick="pubblica()">🚀 PUBBLICA ORA</button>
+    <button id="btn-modifica" class="btn-modifica" onclick="salvaModifica()">💾 SALVA MODIFICHE</button>
+    <button id="btn-annulla" class="btn-annulla" onclick="annullaModifica()">❌ ANNULLA</button>
+
+    <div id="messaggio">✅ Articolo caricato con successo!</div>
+</div>
+
+<div id="tuoi-articoli" style="width: 100%; max-width: 650px; margin-top: 20px;"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9enZdjEVxZLic",
+        authDomain: "sito-sergio-b19ce.firebaseapp.com",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "sito-sergio-b19ce",
+        storageBucket: "sito-sergio-b19ce.firebasestorage.app",
+        messagingSenderId: "194311505630",
+        appId: "1:194311505630:web:ceb9aead0f020c3697a44f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    if (sessionStorage.getItem("accesso_redazione") !== "ok") {
+        window.location.href = "login.html";
+    }
+
+    const provenienza = document.referrer;
+    if (provenienza.includes("mariani.html")) {
+        document.getElementById('destinazione').value = "archivioMariani";
+    }
+
+    let currentPath = document.getElementById('destinazione').value;
+    let articoloInModificaId = null;
+
+    const mappaAutori = {
+        "archivioSergio": "Sergio Silvestrini",
+        "archivioMariani": "Francesco Mariani",
+        "archivioFausto": "Fausto",
+        "archivioCinzia": "Cinzia",
+        "archivioCarlo": "Carlo"
+    };
+
+    function pulisciLink(valore) {
+        if(!valore) return "";
+        return valore.split(",").map(f => {
+            let t = f.trim();
+            if(!t) return "";
+            return (t.startsWith('http') || t.startsWith('immagini/')) ? t : "immagini/" + t;
+        }).join(",");
+    }
+
+    window.cambiaArchivio = function() {
+        currentPath = document.getElementById('destinazione').value;
+        caricaLista();
+    }
+
+    window.pubblica = function() {
+        const t = document.getElementById('titolo').value;
+        const txt = document.getElementById('testo').value;
+        const f = pulisciLink(document.getElementById('linkFoto').value);
+        if(!t || !txt) return alert("Inserisci titolo e testo!");
+        
+        push(ref(db, currentPath), { 
+            titolo: t, testo: txt, foto: f, 
+            data: new Date().toLocaleDateString('it-IT', {day:'2-digit', month:'long', year:'numeric'}), 
+            autore: mappaAutori[currentPath] 
+        }).then(() => { annullaModifica(); mostraMessaggio(); });
+    }
+
+    window.preparaModifica = function(id) {
+        articoloInModificaId = id;
+        onValue(ref(db, currentPath + '/' + id), (snap) => {
+            const data = snap.val();
+            document.getElementById('titolo').value = data.titolo;
+            document.getElementById('testo').value = data.testo;
+            document.getElementById('linkFoto').value = data.foto ? data.foto.replace(/immagini\//g, "") : "";
+            document.getElementById('btn-pubblica').style.display = "none";
+            document.getElementById('btn-modifica').style.display = "block";
+            document.getElementById('btn-annulla').style.display = "block";
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }, {onlyOnce: true});
+    }
+
+    window.salvaModifica = function() {
+        update(ref(db, currentPath + '/' + articoloInModificaId), {
+            titolo: document.getElementById('titolo').value,
+            testo: document.getElementById('testo').value,
+            foto: pulisciLink(document.getElementById('linkFoto').value)
+        }).then(() => { annullaModifica(); mostraMessaggio(); });
+    }
+
+    window.annullaModifica = function() {
+        articoloInModificaId = null;
+        document.getElementById('titolo').value = ""; document.getElementById('testo').value = ""; document.getElementById('linkFoto').value = "";
+        document.getElementById('btn-pubblica').style.display = "block";
+        document.getElementById('btn-modifica').style.display = "none";
+        document.getElementById('btn-annulla').style.display = "none";
+    }
+
+    window.eliminaArticolo = function(id) { 
+        if(confirm("Vuoi eliminare questo articolo?")) remove(ref(db, currentPath + '/' + id)); 
+    }
+
+    function mostraMessaggio() {
+        document.getElementById('messaggio').style.display="block";
+        setTimeout(()=> document.getElementById('messaggio').style.display="none", 2000);
+    }
+
+    function caricaLista() {
+        onValue(ref(db, currentPath), (snap) => {
+            const container = document.getElementById('tuoi-articoli');
+            container.innerHTML = `<p style='text-align:center; font-size:0.8rem; color:#666;'>Articoli nell'archivio di: <b>${mappaAutori[currentPath]}</b></p>`;
+            const data = snap.val();
+            if(data) Object.keys(data).reverse().forEach(id => {
+                container.innerHTML += `
+                    <div class="item-articolo">
+                        <span style="font-size:0.9rem;">${data[id].titolo}</span>
+                        <div>
+                            <button class="btn-azione" style="background:#3498db" onclick="preparaModifica('${id}')">Modifica</button>
+                            <button class="btn-azione" style="background:#e74c3c" onclick="eliminaArticolo('${id}')">Cancella</button>
+                        </div>
+                    </div>`;
+            });
+        });
+    }
+    caricaLista();
+</script>
+</body>
+</html>

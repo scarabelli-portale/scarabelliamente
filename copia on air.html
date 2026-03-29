@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCARABELLIANAMENTE</title>
+    <style>
+        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; line-height: 1.4; }
+        
+        .copertina-container { 
+            position: relative; width: 100%; max-width: 1300px; margin: 0 auto; 
+            height: 280px; overflow: hidden; border-bottom: 5px solid #0056b3;
+        }
+        .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+
+        #scritta-fiori { 
+            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            font-size: 2.2rem; font-weight: 900; color: #ffffff; 
+            text-shadow: 2px 2px 10px rgba(0,0,0,1); text-transform: uppercase;
+            letter-spacing: 4px; white-space: nowrap; z-index: 10;
+        }
+
+        .main-container { 
+            max-width: 1300px; margin: 15px auto; display: flex; flex-wrap: wrap; gap: 15px; padding: 0 10px;
+        }
+        
+        .colonna-lato { flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 15px; }
+        .colonna-centro { flex: 1.8; min-width: 300px; display: flex; flex-direction: column; gap: 15px; }
+
+        .box { background: white; border: 1px solid #ddd; padding: 15px; text-align: center; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+        .box-speciale { border: 2px solid #0056b3; background: #fffdf5; }
+
+        .foto-zoom { 
+            object-fit: cover; border: 1.5px solid #0056b3; margin-bottom: 8px; 
+            transition: all 0.4s ease; cursor: zoom-in; position: relative; z-index: 1;
+        }
+        .foto-zoom:hover { transform: scale(2.2); z-index: 999; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+        .foto-profilo { width: 75px; height: 105px; }
+        .foto-libro { width: 110px; height: auto; border: 1px solid #666; margin: 10px 0; }
+
+        h4 { color: #0056b3; margin: 5px 0; font-size: 0.9rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .testo-presentazione { font-size: 0.85rem; color: #333; text-align: justify; margin: 10px 0; line-height: 1.5; }
+        
+        .area-comandi { margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px; }
+        .btn-mini { display: inline-block; padding: 5px 12px; margin: 2px; text-decoration: none; border-radius: 3px; font-size: 0.7rem; font-weight: bold; color: white; }
+        .bg-giallo { background: #f1c40f; color: black; }
+        
+        /* STILE PULSANTE WHATSAPP */
+        .btn-wz-gruppo {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            padding: 8px 15px;
+            margin-top: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-wz-gruppo:hover { background: #128C7E; transform: scale(1.05); }
+
+        .btn-archivio { display: block; background: #0056b3; color: white; padding: 10px; margin: 10px 0; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.8rem; }
+        .bg-meteo { background: #007bff; color: white; margin-bottom: 10px; display: block; padding: 8px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; font-weight: bold; }
+
+        @media (max-width: 850px) {
+            .main-container { flex-direction: column; }
+            .colonna-centro { order: -1; }
+            .copertina-container { height: 180px; }
+            #scritta-fiori { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="copertina-container">
+        <img src="_scuola.JPG" class="foto-scuola">
+        <div id="scritta-fiori"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="colonna-lato">
+            <div class="box">
+                <img src="ravaldi.jpg" class="foto-profilo foto-zoom">
+                <h4>METEO AGRARIO</h4>
+                <div class="testo-presentazione">Il monitoraggio climatico è la base della moderna agronomia. Fausto Ravaldi analizza i dati locali per il territorio imolese.</div>
+                <a href="https://www.meteoblue.com/it/tempo/settimana/imola_italia_3175402" target="_blank" class="bg-meteo">☀️ METEO DI IMOLA</a>
+                <p><strong>F. Ravaldi</strong></p>
+                <div class="area-comandi"><a href="mailto:posta@scarabellianamente.it" class="btn-mini bg-giallo">✎ SCRIVI</a></div>
+            </div>
+            
+            <div class="box">
+                <img src="Matilde.JPG" class="foto-profilo foto-zoom">
+                <h4>NUOVE RADICI</h4>
+                <div class="testo-presentazione">Uno spazio dedicato al futuro: Matilde raccoglie le voci dei giovani diplomati e degli studenti di oggi.</div>
+                <p><strong>Matilde</strong></p>
+                <div class="area-comandi"><a href="mailto:posta@scarabellianamente.it" class="btn-mini bg-giallo">✎ SCRIVI</a></div>
+            </div>
+        </div>
+
+        <div class="colonna-centro">
+            <div class="box box-speciale">
+                <img src="mariani.jpg" class="foto-profilo foto-zoom" style="width: 90px; height: 125px;">
+                <h4>EDITORIALE DEL DIRETTORE</h4>
+                <div class="testo-presentazione">
+                    <strong>Dallo Scarabelli al Ministero:</strong> Francesco Mariani presenta il percorso di Giuliano Poletti. Una riflessione sulla formazione agraria come scuola di vita.
+                </div>
+                <img src="poletti.jpg" class="foto-libro foto-zoom" alt="Libro Poletti">
+                <p><strong>F. Mariani</strong></p>
+                <div class="area-comandi">
+                    <a href="mariani.html" class="btn-mini bg-giallo">📖 LEGGI L'EDITORIALE</a>
+                    <br>
+                    <a href="https://api.whatsapp.com/send?text=Guarda%20il%20nuovo%20servizio%20su%20Mariani%20e%20Poletti%20nel%20gruppo%20LUOGHI%20SCARABELLI:%20mariani.html" 
+                       target="_blank" 
+                       class="btn-wz-gruppo">
+                       📲 CONDIVIDI SU "LUOGHI SCARABELLI"
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="colonna-lato">
+            <div class="box">
+                <img src="Carlo Pirazzoli.jpg" class="foto-profilo foto-zoom">
+                <h4>ECONOMIA & PAC</h4>
+                <div class="testo-presentazione">Carlo Pirazzoli offre una bussola per orientarsi nei complessi mercati agricoli europei e nelle strategie economiche.</div>
+                <p><strong>C. Pirazzoli</strong></p>
+                <div class="area-comandi"><a href="mailto:posta@scarabellianamente.it" class="btn-mini bg-giallo">✎ SCRIVI</a></div>
+            </div>
+
+            <div class="box">
+                <img src="sergio.jpg" class="foto-profilo foto-zoom">
+                <h4>ARCHIVIO STORICO</h4>
+                <div class="testo-presentazione">Sergio Silvestrini cura la digitalizzazione del patrimonio iconografico. Foto e documenti della nostra comunità.</div>
+                <a href="sergio.html" class="btn-archivio">🎬 ENTRA NELL'ARCHIVIO VIDEO</a>
+                <p><strong>S. Silvestrini</strong></p>
+                <div class="area-comandi"><a href="mailto:posta@scarabellianamente.it" class="btn-mini bg-giallo">✎ SCRIVI</a></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const testo = "SCARABELLIANAMENTE";
+        const target = document.getElementById("scritta-fiori");
+        let i = 0;
+        function scrivi() {
+            if (i < testo.length) {
+                target.innerHTML += testo.charAt(i);
+                i++;
+                setTimeout(scrivi, 130);
+            }
+        }
+        window.onload = scrivi;
+    </script>
+</body>
+</html>
