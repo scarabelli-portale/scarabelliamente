@@ -6,123 +6,77 @@
     <title>SCARABELLIANAMENTE - Home Page</title>
     <style>
         body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; line-height: 1.4; }
-        
-        /* TESTATA FISSA COME UN MONUMENTO */
         .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 280px; overflow: hidden; border-bottom: 5px solid #0056b3; }
         .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
         #scritta-fiori { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 2.2rem; font-weight: 900; color: #ffffff; text-shadow: 2px 2px 10px rgba(0,0,0,1); text-transform: uppercase; letter-spacing: 4px; white-space: nowrap; z-index: 10; min-height: 40px; }
-        
-        .main-container { max-width: 1300px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 20px; padding: 0 15px; }
-        .colonna-lato { flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 20px; }
-        .colonna-centro { flex: 1.8; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
-        
-        /* BOX CLICCABILI */
-        .box { background: white; border: 1px solid #ddd; padding: 20px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; border-bottom: 4px solid #ddd; }
-        .box:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); border-bottom-color: #0056b3; }
-        
-        .box-speciale { border: 3px solid #0056b3; background: #fffdf5; position: relative; border-bottom: 6px solid #0056b3; }
-        .label-presidente { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0056b3; color: white; padding: 4px 20px; font-size: 0.75rem; font-weight: bold; border-radius: 20px; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        
-        .foto-profilo { width: 85px; height: 115px; object-fit: cover; border: 2px solid #0056b3; border-radius: 8px; margin-bottom: 10px; }
-        .foto-direttore { width: 110px; height: 150px; margin-top: 15px; }
-        .foto-zoom { object-fit: cover; border: 1.5px solid #0056b3; margin-top: 10px; transition: all 0.4s ease; cursor: zoom-in; border-radius: 4px; }
-        .foto-zoom:hover { transform: scale(2.2); z-index: 999; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        h4 { color: #0056b3; margin: 10px 0; font-size: 1rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-        .testo-presentazione { font-size: 0.9rem; color: #444; text-align: center; margin: 12px 0; line-height: 1.5; font-style: italic; }
-        
-        /* PULSANTI */
-        .btn-entra { display: block; color: white; padding: 10px; margin: 15px 0 5px 0; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
-        .btn-entra:hover { opacity: 0.9; letter-spacing: 1px; }
-        .bg-blue { background: #0056b3; }
-        .bg-green { background: #27ae60; }
-        .bg-orange { background: #e67e22; }
-        .bg-dark { background: #2c3e50; }
-        
-        footer { margin-top: 50px; padding: 30px; background: #2c3e50; color: white; text-align: center; font-size: 0.9rem; border-top: 5px solid #0056b3; }
-
-        @media (max-width: 850px) { .main-container { flex-direction: column; } .colonna-centro { order: -1; } .copertina-container { height: 160px; } #scritta-fiori { font-size: 1.3rem; } }
+        .main-container { max-width: 1200px; margin: 20px auto; padding: 20px; text-align: center; }
+        .grid-archivi { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .box { background: white; border: 1px solid #ddd; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
+        .box:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .foto-profilo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #0056b3; }
+        .btn-entra { display: inline-block; margin-top: 15px; padding: 10px 20px; color: white; border-radius: 5px; font-weight: bold; text-decoration: none; }
+        .bg-blue { background-color: #0056b3; }
+        .bg-orange { background-color: #e67e22; }
+        .bg-green { background-color: #27ae60; }
+        footer { margin-top: 50px; padding: 20px; background: #333; color: white; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <div class="copertina-container">
-        <img src="immagini/scuola.jpg" class="foto-scuola">
+        <img src="immagini/scuola.jpg" class="foto-scuola" alt="Scuola Scarabelli">
         <div id="scritta-fiori"></div>
     </div>
 
     <div class="main-container">
-        
-        <div class="colonna-lato">
-            <div class="box" onclick="location.href='fausto.html'">
-                <img src="immagini/fausto.jpg" class="foto-profilo">
-                <h4>OSSERVATORIO METEO</h4>
-                <div style="margin: 10px 0; border: 2px solid #2c3e50; border-radius: 8px; overflow: hidden; background: #000; height: 140px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
-                    <img src="immagini/satellite.gif" style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="btn-entra bg-dark"> ENTRA DA FAUSTO</div>
-                <p style="margin: 5px 0; font-size: 0.8rem;"><strong>FAUSTO RAVALDI</strong></p>
-            </div>
-            
-            <div class="box" onclick="location.href='cinzia.html'">
-                <img src="immagini/cinzia.jpg" class="foto-profilo">
-                <h4>DIDATTICA & LAVORO</h4>
-                <div class="testo-presentazione">"Approfondimenti sulla storia e l'evoluzione dell'Istituto Scarabelli."</div>
-                <div class="btn-entra bg-green"> ENTRA DA CINZIA</div>
-                <p style="margin: 5px 0; font-size: 0.8rem;"><strong>CINZIA</strong></p>
-            </div>
-        </div>
+        <h1>BENVENUTI NELL'ARCHIVIO DIGITALE</h1>
+        <p>Scegli il settore che vuoi esplorare:</p>
 
-        <div class="colonna-centro">
-            <div class="box box-speciale" onclick="location.href='francesco.html'">
-                <div class="label-presidente">Presidente Francesco Mariani</div>
-                <img src="immagini/francesco.jpg" class="foto-profilo foto-direttore">
-                <h4>EDITORIALE</h4>
-                <div class="testo-presentazione" style="font-size: 1.1rem;">"Digitalizziamo il passato per rendere fertile il futuro dei nostri giovani."</div>
-                <img src="immagini/poletti.jpg" style="width: 120px;" class="foto-zoom">
-                <div class="btn-entra bg-blue"> LEGGI L'EDITORIALE</div>
-                <p style="margin: 5px 0; font-size: 0.8rem;"><strong>FRANCESCO</strong></p>
-            </div>
-        </div>
-
-        <div class="colonna-lato">
-            <div class="box" onclick="location.href='carlo.html'">
-                <img src="immagini/carlo.jpg" class="foto-profilo">
-                <h4>ECONOMIA & MERCATI</h4>
-                <div style="background: #1a1a1a; color: #00ff00; padding: 8px; margin: 10px 0; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.75rem; border: 1px solid #333;">
-                    <marquee scrollamount="3"> FRUMENTO: 215.50 --- MAIS: 185.20 --- EURO/USD: 1.08</marquee>
-                </div>
-                <div class="btn-entra bg-orange"> ENTRA DA CARLO</div>
-                <p style="margin: 5px 0; font-size: 0.8rem;"><strong>CARLO</strong></p>
-            </div>
-
-          <div class="box" onclick="location.href='sergio/sergio.html'">
+        <div class="grid-archivi">
+            <div class="box" onclick="location.href='sergio/sergio.html'">
                 <img src="immagini/sergio.jpg" class="foto-profilo">
                 <h4>ARCHIVIO STORICO</h4>
-                <div class="testo-presentazione">"Digitalizzazione del patrimonio iconografico della nostra comunità."</div>
-                <div class="btn-entra bg-blue"> ENTRA DA SERGIO</div>
-                <p style="margin: 5px 0; font-size: 0.8rem;"><strong>SERGIO SILVESTRINI</strong></p>
+                <div class="btn-entra bg-blue">ENTRA DA SERGIO</div>
+                <p><strong>SERGIO SILVESTRINI</strong></p>
+            </div>
+
+            <div class="box" onclick="location.href='carlo/carlo.html'">
+                <img src="immagini/carlo.jpg" class="foto-profilo">
+                <h4>METEO & DATI</h4>
+                <div class="btn-entra bg-orange">ENTRA DA CARLO</div>
+                <p><strong>CARLO</strong></p>
+            </div>
+
+            <div class="box" onclick="location.href='cinzia/cinzia.html'">
+                <img src="immagini/cinzia.jpg" class="foto-profilo">
+                <h4>LAVORO E SCUOLA</h4>
+                <div class="btn-entra bg-green">ENTRA DA CINZIA</div>
+                <p><strong>CINZIA</strong></p>
+            </div>
+
+            <div class="box" onclick="location.href='fausto/fausto.html'">
+                <img src="immagini/fausto.jpg" class="foto-profilo">
+                <h4>NOTIZIE E METEO</h4>
+                <div class="btn-entra bg-blue">ENTRA DA FAUSTO</div>
+                <p><strong>FAUSTO RAVALDI</strong></p>
             </div>
         </div>
-
     </div>
 
     <footer>
-        <p>© 2026 Progetto Scarabellianamente - Sergio Silvestrini</p>
-        <p style="font-size: 0.7rem; opacity: 0.6; margin-top: 10px;">Tutelato dall'Art. 21 della Costituzione Italiana</p>
+        <p>� 2026 Progetto Scarabellianamente - Sergio Silvestrini</p>
     </footer>
 
     <script>
-        // EFFETTO SCRITTURA TITOLO (Unica funzione rimasta)
         const testo = "SCARABELLIANAMENTE";
         const target = document.getElementById("scritta-fiori");
         let i = 0;
-        function scrivi() { 
-            if (target && i < testo.length) { 
-                target.innerHTML += testo.charAt(i); 
-                i++; 
-                setTimeout(scrivi, 130); 
-            } 
+        function scrivi() {
+            if (i < testo.length) {
+                target.innerHTML += testo.charAt(i);
+                i++;
+                setTimeout(scrivi, 150);
+            }
         }
         window.onload = scrivi;
     </script>
