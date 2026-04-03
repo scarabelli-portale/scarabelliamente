@@ -3,33 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIDATTICA - Cinzia</title>
+    <title>ARCHIVIO SCARABELLI - Cinzia</title>
     <style>
-        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; line-height: 1.4; }
-        .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 280px; overflow: hidden; border-bottom: 5px solid #0056b3; }
-        .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
-        #scritta-animata { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 2.2rem; font-weight: 900; color: #ffffff; text-shadow: 2px 2px 10px rgba(0,0,0,1); text-transform: uppercase; letter-spacing: 4px; white-space: nowrap; z-index: 10; }
-        .main-container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .box-profilo { text-align: center; background: white; padding: 15px; border-radius: 12px; border: 3px solid #0056b3; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); max-width: 250px; margin-left: auto; margin-right: auto; }
-        .foto-profilo { width: 75px; height: 100px; object-fit: cover; border: 2px solid #0056b3; border-radius: 8px; }
-        .box-articolo { background: white; border: 3px solid #0056b3; padding: 25px; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        h1 { color: #0056b3; font-size: 1.8rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
+        
+        /* TESTATA UNIFORMATA - Ridotta per far stare la scritta */
+        .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 230px; overflow: hidden; border-bottom: 5px solid #0056b3; }
+        .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+        
+        /* Scritta rimpicciolita per non uscire dai bordi */
+        #scritta-animata { 
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            font-size: 1.5rem; font-weight: 900; color: #ffffff; 
+            text-shadow: 2px 2px 10px rgba(0,0,0,1); text-transform: uppercase; 
+            letter-spacing: 2px; white-space: nowrap; z-index: 10; 
+        }
+        
+        /* NAV-BAR MODELLO FAUSTO */
+        .nav-bar { 
+            max-width: 900px; 
+            margin: 15px auto; 
+            display: flex; 
+            align-items: center; 
+            background: white; 
+            padding: 0 20px; 
+            border-radius: 50px; 
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: relative; 
+            height: 50px; 
+        }
+        .identita-redattore { display: flex; align-items: center; gap: 10px; z-index: 1; }
+        .foto-redattore-mini { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #0056b3; object-fit: cover; }
+        .nome-redattore { font-size: 0.8rem; font-weight: bold; color: #0056b3; text-transform: uppercase; letter-spacing: 1px; }
+
+        .btn-home { 
+            position: absolute; left: 50%; transform: translateX(-50%);
+            background: #0056b3; color: white; padding: 5px 15px; 
+            text-decoration: none; border-radius: 20px; 
+            font-weight: bold; font-size: 0.7rem; text-transform: uppercase;
+            transition: 0.3s; white-space: nowrap;
+        }
+        .btn-home:hover { background: #2c3e50; transform: translateX(-50%) scale(1.05); }
+
+        /* ARTICOLI */
+        .main-container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
+        .box-articolo { background: white; border: 1px solid #ddd; border-left: 6px solid #0056b3; padding: 25px; border-radius: 8px; margin-bottom: 25px; }
+        h1 { color: #0056b3; font-size: 1.7rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+        @media (max-width: 850px) { .copertina-container { height: 160px; } #scritta-animata { font-size: 0.9rem; } .nome-redattore { display: none; } }
     </style>
 </head>
 <body>
+
     <div class="copertina-container">
-        <img src="immagini/_scuola.jpg" class="foto-scuola">
+        <img src="immagini/scuola.jpg" class="foto-scuola">
         <div id="scritta-animata"></div> 
     </div>
 
-    <div style="text-align: center; margin: 20px;"><a href="index.html" style="background: #0056b3; color: white; padding: 10px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">← TORNA ALLA HOME</a></div>
+    <div class="nav-bar">
+        <div class="identita-redattore">
+            <img src="immagini/cinzia.jpg" class="foto-redattore-mini" onerror="this.src='immagini/scuola.jpg'">
+            <span class="nome-redattore">Cinzia</span>
+        </div>
+        <a href="index.html" class="btn-home">Torna alla Home</a>
+        <div style="flex: 1;"></div>
+    </div>
 
     <div class="main-container">
-        <div class="box-profilo">
-            <img src="immagini/cinzia.jpg" class="foto-profilo" onerror="this.src='immagini/_scuola.jpg'">
-            <h3 style="color: #0056b3; margin: 5px 0 0 0; font-size: 1rem;">CINZIA</h3>
-            <p style="font-style: italic; color: #666; font-size: 0.8rem; margin: 0;">Didattica e Lavoro</p>
-        </div>
         <div id="lista-articoli"></div>
     </div>
 
@@ -49,7 +90,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const articoliRef = ref(db, 'archivioCinzia'); // PUNTA A CINZIA
+        const articoliRef = ref(db, 'archivioCinzia'); 
 
         onValue(articoliRef, (snapshot) => {
             const container = document.getElementById("lista-articoli");
@@ -59,23 +100,22 @@
                 Object.values(data).reverse().forEach(art => {
                     container.innerHTML += `
                         <div class="box-articolo">
-                            <span style="font-size:0.75rem; color:#666;">Data: ${art.data || ''}</span>
+                            <span style="font-size:0.75rem; color:#888;">Data: ${art.data || ''}</span>
                             <h1>${art.titolo}</h1>
                             <div style="font-size:1.1rem; text-align:justify; white-space:pre-wrap;">${art.testo}</div>
                         </div>`;
                 });
-            } else {
-                container.innerHTML = "<p style='text-align:center;'>Nessun documento presente nell'archivio di Cinzia.</p>";
             }
         });
 
-        const testoScritta = "DIDATTICA E LAVORO";
+        const testoScritta = "IL MONDO DEL LAVORO E LA SCUOLA";
         let j = 0;
         function animaTitolo() {
-            if (j < testoScritta.length) {
-                document.getElementById("scritta-animata").innerHTML += testoScritta.charAt(j);
+            const el = document.getElementById("scritta-animata");
+            if (el && j < testoScritta.length) {
+                el.innerHTML += testoScritta.charAt(j);
                 j++;
-                setTimeout(animaTitolo, 130);
+                setTimeout(animaTitolo, 100);
             }
         }
         window.onload = animaTitolo;

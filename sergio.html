@@ -3,38 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCHIVIO SERGIO - VERSIONE FINALE</title>
-
+    <title>ARCHIVIO SERGIO - GESTIONE ATTIVA</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
         body { font-family: Arial, sans-serif; background: #eee; margin: 0; padding: 0; } 
-
         .header-scuola { position: relative; width: 100%; max-height: 200px; overflow: hidden; background: #fff; border-bottom: 4px solid #143ca0; display: flex; justify-content: center; }
         .header-scuola img { width: 100%; max-width: 900px; height: auto; object-fit: cover; }
         .testo-sopra-foto { position: absolute; bottom: 10px; font-family: 'Dancing Script', cursive; color: white; font-size: 1.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); z-index: 10; }
         .home-link { left: 20px; text-decoration: none; background: rgba(0,0,0,0.4); padding: 5px 12px; border-radius: 20px; }
-        .btn-gestione { right: 20px; background: #FFD700; color: #143ca0; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
-
+        .btn-gestione { right: 20px; background: #FFD700; color: #143ca0; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.8rem; border: none; }
+        
         .griglia-multimedia { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 20px; max-width: 1000px; margin: auto; }
         .elemento-album { background: white; border-radius: 8px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .media-box { width: 100%; aspect-ratio: 1 / 1; background: #333; display: flex; align-items: center; justify-content: center; }
         .media-box img { width: 100%; height: 100%; object-fit: cover; }
         .titolo-post { font-size: 0.9rem; font-weight: bold; text-align: center; padding: 10px; color: #143ca0; }
-
+        
         #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 60, 160, 0.98); z-index: 9999; color: white; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         #box-contenuto { max-width: 600px; width: 100%; margin: 10px auto; text-align: center; }
         
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-bottom: 15px; border: 3px solid white; border-radius: 10px; background: black; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .btn-youtube-grande { display: inline-block; background: #ff0000; color: white; padding: 15px 25px; border-radius: 15px; text-decoration: none; font-weight: bold; margin: 10px 0; border-bottom: 4px solid #b30000; }
+        .testo-storia { text-align: justify; font-size: 1.1rem; line-height: 1.6; margin: 15px 0; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; white-space: pre-wrap; }
         
-        .testo-storia { text-align: justify; font-size: 1.1rem; line-height: 1.6; margin: 15px 0; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; white-space: pre-wrap; }
-        
-        .area-edit { display: none; text-align: left; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-top: 10px; }
-        .input-modifica { width: 100%; padding: 10px; border-radius: 5px; border: none; margin: 8px 0; font-size: 1rem; }
+        /* AREA MODIFICA VISIBILE SOLO IN GESTIONE */
+        #zona-modifica { display: none; text-align: left; background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-top: 20px; border: 2px solid #FFD700; }
+        .input-modifica { width: 100%; padding: 10px; border-radius: 5px; border: none; margin: 8px 0; font-size: 1rem; box-sizing: border-box; }
         .btn-salva { background: #28a745; color: white; padding: 12px; border: none; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .chiudi-btn { background: white; color: #143ca0; padding: 10px 25px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; margin-top: 15px; }
-
-        @media (max-width: 600px) { .griglia-multimedia { grid-template-columns: repeat(2, 1fr); } }
+        
+        .chiudi-btn { background: white; color: #143ca0; padding: 10px 25px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -45,7 +41,7 @@
     <div class="header-scuola">
         <img src="immagini/foto_scuola.jpg" alt="Scuola">
         <a href="index.html" class="testo-sopra-foto home-link">⬅ Home</a>
-        <div class="testo-sopra-foto btn-gestione" id="btn-gest" onclick="attivaGestione()">⚙ GESTIONE</div>
+        <button class="testo-sopra-foto btn-gestione" id="btn-gest" onclick="attivaGestione()">⚙ GESTIONE OFF</button>
     </div>
 
     <div class="griglia-multimedia" id="lista-multimedia"></div>
@@ -53,17 +49,18 @@
     <div id="overlay-blu">
         <div id="box-contenuto">
             <div id="media-display"></div> 
-            
-            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 2rem;"></h2>
+            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 2.2rem;"></h2>
             <div id="testo-view" class="testo-storia"></div>
 
-            <div id="zona-modifica" class="area-edit">
+            <div id="zona-modifica">
+                <p style="color: #FFD700; font-weight: bold; margin: 0;">MODIFICA TITOLO:</p>
                 <input type="text" id="titolo-edit" class="input-modifica">
+                <p style="color: #FFD700; font-weight: bold; margin: 10px 0 0 0;">MODIFICA STORIA:</p>
                 <textarea id="testo-edit" class="input-modifica" style="height: 150px;"></textarea>
-                <button class="btn-salva" onclick="salvaModifiche()">💾 SALVA</button>
+                <button class="btn-salva" onclick="salvaModifiche()">💾 SALVA NELL'ARCHIVIO</button>
             </div>
 
-            <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI</button>
+            <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI X</button>
         </div>
     </div>
 
@@ -82,7 +79,16 @@
 
         function attivaGestione() {
             modoGestione = !modoGestione;
-            document.getElementById('btn-gest').style.background = modoGestione ? "#28a745" : "#FFD700";
+            const btn = document.getElementById('btn-gest');
+            if (modoGestione) {
+                btn.style.background = "#28a745";
+                btn.style.color = "white";
+                btn.innerText = "✅ GESTIONE ON";
+            } else {
+                btn.style.background = "#FFD700";
+                btn.style.color = "#143ca0";
+                btn.innerText = "⚙ GESTIONE OFF";
+            }
         }
 
         database.ref('archivioSergio').on('value', (snapshot) => {
@@ -113,17 +119,19 @@
 
                 if (link && link.includes('youtu')) {
                     let vId = link.includes('v=') ? link.split('v=')[1].split('&')[0] : link.split('/').pop().split('?')[0];
-                    // IL TRUCCO DEL "CASUALE" PER BYPASSARE IL 153
-                    let randomParam = Math.floor(Math.random() * 9999);
-                    display.innerHTML = `<div class="video-container"><iframe src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=0&showinfo=0&rel=0&iv_load_policy=3&nocache=${randomParam}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
+                    display.innerHTML = `<img src="https://img.youtube.com/vi/${vId}/maxresdefault.jpg" style="width:100%; border-radius:10px;"><br><a href="${link}" target="_blank" class="btn-youtube-grande">▶ GUARDA IL VIDEO</a>`;
                 } else {
                     display.innerHTML = `<img src="${data.immagine}" style="width:100%; border-radius:10px;">`;
                 }
 
-                document.getElementById('zona-modifica').style.display = modoGestione ? 'block' : 'none';
-                if(modoGestione) {
+                // CONTROLLO RIGOROSO PER LA GESTIONE
+                const zonaModifica = document.getElementById('zona-modifica');
+                if (modoGestione === true) {
+                    zonaModifica.style.display = 'block';
                     document.getElementById('titolo-edit').value = data.titolo || "";
                     document.getElementById('testo-edit').value = data.testo || "";
+                } else {
+                    zonaModifica.style.display = 'none';
                 }
 
                 document.getElementById('overlay-blu').style.display = 'block';
@@ -132,15 +140,19 @@
         }
 
         function salvaModifiche() {
+            const nuovoTitolo = document.getElementById('titolo-edit').value;
+            const nuovoTesto = document.getElementById('testo-edit').value;
             database.ref('archivioSergio/' + idCorrente).update({
-                titolo: document.getElementById('titolo-edit').value,
-                testo: document.getElementById('testo-edit').value
-            }).then(() => { alert("Salvato!"); chiudiTutto(); });
+                titolo: nuovoTitolo,
+                testo: nuovoTesto
+            }).then(() => {
+                alert("Dati aggiornati nel database!");
+                chiudiTutto();
+            });
         }
 
         function chiudiTutto() { 
             document.getElementById('overlay-blu').style.display = 'none'; 
-            document.getElementById('media-display').innerHTML = ""; 
             document.body.style.overflow = 'auto'; 
         }
     </script>
