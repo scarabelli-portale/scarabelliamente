@@ -3,38 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sergio - Scarabellianamente</title>
+    <title>ARCHIVIO STORICO - SERGIO SILVESTRINI</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
-        header { background-color: #2c3e50; color: white; text-align: center; padding: 1rem; border-radius: 8px 8px 0 0; margin-bottom: 20px; }
-        .content { background: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
-        img.profile-img { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 20px; border: 5px solid #eee; }
-        .back-button { display: inline-block; margin-top: 30px; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background 0.3s; }
-        .back-button:hover { background-color: #2980b9; }
-        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        p { text-align: left; }
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; }
+
+        /* TESTATA ELEGANTE */
+        .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #143ca0; background: #000; }
+        .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
+        
+        #contenitore-titolo { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; width: 100%; }
+        .titolo-stampato { font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase; color: white; margin-bottom: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold; }
+        .firma-sergio { font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); }
+
+        /* PULSANTI */
+        .btn-nav { position: absolute; top: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 20; border: none; cursor: pointer; }
+        .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
+        .btn-gest { right: 15px; background: #FFD700; color: #143ca0; }
+
+        /* GRIGLIA */
+        .griglia-multimedia { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 30px; max-width: 1200px; margin: auto; }
+        .elemento-album { background: white; border-radius: 10px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+        .media-box { width: 100%; aspect-ratio: 16 / 9; background: #222; overflow: hidden; }
+        .media-box img { width: 100%; height: 100%; object-fit: cover; }
+        .titolo-post { font-size: 0.95rem; font-weight: bold; text-align: center; padding: 15px; color: #143ca0; text-transform: uppercase; }
+
+        /* FINESTRA BLU */
+        #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 60, 160, 0.98); z-index: 9999; color: white; padding: 25px; box-sizing: border-box; overflow-y: auto; }
+        #box-contenuto { max-width: 850px; margin: auto; text-align: center; }
+        .testo-storia { text-align: justify; font-size: 1.25rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
+        
+        .btn-vai-youtube { display: inline-block; background: #ff0000; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; }
+        .chiudi-btn { background: white; color: #143ca0; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
     </style>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
 
-    <header>
-        <h1>La Pagina di Sergio</h1>
-    </header>
-
-    <div class="content">
-        <img src="../immagini/scuola.jpg" alt="La nostra scuola" class="profile-img">
-        
-        <h2>Benvenuti nel mio spazio</h2>
-        <p>
-            Questo è il mio angolo all'interno del portale "Scarabellianamente". 
-            Qui raccoglieremo i ricordi, le foto e i documenti della nostra esperienza scolastica. 
-            Il progetto è in continua evoluzione, proprio come i nostri ricordi!
-        </p>
-
-        <p><em>"Ricordare il passato serve a costruire meglio il futuro."</em></p>
-
-        <a href="../index.html" class="back-button">← Torna al Portale Principale</a>
+    <div class="copertina-container">
+        <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
+        <button class="btn-nav btn-gest" onclick="location.href='login.html'">⚙ GESTIONE</button>
+        <img src="immagini/scuola.jpg" class="foto-scuola">
+        <div id="contenitore-titolo">
+            <div class="titolo-stampato">Archivio Storico</div>
+            <div class="firma-sergio">Sergio Silvestrini</div>
+        </div>
     </div>
 
+    <div class="griglia-multimedia" id="lista-multimedia"></div>
+
+    <div id="overlay-blu">
+        <div id="box-contenuto">
+            <div id="media-display"></div> 
+            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem;"></h2>
+            <div id="testo-view" class="testo-storia"></div>
+            <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI X</button>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+            authDomain: "sito-sergio-b19ce.firebaseapp.com",
+            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+            projectId: "sito-sergio-b19ce"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function ottieniYoutubeID(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length == 11) ? match[2] : null;
+        }
+
+        database.ref('archivioSergio').on('value', (snapshot) => {
+            const lista = document.getElementById('lista-multimedia');
+            lista.innerHTML = "";
+            snapshot.forEach((child) => {
+                const data = child.val();
+                const id = child.key;
+                const link = data.video || data.immagine || "";
+                let vId = ottieniYoutubeID(link);
+                let anteprima = vId ? `https://img.youtube.com/vi/${vId}/hqdefault.jpg` : link;
+                
+                lista.insertAdjacentHTML('afterbegin', `
+                    <div class="elemento-album" onclick="apriContenuto('${id}')">
+                        <div class="media-box"><img src="${anteprima}"></div>
+                        <div class="titolo-post">${data.titolo || 'Senza titolo'}</div>
+                    </div>`);
+            });
+        });
+
+        function apriContenuto(id) {
+            database.ref('archivioSergio/' + id).once('value').then((snapshot) => {
+                const data = snapshot.val();
+                document.getElementById('titolo-view').innerText = data.titolo || "";
+                document.getElementById('testo-view').innerText = data.testo || "";
+                const display = document.getElementById('media-display');
+                const link = data.video || data.immagine || "";
+                let vId = ottieniYoutubeID(link);
+
+                if (vId) {
+                    display.innerHTML = `
+                        <iframe width="100%" height="450" 
+                            src="https://www.youtube.com/embed/${vId}" 
+                            frameborder="0" allowfullscreen 
+                            style="border-radius:15px; border:3px solid #FFD700;">
+                        </iframe>
+                        <br><a href="https://www.youtube.com/watch?v=${vId}" target="_blank" class="btn-vai-youtube">▶ GUARDA SU YOUTUBE (Tasto Emergenza)</a>
+                    `;
+                } else {
+                    display.innerHTML = `<img src="${link}" style="width:100%; border-radius:15px; border:3px solid #FFD700;">`;
+                }
+                document.getElementById('overlay-blu').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        function chiudiTutto() { 
+            document.getElementById('media-display').innerHTML = ""; 
+            document.getElementById('overlay-blu').style.display = 'none'; 
+            document.body.style.overflow = 'auto'; 
+        }
+    </script>
 </body>
 </html>
