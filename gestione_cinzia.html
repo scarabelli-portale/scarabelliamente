@@ -8,7 +8,6 @@
         .box { max-width: 480px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
         
-        /* Box Metodologico per la Foto */
         .box-foto { 
             background: #fff5eb; border: 2px dashed #e67e22; padding: 15px; 
             border-radius: 10px; margin: 15px 0; text-align: left; 
@@ -56,6 +55,16 @@
 </div>
 
 <script>
+    // --- PROTEZIONE ACCESSO ---
+    var passwordRichiesta = "aiznic"; 
+    var check = prompt("Area Riservata - Inserisci Password di Redazione:");
+
+    if (check !== passwordRichiesta) {
+        alert("Password Errata! Torna indietro.");
+        window.location.href = "cinzia.html"; 
+    }
+    // --------------------------
+
     const firebaseConfig = {
         apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
         authDomain: "sito-sergio-b19ce.firebaseapp.com",
