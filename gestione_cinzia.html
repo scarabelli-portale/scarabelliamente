@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>REDAZIONE CINZIA</title>
+    <style>
+        body { font-family: sans-serif; background: #003366; color: white; text-align: center; padding: 20px; }
+        .box { max-width: 480px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        
+        /* Box Metodologico per la Foto */
+        .box-foto { 
+            background: #fff5eb; border: 2px dashed #e67e22; padding: 15px; 
+            border-radius: 10px; margin: 15px 0; text-align: left; 
+        }
+        .btn-carica { 
+            background: #e67e22; color: white; border: none; padding: 10px; 
+            width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; 
+            text-decoration: none; display: block; text-align: center; margin-bottom: 10px;
+        }
+        .btn-carica:hover { background: #d35400; }
+
+        button#pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.1rem; }
+        button#pubblica:hover { background: #219150; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+
+<div id="area-lavoro" class="box">
+    <h2 style="color:#003366; margin-top: 0;">✍️ Redazione Cinzia</h2>
+    
+    <input type="text" id="tit" placeholder="TITOLO (Obbligatorio)">
+    <textarea id="tes" rows="6" placeholder="STORIA / TESTO (Scrivi qui il tuo racconto)"></textarea>
+    
+    <div class="box-foto">
+        <p style="margin-top: 0; color: #d35400; font-weight: bold; font-size: 0.9rem;">📸 PROCEDURA IMMAGINE:</p>
+        
+        <a href="https://it.imgbb.com/" target="_blank" class="btn-carica">
+            1. CLICCA QUI E CARICA FOTO
+        </a>
+        
+        <p style="font-size: 0.75rem; color: #555; line-height: 1.3;">
+            Una volta caricata la foto su ImgBB, scegli <b>"Link diretti"</b>, copia l'indirizzo e incollalo qui sotto:
+        </p>
+        
+        <input type="text" id="img" placeholder="Incolla il link qui (es. https://ibb.co/...)">
+    </div>
+    
+    <input type="text" id="vid" placeholder="Link YouTube (Opzionale)">
+    
+    <button id="pubblica" onclick="inviaAlDatabase()">🚀 PUBBLICA SU SCARABELLICAMENTE</button>
+    
+    <a href="cinzia.html" style="display:block; margin-top:15px; color:#666; text-decoration:none; font-size: 0.9rem;">⬅ Torna all'archivio</a>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        authDomain: "sito-sergio-b19ce.firebaseapp.com",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "sito-sergio-b19ce"
+    };
+    
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const database = firebase.database();
+
+    function inviaAlDatabase() {
+        const titoloVal = document.getElementById('tit').value.trim();
+        const testoVal = document.getElementById('tes').value.trim();
+        const immagineVal = document.getElementById('img').value.trim();
+        const videoVal = document.getElementById('vid').value.trim();
+
+        if (titoloVal === "") { 
+            alert("Metti il titolo!"); 
+            return; 
+        }
+
+        database.ref('archivioCinzia').push({
+            titolo: titoloVal,
+            testo: testoVal,
+            immagine: immagineVal,
+            video: videoVal
+        }).then(() => {
+            alert("✅ Storia pubblicata con successo!");
+            document.getElementById('tit').value = "";
+            document.getElementById('tes').value = "";
+            document.getElementById('img').value = "";
+            document.getElementById('vid').value = "";
+        }).catch((error) => {
+            alert("Errore: " + error.message);
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REDAZIONE CINZIA - AREA PRIVATA</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #003366; color: white; text-align: center; padding: 20px; }
+        .box-gestione { max-width: 500px; margin: 40px auto; background: white; color: #333; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; }
+        h2 { color: #003366; margin-top: 0; text-transform: uppercase; }
+        label { display: block; text-align: left; font-weight: bold; margin-top: 15px; color: #555; font-size: 0.85rem; }
+        input, textarea { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        .btn-invia { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem; margin-top: 20px; }
+        .link-torna { display: block; margin-top: 25px; color: #ddd; text-decoration: none; font-size: 0.9rem; }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+
+<div class="box-gestione" id="area-lavoro">
+    <h2>REDAZIONE CINZIA</h2>
+    <p style="font-size: 0.9rem; color: #888;">Scrivi il titolo e la storia, poi clicca Pubblica.</p>
+    
+    <label>TITOLO</label>
+    <input type="text" id="titolo" placeholder="Inserisci il titolo...">
+    
+    <label>STORIA</label>
+    <textarea id="testo" rows="8" placeholder="Scrivi qui..."></textarea>
+    
+    <label>LINK IMMAGINE (Opzionale)</label>
+    <input type="text" id="immagine" placeholder="Link foto...">
+    
+    <label>LINK YOUTUBE (Opzionale)</label>
+    <input type="text" id="video" placeholder="Link video...">
+
+    <button class="btn-invia" onclick="pubblica()">🚀 PUBBLICA ORA</button>
+    <div id="stato" style="margin-top:15px; font-weight:bold;"></div>
+</div>
+
+<a href="cinzia.html" class="link-torna">⬅ Torna all'archivio</a>
+
+<script>
+    // Configurazione Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        authDomain: "sito-sergio-b19ce.firebaseapp.com",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "sito-sergio-b19ce"
+    };
+
+    // Inizializza solo se non è già stato fatto
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const database = firebase.database();
+
+    // VARIABILE DI CONTROLLO PER EVITARE DOPPIA DOMANDA
+    let chiesta = false;
+
+    window.onload = function() {
+        if (!chiesta) {
+            chiesta = true; // Segna che la stiamo chiedendo ora
+            const p = prompt("Password per Cinzia (aiznic):");
+            if (p === "aiznic") {
+                document.getElementById('area-lavoro').style.display = "block";
+            } else {
+                alert("Sbagliato!");
+                window.location.href = "cinzia.html";
+            }
+        }
+    };
+
+    function pubblica() {
+        const tit = document.getElementById('titolo').value.trim();
+        const tes = document.getElementById('testo').value.trim();
+        const img = document.getElementById('immagine').value.trim();
+        const vid = document.getElementById('video').value.trim();
+
+        if (tit === "") {
+            alert("Metti almeno il titolo!");
+            return;
+        }
+
+        database.ref('archivioCinzia').push({
+            titolo: tit,
+            testo: tes,
+            immagine: img,
+            video: vid
+        }).then(() => {
+            document.getElementById('stato').innerHTML = "<span style='color:green'>✅ SALVATO!</span>";
+            document.getElementById('titolo').value = "";
+            document.getElementById('testo').value = "";
+            document.getElementById('immagine').value = "";
+            document.getElementById('video').value = "";
+            setTimeout(() => { document.getElementById('stato').innerHTML = ""; }, 3000);
+        });
+    }
+</script>
+
+</body>
+</html>

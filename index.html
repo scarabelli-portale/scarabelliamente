@@ -32,7 +32,7 @@
         .testo-presentazione { font-size: 0.9rem; color: #444; text-align: center; margin: 12px 0; line-height: 1.5; font-style: italic; }
         
         /* PULSANTI */
-        .btn-entra { display: block; color: white; padding: 10px; margin: 15px 0 5px 0; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
+        .btn-entra { display: block; color: white; padding: 10px; margin: 15px 0 5px 0; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; text-align: center; border: none; width: 100%; cursor: pointer; }
         .btn-entra:hover { opacity: 0.9; letter-spacing: 1px; }
         .bg-blue { background: #0056b3; }
         .bg-green { background: #27ae60; }
@@ -65,12 +65,19 @@
             </div>
             
             <div class="box" onclick="location.href='cinzia.html'">
-                <img src="immagini/cinzia.jpg" class="foto-profilo">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px; min-height: 100px;">
+                    <img src="immagini/cinzia.jpg" style="width: 75px; height: 100px; object-fit: cover; border-radius: 5px; border: 2px solid #0056b3; flex-shrink: 0;">
+                    <div style="text-align: left; border-left: 3px solid #28a745; padding-left: 12px; max-width: 160px;">
+                        <p style="margin: 0; font-size: 0.65rem; color: #777; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Ultimo Articolo:</p>
+                        <p id="titolo-home-cinzia" style="margin: 4px 0 0 0; font-size: 0.85rem; font-weight: bold; color: #333; line-height: 1.3; font-style: italic;">
+                            In caricamento...
+                        </p>
+                    </div>
+                </div>
                 <h4>DIDATTICA & LAVORO</h4>
-                <div class="testo-presentazione">"Approfondimenti sulla storia e l'evoluzione dell'Istituto Scarabelli."</div>
                 <div class="btn-entra bg-green"> ENTRA DA CINZIA</div>
                 <p style="margin: 5px 0; font-size: 0.8rem;"><strong>CINZIA</strong></p>
-            </div>
+            </div> 
         </div>
 
         <div class="colonna-centro">
@@ -99,7 +106,7 @@
             <div class="box" onclick="location.href='sergio.html'">
                 <img src="immagini/sergio.jpg" class="foto-profilo">
                 <h4>ARCHIVIO STORICO</h4>
-                <div class="testo-presentazione">"Digitalizzazione del patrimonio iconografico della nostra comunitÃ ."</div>
+                <div class="testo-presentazione">"Digitalizzazione del patrimonio iconografico della nostra comunità."</div>
                 <div class="btn-entra bg-blue"> ENTRA DA SERGIO</div>
                 <p style="margin: 5px 0; font-size: 0.8rem;"><strong>SERGIO SILVESTRINI</strong></p>
             </div>
@@ -108,12 +115,14 @@
     </div>
 
     <footer>
-        <p>Â© 2026 Progetto Scarabellianamente - Sergio Silvestrini</p>
+        <p>© 2026 Progetto Scarabellianamente - Sergio Silvestrini</p>
         <p style="font-size: 0.7rem; opacity: 0.6; margin-top: 10px;">Tutelato dall'Art. 21 della Costituzione Italiana</p>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        // EFFETTO SCRITTURA TITOLO (Unica funzione rimasta)
+        // 1. EFFETTO SCRITTURA TITOLO
         const testo = "SCARABELLIANAMENTE";
         const target = document.getElementById("scritta-fiori");
         let i = 0;
@@ -124,6 +133,21 @@
                 setTimeout(scrivi, 130); 
             } 
         }
+
+        // 2. FIREBASE PER TITOLO CINZIA AUTOMATICO
+        const firebaseConfig = {
+            apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        
+        firebase.database().ref('archivioCinzia').limitToLast(1).on('value', (snap) => {
+            snap.forEach((child) => {
+                const t = child.val().titolo;
+                document.getElementById('titolo-home-cinzia').innerText = t || "Nessun titolo";
+            });
+        });
+
         window.onload = scrivi;
     </script>
 </body>
