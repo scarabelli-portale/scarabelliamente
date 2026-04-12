@@ -28,32 +28,24 @@
         }
         .elemento-album:hover { transform: translateY(-5px); border-color: #FFD700; }
         
-        .media-box-post { 
-            width: 100%; 
-            height: 100px; 
-            background: #003366; 
-            overflow: hidden; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
-        /* Corretto: 100% per non far uscire l'immagine e contain per non tagliarla */
-        .media-box-post img { width: 100%; height: 100%; object-fit: contain; }
+        .media-box-post { width: 100%; height: 160px; background: #003366; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .media-box-post img { width: 100%; height: 100%; object-fit: cover; }
         
         .info-post { padding: 12px; text-align: left; }
         .titolo-post { font-size: 0.95rem; font-weight: bold; color: #0056b3; text-transform: uppercase; margin-bottom: 5px; }
         .anteprima-testo { font-size: 0.8rem; color: #555; line-height: 1.3; text-align: justify; }
 
-        /* OVERLAY */
+        /* OVERLAY BLU */
         #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 40, 100, 0.98); z-index: 9999; color: white; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #box-contenuto { max-width: 800px; margin: auto; text-align: center; }
-        #media-display { width: 100%; margin-bottom: 20px; border-radius: 15px; overflow: hidden; }
-        .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.6; padding: 20px; white-space: pre-wrap; color: white; background: rgba(255,255,255,0.05); border-radius: 10px; }
         
+        #media-display { width: 100%; margin-bottom: 20px; }
+        .img-overlay { width: 100%; max-height: 550px; object-fit: contain; border-radius: 10px; border: 3px solid #FFD700; }
+
+        .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.6; padding: 20px; white-space: pre-wrap; color: white; background: rgba(255,255,255,0.05); border-radius: 10px; }
         .btn-wz { display: inline-flex; align-items: center; background-color: #25D366; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 20px; border: 2px solid white; }
         .chiudi-btn { background: white; color: #0056b3; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; margin-left: 10px; }
 
-        /* GESTIONE MANUTENZIONE - Impostata correttamente */
         #sezione-gestione { display: none; padding: 30px; max-width: 800px; margin: 20px auto; background: white; border-radius: 10px; color: #333; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .tabella-gestione { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tabella-gestione td { border: 1px solid #ddd; padding: 10px; font-size: 0.9rem; }
@@ -68,7 +60,7 @@
     <div class="copertina-container">
         <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
         <button class="btn-nav btn-gest" onclick="toggleGestione()">⚙ GESTIONE</button>
-        <img src="immagini/scuola.jpg" class="foto-scuola-header">
+        <img src="immagini/scuola.jpg" class="foto-scuola-header" onerror="this.src='https://static.wixstatic.com/media/078a0a_88e089286d5240c9ba25c61309f7a77e~mv2.jpg'">
         <div id="contenitore-titolo">
             <div class="titolo-stampato">MONDO DEL LAVORO E SCUOLA</div>
             <div class="firma-persona">Cinzia</div>
@@ -107,17 +99,15 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
-        function correggiUrlImmagine(url) {
-            if (!url || url.trim() === "") return "immagini/scuola.jpg";
+        // Funzione di sicurezza per pulire i link in entrata
+        function pulisciLink(url) {
+            if (!url || url.trim() === "") return "https://static.wixstatic.com/media/078a0a_88e089286d5240c9ba25c61309f7a77e~mv2.jpg";
             let u = url.trim();
-            if (u.includes("http")) {
-                if (u.includes("ibb.co") && !u.match(/\.(jpeg|jpg|gif|png)$/)) {
-                    let id = u.split('/').pop();
-                    return "https://i.ibb.co/" + id + "/image.png"; 
-                }
-                return u;
+            if (u.includes('<img src=')) {
+                let match = u.match(/src=["']([^"']+)["']/);
+                return match ? match[1] : u;
             }
-            return "immagini_cinzia/" + u;
+            return u;
         }
 
         database.ref('archivioCinzia').on('value', (snapshot) => {
@@ -128,11 +118,11 @@
             snapshot.forEach((child) => {
                 const data = child.val();
                 const chiave = child.key;
-                let imgFinal = correggiUrlImmagine(data.immagine);
+                let imgFinal = pulisciLink(data.immagine);
 
                 lista.insertAdjacentHTML('afterbegin', `
                     <div class="elemento-album" onclick="apriContenuto('${chiave}')">
-                        <div class="media-box-post"><img src="${imgFinal}" onerror="this.src='immagini/scuola.jpg'"></div>
+                        <div class="media-box-post"><img src="${imgFinal}" onerror="this.src='https://static.wixstatic.com/media/078a0a_88e089286d5240c9ba25c61309f7a77e~mv2.jpg'"></div>
                         <div class="info-post">
                             <div class="titolo-post">${data.titolo || 'Senza titolo'}</div>
                             <div class="anteprima-testo">${data.testo ? data.testo.substring(0, 80) + '...' : ''}</div>
@@ -149,12 +139,14 @@
                 document.getElementById('titolo-view').innerText = data.titolo;
                 document.getElementById('testo-view').innerText = data.testo;
                 
+                const display = document.getElementById('media-display');
+                let imgFinal = pulisciLink(data.immagine);
+                
+                // Mostra una singola immagine pulita
+                display.innerHTML = `<img src="${imgFinal}" class="img-overlay" onerror="this.src='https://static.wixstatic.com/media/078a0a_88e089286d5240c9ba25c61309f7a77e~mv2.jpg'">`;
+
                 const msg = encodeURIComponent("Leggi questo racconto di Cinzia: " + data.titolo);
                 document.getElementById('link-wz-dinamico').href = "https://api.whatsapp.com/send?text=" + msg;
-
-                const display = document.getElementById('media-display');
-                let imgFinal = correggiUrlImmagine(data.immagine);
-                display.innerHTML = `<img src="${imgFinal}" style="width:100%; max-height:450px; object-fit:contain; border:3px solid #FFD700;" onerror="this.src='immagini/scuola.jpg'">`;
                 
                 document.getElementById('overlay-blu').style.display = 'block';
                 document.body.style.overflow = 'hidden';
@@ -163,15 +155,10 @@
 
         function chiudiTutto() { document.getElementById('overlay-blu').style.display = 'none'; document.body.style.overflow = 'auto'; }
         
-        // FUNZIONE GESTIONE MIGLIORATA
         function toggleGestione() { 
             const area = document.getElementById('sezione-gestione');
-            if (area.style.display === "block") {
-                area.style.display = "none";
-            } else {
-                area.style.display = "block";
-                area.scrollIntoView({ behavior: 'smooth' });
-            }
+            area.style.display = (area.style.display === "block") ? "none" : "block";
+            if(area.style.display === "block") area.scrollIntoView({ behavior: 'smooth' });
         }
 
         function eliminaPost(id) { 
