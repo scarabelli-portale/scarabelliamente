@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Archivio Sergio</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #143ca0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; width: 300px; }
+        h2 { color: #143ca0; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #FFD700; color: #143ca0; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #e6c200; }
+        .back-link { display: block; margin-top: 15px; font-size: 0.8rem; color: #666; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>🔒 Accesso Sergio</h2>
+        <input type="password" id="pass" placeholder="Inserisci Password">
+        <button onclick="check()">ENTRA</button>
+        <a href="sergio.html" class="back-link">Torna all'Archivio</a>
+    </div>
+    <script>
+        function check() {
+            if(document.getElementById('pass').value === 'sergio2024') { 
+                sessionStorage.setItem('auth_sergio', 'ok');
+                location.href = 'gestione_sergio.html';
+            } else {
+                alert('Password Errata!');
+            }
+        }
+    </script>
+</body>
+</html>
