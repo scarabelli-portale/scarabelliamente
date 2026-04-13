@@ -6,49 +6,30 @@
     <title>SCARABELLIANAMENTE - Home Page</title>
     <style>
         body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; line-height: 1.4; }
-        
-        /* TESTATA */
         .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 280px; overflow: hidden; border-bottom: 5px solid #0056b3; }
         .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
         #scritta-fiori { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 2.2rem; font-weight: 900; color: #ffffff; text-shadow: 2px 2px 10px rgba(0,0,0,1); text-transform: uppercase; letter-spacing: 4px; white-space: nowrap; z-index: 10; min-height: 40px; }
-        
         .main-container { max-width: 1300px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 20px; padding: 0 15px; }
         .colonna-lato { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px; }
         .colonna-centro { flex: 1.8; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
-        
-        /* BOX CLICCABILI */
-        .box { background: white; border: 1px solid #ddd; padding: 20px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; border-bottom: 4px solid #ddd; }
-        .box:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); border-bottom-color: #0056b3; }
-        
-        /* BOX CINZIA SPECIALE */
-        .box-cinzia { text-align: left !important; padding: 15px !important; }
-        .flex-cinzia { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
-        .foto-profilo-min { width: 75px; height: 100px; object-fit: cover; border: 2px solid #27ae60; border-radius: 6px; flex-shrink: 0; }
-        .rubrica-lista { flex-grow: 1; font-family: sans-serif; min-width: 0; }
-        .rubrica-lista h5 { margin: 0 0 5px 0; font-size: 0.65rem; color: #27ae60; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 3px; }
-        .lista-titoli-home { list-style: none; padding: 0; margin: 0; font-size: 0.75rem; }
-        .lista-titoli-home li { padding: 3px 0; border-bottom: 1px solid #f9f9f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #444; }
-        
-        /* MINIATURA ULTIMO POST */
-        .miniatura-ultimo-post { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; flex-shrink: 0; margin-top: 20px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
-
-        .box-speciale { border: 3px solid #0056b3; background: #fffdf5; position: relative; border-bottom: 6px solid #0056b3; }
-        .label-presidente { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0056b3; color: white; padding: 4px 20px; font-size: 0.75rem; font-weight: bold; border-radius: 20px; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        
-        .foto-profilo { width: 85px; height: 115px; object-fit: cover; border: 2px solid #0056b3; border-radius: 8px; margin-bottom: 10px; }
-        .foto-direttore { width: 110px; height: 150px; margin-top: 15px; }
-        
-        h4 { color: #0056b3; margin: 10px 0; font-size: 1rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 8px; text-align: center; }
-        
-        .btn-entra { display: block; color: white; padding: 10px; margin: 10px 0 0 0; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; text-align: center; border: none; width: 100%; cursor: pointer; }
+        .box { background: white; border: 1px solid #ddd; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; border-bottom: 4px solid #ddd; position: relative; }
+        .box:hover { transform: translateY(-5px); border-bottom-color: #0056b3; }
+        .box-speciale { border: 3px solid #0056b3; background: #fffdf5; border-bottom: 6px solid #0056b3; }
+        .label-presidente { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0056b3; color: white; padding: 4px 20px; font-size: 0.75rem; font-weight: bold; border-radius: 20px; text-transform: uppercase; z-index: 5; }
+        .foto-profilo { width: 75px; height: 100px; object-fit: cover; border-radius: 6px; flex-shrink: 0; border: 2px solid #ddd; }
+        .foto-francesco { border-color: #0056b3; }
+        .foto-cinzia { border-color: #27ae60; }
+        h5 { margin: 0; font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 3px; }
+        ul { list-style: none; padding: 5px 0; margin: 0; }
+        li { font-size: 0.8rem; padding: 3px 0; border-bottom: 1px solid #f9f9f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #444; }
+        .btn-entra { display: block; color: white; padding: 10px; margin-top: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; text-align: center; border: none; width: 100%; cursor: pointer; }
         .bg-blue { background: #0056b3; }
         .bg-green { background: #27ae60; }
         .bg-orange { background: #e67e22; }
         .bg-dark { background: #2c3e50; }
-        
-        footer { margin-top: 50px; padding: 30px; background: #2c3e50; color: white; text-align: center; font-size: 0.9rem; border-top: 5px solid #0056b3; }
-
-        @media (max-width: 850px) { .main-container { flex-direction: column; } .colonna-centro { order: -1; } .copertina-container { height: 160px; } #scritta-fiori { font-size: 1.3rem; } }
+        .bg-gold { background: #FFD700; color: #001a33 !important; }
+        footer { margin-top: 50px; padding: 30px; background: #2c3e50; color: white; text-align: center; font-size: 0.9rem; }
+        @media (max-width: 850px) { .main-container { flex-direction: column; } .colonna-centro { order: -1; } }
     </style>
 </head>
 <body>
@@ -61,108 +42,126 @@
     <div class="main-container">
         <div class="colonna-lato">
             <div class="box" onclick="location.href='fausto.html'">
-                <img src="immagini/fausto.jpg" class="foto-profilo">
-                <h4>OSSERVATORIO METEO</h4>
-                <div style="margin: 10px 0; border: 2px solid #2c3e50; border-radius: 8px; overflow: hidden; background: #000; height: 100px;">
-                    <img src="immagini/satellite.gif" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                    <img src="immagini/fausto.jpg" class="foto-profilo">
+                    <div style="flex:1; text-align: left;">
+                        <h5 style="color:#2c3e50">Meteo & Satellite</h5>
+                        <div style="margin-top:5px; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; height: 60px;">
+                            <img src="immagini/satellite.gif" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                    </div>
                 </div>
                 <div class="btn-entra bg-dark"> ENTRA DA FAUSTO</div>
-                <p style="margin: 5px 0; font-size: 0.75rem; text-align: center;"><strong>FAUSTO RAVALDI</strong></p>
             </div>
             
-            <div class="box box-cinzia" onclick="location.href='cinzia.html'">
-                <div class="flex-cinzia">
-                    <img src="immagini/cinzia.jpg" class="foto-profilo-min">
-                    <div class="rubrica-lista">
-                        <h5>Articoli Pubblicati:</h5>
-                        <ul class="lista-titoli-home" id="lista-home-cinzia">
-                            <li>Caricamento...</li>
-                        </ul>
+            <div class="box">
+                <div style="display:flex; gap:15px; align-items: flex-start;" onclick="location.href='cinzia.html'">
+                    <img src="immagini/cinzia.jpg" class="foto-profilo foto-cinzia">
+                    <div style="flex:1">
+                        <h5 style="color:#27ae60">Didattica & Lavoro</h5>
+                        <ul id="lista-home-cinzia"><li>In attesa...</li></ul>
                     </div>
-                    <div id="contenitore-miniaturina"></div>
                 </div>
-                <h4 style="margin-top:15px; font-size:0.9rem;">DIDATTICA & LAVORO</h4>
-                <div class="btn-entra bg-green"> ENTRA NELLA RUBRICA DI CINZIA</div>
+                <div style="display: flex; gap: 5px;">
+                    <button class="btn-entra bg-green" style="flex:3" onclick="location.href='cinzia.html'">ENTRA</button>
+                    <button class="btn-entra bg-gold" style="flex:1.5; font-size:0.7rem;" onclick="location.href='login_cinzia.html'">GESTIONE</button>
+                </div>
             </div> 
         </div>
 
         <div class="colonna-centro">
-            <div class="box box-speciale" onclick="location.href='francesco.html'">
+            <div class="box box-speciale">
                 <div class="label-presidente">Presidente Francesco Mariani</div>
-                <img src="immagini/francesco.jpg" class="foto-profilo foto-direttore">
-                <h4>EDITORIALE</h4>
-                <div style="font-size: 1.1rem; font-style: italic; margin:15px 0;">"Digitalizziamo il passato per rendere fertile il futuro dei nostri giovani."</div>
-                <div class="btn-entra bg-blue"> LEGGI L'EDITORIALE</div>
-                <p style="margin: 5px 0; font-size: 0.8rem;"><strong>FRANCESCO</strong></p>
+                <div style="display:flex; gap:15px; align-items: flex-start;">
+                    <img src="immagini/francesco.jpg" class="foto-profilo foto-francesco" onclick="location.href='francesco.html'">
+                    <div style="flex:1">
+                        <h5 style="color:#0056b3">Editoriali & News</h5>
+                        <ul id="lista-home-francesco"><li>In attesa...</li></ul>
+                    </div>
+                </div>
+                <div id="anteprima-testo" style="font-size: 0.95rem; font-style: italic; margin: 15px 0; color: #444; text-align: left; border-top: 1px solid #eee; padding-top: 10px;">
+                    "Seleziona un contenuto..."
+                </div>
+                <div id="box-manifesto-speciale" style="display: none; width: 100%; border: 3px solid #FFD700; background: white; border-radius: 8px; margin-bottom: 15px; overflow: hidden;">
+                    <div id="contenuto-manifesto"></div>
+                </div>
+                <div style="display: flex; gap: 5px; margin-top: auto;">
+                    <button class="btn-entra bg-blue" style="flex:3" onclick="location.href='francesco.html'">ARCHIVIO PRESIDENZA</button>
+                    <button class="btn-entra bg-gold" style="flex:1.5; font-size:0.7rem;" onclick="location.href='login_presidente.html'">GESTIONE</button>
+                </div>
             </div>
         </div>
 
         <div class="colonna-lato">
             <div class="box" onclick="location.href='carlo.html'">
-                <img src="immagini/carlo.jpg" class="foto-profilo">
-                <h4>ECONOMIA & MERCATI</h4>
-                <div style="background: #1a1a1a; color: #00ff00; padding: 8px; margin: 10px 0; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.7rem;">
-                    <marquee scrollamount="3"> FRUMENTO: 215.50 --- MAIS: 185.20 --- EURO/USD: 1.08</marquee>
+                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                    <img src="immagini/carlo.jpg" class="foto-profilo">
+                    <div style="flex:1; text-align: left;">
+                        <h5 style="color:#e67e22">Economia & Mercati</h5>
+                        <div style="background: #1a1a1a; color: #00ff00; padding: 5px; margin-top: 5px; border-radius: 4px; font-family: monospace; font-size: 0.65rem;">
+                            <marquee scrollamount="2">MERCATI IN AGGIORNAMENTO...</marquee>
+                        </div>
+                    </div>
                 </div>
                 <div class="btn-entra bg-orange"> ENTRA DA CARLO</div>
-                <p style="margin: 5px 0; font-size: 0.75rem; text-align:center;"><strong>CARLO</strong></p>
             </div>
-
             <div class="box" onclick="location.href='sergio.html'">
-                <img src="immagini/sergio.jpg" class="foto-profilo">
-                <h4>ARCHIVIO STORICO</h4>
-                <div style="font-size: 0.85rem; font-style: italic; margin: 10px 0;">"Digitalizzazione del patrimonio iconografico della nostra comunit�."</div>
+                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                    <img src="immagini/sergio.jpg" class="foto-profilo">
+                    <div style="flex:1; text-align: left;">
+                        <h5 style="color:#0056b3">Archivio Storico</h5>
+                        <p style="font-size: 0.7rem; margin: 5px 0;">Patrimonio iconografico.</p>
+                    </div>
+                </div>
                 <div class="btn-entra bg-blue"> ENTRA DA SERGIO</div>
-                <p style="margin: 5px 0; font-size: 0.75rem; text-align:center;"><strong>SERGIO SILVESTRINI</strong></p>
             </div>
         </div>
     </div>
 
-    <footer><p>� 2026 Progetto Scarabellianamente - Sergio Silvestrini</p></footer>
+    <footer><p>© 2026 Progetto Scarabellianamente - Sergio Silvestrini</p></footer>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        const testo = "SCARABELLIANAMENTE";
-        const target = document.getElementById("scritta-fiori");
-        let i = 0;
-        function scrivi() { if (target && i < testo.length) { target.innerHTML += testo.charAt(i); i++; setTimeout(scrivi, 130); } }
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
-            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
-        };
+        const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
 
-        function pulisciLink(url) {
-            if (!url || url.trim() === "") return "https://static.wixstatic.com/media/078a0a_88e089286d5240c9ba25c61309f7a77e~mv2.jpg";
-            let u = url.trim();
-            if (u.includes('<img src=')) {
-                let match = u.match(/src=["']([^"']+)["']/);
-                return match ? match[1] : u;
-            }
-            return u;
-        }
+        const testoAnima = "SCARABELLIANAMENTE";
+        const targetAnima = document.getElementById("scritta-fiori");
+        let iA = 0;
+        function scriviTitolo() { if (targetAnima && iA < testoAnima.length) { targetAnima.innerHTML += testoAnima.charAt(iA); iA++; setTimeout(scriviTitolo, 130); } }
+        window.onload = scriviTitolo;
 
-        firebase.database().ref('archivioCinzia').limitToLast(5).on('value', (snap) => {
-            const listaRapida = document.getElementById('lista-home-cinzia');
-            const contenitoreFoto = document.getElementById('contenitore-miniaturina');
-            listaRapida.innerHTML = "";
-            let articoli = [];
-            snap.forEach((child) => { articoli.push(child.val()); });
-            articoli.reverse();
-
-            articoli.forEach(data => {
-                listaRapida.innerHTML += `<li>� ${data.titolo}</li>`;
-            });
-
-            if(articoli.length > 0) {
-                let imgUltima = pulisciLink(articoli[0].immagine);
-                contenitoreFoto.innerHTML = `<img src="${imgUltima}" class="miniatura-ultimo-post" onerror="this.src='https://static.wixstatic.com/media/078a0a_88e089286d5240c9ba25c61309f7a77e~mv2.jpg'">`;
-            }
+        // FRANCESCO
+        db.ref('archivioCentrale').limitToLast(5).on('value', (snap) => {
+            const listaF = document.getElementById('lista-home-francesco');
+            const anteprima = document.getElementById('anteprima-testo');
+            if(!listaF) return;
+            listaF.innerHTML = "";
+            if (!snap.exists()) { listaF.innerHTML = "<li>Nessun contenuto.</li>"; return; }
+            let posts = [];
+            snap.forEach(c => posts.push(c.val()));
+            posts.reverse();
+            posts.forEach((p, idx) => { if(idx < 4) listaF.innerHTML += "<li>• " + (p.titolo || 'Titolo') + "</li>"; });
+            anteprima.innerText = posts[0].testo ? posts[0].testo.substring(0, 100) + "..." : "Leggi l'ultimo post...";
         });
 
-        window.onload = scrivi;
+        // CINZIA - PULIZIA RADICALE ANTI-ROMBO
+        db.ref('archivioCinzia').limitToLast(4).on('value', (snap) => {
+            const listaC = document.getElementById('lista-home-cinzia');
+            if(!listaC) return;
+            listaC.innerHTML = "";
+            if (!snap.exists()) { listaC.innerHTML = "<li>Nessun contenuto.</li>"; return; }
+            let cPosts = [];
+            snap.forEach(c => cPosts.push(c.val()));
+            cPosts.reverse().forEach(p => {
+                let tRaw = p.titolo || 'Senza Titolo';
+                // Solo lettere, numeri e spazi. Uccide il rombo.
+                let tClean = tRaw.replace(/[^a-zA-Z0-9\sàèìòùÁÉÍÓÚáéíóú]/g, '');
+                listaC.innerHTML += "<li> " + tClean.trim() + "</li>";
+            });
+        });
     </script>
 </body>
 </html>
