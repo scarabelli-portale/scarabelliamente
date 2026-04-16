@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SALA COMANDI - PRESIDENTE</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: auto; }
+        .box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 6px solid #FFD700; margin-bottom: 30px; }
+        h2 { color: #001a33; margin-top: 0; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        
+        /* SEZIONE FOTO */
+        .box-foto { background: #fff5eb; border: 2px dashed #e67e22; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center; }
+        .btn-carica { background: #e67e22; color: white; padding: 10px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; margin-bottom: 10px; }
+
+        #btn-pubblica { background: #143ca0; color: white; border: none; padding: 18px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+        #btn-pubblica:hover { background: #001a33; transform: scale(1.02); }
+        
+        .scelta-manifesto { background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #ffeeba; display: flex; align-items: center; justify-content: center; }
+        
+        .radar { background: #e9ecef; padding: 20px; border-radius: 12px; border: 1px solid #ccc; }
+        .post-radar { background: white; padding: 12px; margin-bottom: 10px; border-radius: 8px; border-left: 6px solid #143ca0; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .btn-promuovi { background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-promuovi:hover { background: #1e8449; }
+        
+        .info-post { display: flex; flex-direction: column; }
+        .autore-label { font-size: 0.7rem; text-transform: uppercase; color: #143ca0; font-weight: bold; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+
+<script>
+    if (sessionStorage.getItem("accesso_presidente") !== "autorizzato") {
+        window.location.href = "login_presidente.html";
+    }
+</script>
+
+<div class="container">
+    <div class="box">
+        <h2>✍️ Editoriale di Francesco Mariani</h2>
+        <a href="index.html" style="color: #143ca0; font-weight: bold; text-decoration: none;">⬅️ ESCI E TORNA AL SITO</a>
+        
+        <input type="text" id="tit" placeholder="TITOLO DELL'EDITORIALE">
+        <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TESTO..."></textarea>
+        
+        <div class="box-foto">
+            <p style="margin:0 0 10px 0; color:#d35400; font-weight:bold;">📸 AGGIUNGI FOTO</p>
+            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">1. CARICA FOTO SU IMGBB</a>
+            <input type="text" id="img" placeholder="2. Incolla qui il codice o link della foto">
+        </div>
+
+        <div class="scelta-manifesto">
+            <input type="checkbox" id="is-manifesto" style="width:20px; height:20px; margin-right:10px; cursor:pointer;">
+            <label for="is-manifesto" style="cursor:pointer;"><b>ATTIVA COME MANIFESTO</b></label>
+        </div>
+
+        <button id="btn-pubblica" onclick="inviaEditoriale()">🚀 PUBBLICA IN PRIMA PAGINA</button>
+    </div>
+
+    <div class="radar">
+        <h3 style="margin-top:0;">📡 Radar Redazioni (Ultimi inserimenti)</h3>
+        <div id="elenco-radar">Caricamento radar...</div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        authDomain: "sito-sergio-b19ce.firebaseapp.com",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "sito-sergio-b19ce"
+    };
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const database = firebase.database();
+
+    function inviaEditoriale() {
+        const t = document.getElementById('tit').value;
+        const s = document.getElementById('tes').value;
+        const iRaw = document.getElementById('img').value;
+        const m = document.getElementById('is-manifesto').checked ? "manifesto" : "normale";
+
+        if(!t) { alert("Metti almeno un titolo!"); return; }
+
+        let immaginePulita = iRaw.trim();
+        if (immaginePulita.includes('<img src="')) {
+            immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
+        } else if (immaginePulita.includes('[img]')) {
+            immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
+        }
+
+        database.ref('archivioCentrale').push({
+            titolo: t,
+            testo: s,
+            immagine: immaginePulita,
+            tipo: m,
+            autore: "PRESIDENTE",
+            data: new Date().toLocaleString()
+        }).then(() => {
+            alert("✅ Pubblicato!");
+            location.reload();
+        });
+    }
+
+    // --- LOGICA RADAR OTTIMIZZATA ---
+    function aggiornaRadar() {
+        const redazioni = ['archivioSergio', 'archivioCinzia'];
+        const contenitore = document.getElementById('elenco-radar');
+        contenitore.innerHTML = ""; // Pulisce prima di caricare
+
+        redazioni.forEach(red => {
+            database.ref(red).limitToLast(3).once('value', (snap) => {
+                snap.forEach(child => {
+                    const post = child.val();
+                    const nomeAutore = red.replace('archivio', '').toUpperCase();
+                    const html = `
+                        <div class="post-radar">
+                            <div class="info-post">
+                                <span class="autore-label">${nomeAutore}</span>
+                                <b>${post.titolo}</b>
+                            </div>
+                            <button class="btn-promuovi" onclick="promuovi('${child.key}', '${red}')">Promuovi</button>
+                        </div>
+                    `;
+                    contenitore.innerHTML = html + contenitore.innerHTML; // Mette i più nuovi in alto
+                });
+            });
+        });
+    }
+
+    function promuovi(id, red) {
+        if(confirm("Vuoi portare questo post in Prima Pagina?")) {
+            database.ref(red + '/' + id).once('value').then(s => {
+                const datiOriginali = s.val();
+                database.ref('archivioCentrale').push({
+                    ...datiOriginali,
+                    autore: red.replace('archivio', '').toUpperCase(),
+                    tipo: 'normale',
+                    data_promozione: new Date().toLocaleString() 
+                }).then(() => alert("✅ Post clonato con successo!"));
+            });
+        }
+    }
+
+    // Avvio radar
+    aggiornaRadar();
+</script>
+</body>
+</html>

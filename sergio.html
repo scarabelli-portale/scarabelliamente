@@ -6,71 +6,105 @@
     <title>ARCHIVIO STORICO - SERGIO SILVESTRINI</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
 
-        /* TESTATA ELEGANTE */
+        /* TESTATA ORIGINALE DI SERGIO */
         .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #143ca0; background: #000; }
-        .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
-        
+        .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         #contenitore-titolo { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; width: 100%; }
-        .titolo-stampato { font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase; color: white; margin-bottom: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold; }
+        .titolo-stampato { font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold; }
         .firma-sergio { font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); }
 
-        /* PULSANTI */
         .btn-nav { position: absolute; top: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 20; border: none; cursor: pointer; }
         .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
         .btn-gest { right: 15px; background: #FFD700; color: #143ca0; }
 
-        /* GRIGLIA */
-        .griglia-multimedia { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 30px; max-width: 1200px; margin: auto; }
-        .elemento-album { background: white; border-radius: 10px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #ddd; }
-        .media-box { width: 100%; aspect-ratio: 16 / 9; background: #222; overflow: hidden; }
-        .media-box img { width: 100%; height: 100%; object-fit: cover; }
-        .titolo-post { font-size: 0.95rem; font-weight: bold; text-align: center; padding: 15px; color: #143ca0; text-transform: uppercase; }
+        /* LAYOUT A DUE COLONNE */
+        .main-wrapper { display: flex; max-width: 1300px; margin: 30px auto; gap: 20px; padding: 0 15px; }
+        
+        /* COLONNA SINISTRA */
+        .sidebar-servizi { width: 280px; flex-shrink: 0; }
+        .tabellina-box { background: white; border-radius: 12px; border: 1px solid #ddd; border-top: 5px solid #143ca0; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 20px; }
+        .tabellina-box h4 { margin: 0 0 15px 0; font-size: 0.9rem; color: #143ca0; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .servizio-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f9f9f9; font-size: 0.85rem; color: #444; text-decoration: none; transition: 0.2s; }
+        .servizio-item:hover { color: #143ca0; padding-left: 5px; }
+        .icona-s { margin-right: 10px; font-size: 1.1rem; width: 25px; text-align: center; }
 
-        /* FINESTRA BLU */
+        .btn-wz { background: #25D366 !important; color: white !important; border: none !important; margin-top: 15px; justify-content: center; border-radius: 8px; font-weight: bold; }
+        .btn-mail { background: #143ca0 !important; color: white !important; border: none !important; margin-top: 5px; justify-content: center; border-radius: 8px; font-weight: bold; }
+
+        /* GRIGLIA MULTIMEDIALE */
+        .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .elemento-album { background: white; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; }
+        .elemento-album:hover { transform: translateY(-5px); border-color: #FFD700; }
+        .media-box { width: 100%; height: 160px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #eee; overflow: hidden; }
+        .media-box img { width: 100%; height: 100%; object-fit: cover; }
+        .info-box { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .titolo-post { font-size: 0.9rem; font-weight: bold; color: #143ca0; text-transform: uppercase; margin-bottom: 8px; }
+        .anteprima-testo { font-size: 0.85rem; color: #666; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-style: italic; }
+
+        /* OVERLAY STILE CINZIA */
         #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 60, 160, 0.98); z-index: 9999; color: white; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #box-contenuto { max-width: 850px; margin: auto; text-align: center; }
-        .testo-storia { text-align: justify; font-size: 1.25rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
-        
-        .btn-vai-youtube { display: inline-block; background: #ff0000; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; }
+        .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
         .chiudi-btn { background: white; color: #143ca0; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
-    </style>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } .sidebar-servizi { width: 100%; } }
+    </style>
 </head>
 <body>
 
     <div class="copertina-container">
         <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
-        <button class="btn-nav btn-gest" onclick="location.href='login.html'">⚙ GESTIONE</button>
+        <button class="btn-nav btn-gest" onclick="location.href='gestione_sergio.html'">⚙ GESTIONE</button>
         <img src="immagini/scuola.jpg" class="foto-scuola">
         <div id="contenitore-titolo">
-            <div class="titolo-stampato">Archivio Storico</div>
+            <div class="titolo-stampato">Archivio Storico & Iconografico</div>
             <div class="firma-sergio">Sergio Silvestrini</div>
         </div>
     </div>
 
-    <div class="griglia-multimedia" id="lista-multimedia"></div>
+    <div class="main-wrapper">
+        <aside class="sidebar-servizi">
+            <div class="tabellina-box">
+                <h4>I Miei Servizi 📷🎥</h4>
+                <div class="servizio-item"><span class="icona-s">📁</span> Archivio Foto</div>
+                <div class="servizio-item"><span class="icona-s">🎥</span> Filmati Storici</div>
+                <div class="servizio-item"><span class="icona-s">🌍</span> Ricerca Locale</div>
+                
+                <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+                
+                <a href="https://wa.me/393331234567?text=Ciao Sergio, ti scrivo dal sito Scarabellianamente" target="_blank" class="servizio-item btn-wz">
+                    <span class="icona-s">📱</span> WHATSAPP
+                </a>
+                <a href="mailto:tuaemail@esempio.it" class="servizio-item btn-mail">
+                    <span class="icona-s">✉</span> EMAIL
+                </a>
+            </div>
+        </aside>
+
+        <div class="griglia-multimedia" id="lista-multimedia"></div>
+    </div>
 
     <div id="overlay-blu">
         <div id="box-contenuto">
             <div id="media-display"></div> 
-            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem;"></h2>
+            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem; margin-bottom:10px;"></h2>
             <div id="testo-view" class="testo-storia"></div>
             <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI X</button>
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        const firebaseConfig = {
+        const firebaseConfig = { 
             apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
             authDomain: "sito-sergio-b19ce.firebaseapp.com",
             databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
             projectId: "sito-sergio-b19ce"
         };
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
         function ottieniYoutubeID(url) {
@@ -86,14 +120,18 @@
             snapshot.forEach((child) => {
                 const data = child.val();
                 const id = child.key;
-                const link = data.video || data.immagine || "";
+                // CORREZIONE 2: Lettura flessibile dell'immagine
+                const link = (data.immagine || data.video || "").trim();
                 let vId = ottieniYoutubeID(link);
                 let anteprima = vId ? `https://img.youtube.com/vi/${vId}/hqdefault.jpg` : link;
-                
+
                 lista.insertAdjacentHTML('afterbegin', `
                     <div class="elemento-album" onclick="apriContenuto('${id}')">
-                        <div class="media-box"><img src="${anteprima}"></div>
-                        <div class="titolo-post">${data.titolo || 'Senza titolo'}</div>
+                        <div class="media-box"><img src="${anteprima}" onerror="this.src='immagini/scuola.jpg'"></div>
+                        <div class="info-box">
+                            <div class="titolo-post">📷 ${data.titolo || 'Senza titolo'}</div>
+                            <div class="anteprima-testo">${data.testo || ""}</div>
+                        </div>
                     </div>`);
             });
         });
@@ -104,20 +142,15 @@
                 document.getElementById('titolo-view').innerText = data.titolo || "";
                 document.getElementById('testo-view').innerText = data.testo || "";
                 const display = document.getElementById('media-display');
-                const link = data.video || data.immagine || "";
+                const link = (data.immagine || data.video || "").trim();
                 let vId = ottieniYoutubeID(link);
 
                 if (vId) {
-                    display.innerHTML = `
-                        <iframe width="100%" height="450" 
-                            src="https://www.youtube.com/embed/${vId}" 
-                            frameborder="0" allowfullscreen 
-                            style="border-radius:15px; border:3px solid #FFD700;">
-                        </iframe>
-                        <br><a href="https://www.youtube.com/watch?v=${vId}" target="_blank" class="btn-vai-youtube">▶ GUARDA SU YOUTUBE (Tasto Emergenza)</a>
-                    `;
+                    display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;">
+                        <a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:inline-block; background:#FFD700; color:#143ca0; padding:15px 40px; border-radius:50px; text-decoration:none; font-weight:bold; font-size:1.2rem;">GUARDA IL VIDEO 🎥</a>
+                    </div>`;
                 } else {
-                    display.innerHTML = `<img src="${link}" style="width:100%; border-radius:15px; border:3px solid #FFD700;">`;
+                    display.innerHTML = `<img src="${link}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`;
                 }
                 document.getElementById('overlay-blu').style.display = 'block';
                 document.body.style.overflow = 'hidden';
@@ -125,7 +158,6 @@
         }
 
         function chiudiTutto() { 
-            document.getElementById('media-display').innerHTML = ""; 
             document.getElementById('overlay-blu').style.display = 'none'; 
             document.body.style.overflow = 'auto'; 
         }

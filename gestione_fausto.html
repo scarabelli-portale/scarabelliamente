@@ -2,12 +2,12 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>REDAZIONE CINZIA - GESTIONE</title>
+    <title>REDAZIONE FAUSTO - GESTIONE</title>
     <style>
-        body { font-family: sans-serif; background: #27ae60; color: white; text-align: center; padding: 20px; }
+        body { font-family: sans-serif; background: #00a8e8; color: white; text-align: center; padding: 20px; }
         .box { max-width: 550px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #FFD700; }
         input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-        .box-foto { background: #fdf2e9; border: 2px dashed #e67e22; padding: 15px; border-radius: 12px; margin: 15px 0; }
+        .box-foto { background: #f0faff; border: 2px dashed #00a8e8; padding: 15px; border-radius: 12px; margin: 15px 0; }
         .btn-carica { background: #e67e22; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; transition: 0.3s; }
         .btn-carica:hover { background: #d35400; }
         #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; }
@@ -24,32 +24,32 @@
 
 <div id="area-login">
     <div class="login-box">
-        <h2 style="color:#27ae60;">Area Cinzia ✍️</h2>
+        <h2 style="color:#00a8e8;">Area Fausto ☁️</h2>
         <input type="password" id="pass" placeholder="Password di accesso">
-        <button onclick="login()" style="background:#27ae60; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer;">ENTRA</button>
+        <button onclick="login()" style="background:#00a8e8; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer;">ENTRA</button>
     </div>
 </div>
 
 <div id="redazione" style="display:none;">
     <div class="box">
-        <h2 style="color:#27ae60; margin-top:0;">✍️ Redazione di Cinzia</h2>
-        <input type="text" id="tit" placeholder="TITOLO DEL RACCONTO">
-        <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TUO TESTO..."></textarea>
+        <h2 style="color:#00a8e8; margin-top:0;">☁️ Redazione di Fausto</h2>
+        <input type="text" id="tit" placeholder="TITOLO DEL BOLLETTINO">
+        <textarea id="tes" rows="5" placeholder="SCRIVI QUI LE PREVISIONI..."></textarea>
         
         <div class="box-foto">
             <p style="color:#e67e22; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
             <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">CLICCA QUI E CARICA</a>
             <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA QUI SOTTO IL LINK OTTENUTO:</p>
-            <input type="text" id="img" placeholder="Incolla il link (es. https://ibb.co/...)">
+            <input type="text" id="img" placeholder="Incolla QUI il link della foto (es. https://ibb.co/...)">
         </div>
         
-        <button id="pubblica" onclick="invia()">🚀 PUBBLICA ARTICOLO</button>
+        <button id="pubblica" onclick="invia()">🚀 PUBBLICA BOLLETTINO</button>
 
         <div class="sezione-lista">
-            <h3 style="color:#27ae60; text-align:center;">🗑️ GESTIONE ARTICOLI</h3>
+            <h3 style="color:#00a8e8; text-align:center;">🗑️ GESTIONE BOLLETTINI</h3>
             <div id="lista-post"></div>
         </div>
-        <button onclick="location.href='cinzia.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO</button>
+        <button onclick="location.href='fausto.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO</button>
     </div>
 </div>
 
@@ -65,13 +65,13 @@
 
     function login() {
         const p = document.getElementById('pass').value;
-        if (p === "aiznic") {
+        if (p === "otsuaf") {
             document.getElementById('area-login').style.display = 'none';
             document.getElementById('redazione').style.display = 'block';
         } else { alert("Password Errata"); }
     }
 
-    function invia() {
+   function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
         let iRaw = document.getElementById('img').value;
@@ -79,25 +79,34 @@
         if(!t) { alert("Metti un titolo!"); return; }
 
         let immaginePulita = iRaw.trim();
-        // FILTRO MAGICO PER ESTRARRE IL LINK VERO
+        // Filtro per pulire il link
         if (immaginePulita.includes('<img src="')) {
             immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
         } else if (immaginePulita.includes('[img]')) {
             immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
         }
 
-        database.ref('archivioCinzia').push({
+        database.ref('archivioFausto').push({
             titolo: t, 
             testo: s, 
             immagine: immaginePulita, 
-            data: new Date().toLocaleString()
+            data: new Date().toLocaleDateString('it-IT')
         }).then(() => {
-            alert("✅ PUBBLICATO CON SUCCESSO!");
-            window.location.href = "cinzia.html"; 
+            alert("✅ BOLLETTINO PUBBLICATO!");
+            
+            // --- QUESTE RIGHE PULISCONO TUTTO PER IL PROSSIMO ARTICOLO ---
+            document.getElementById('tit').value = "";
+            document.getElementById('tes').value = "";
+            document.getElementById('img').value = "";
+            // -------------------------------------------------------------
+            
+            // Se vuoi rimanere nella pagina di gestione invece di scappare via, 
+            // commenta la riga qui sotto mettendo // davanti
+            window.location.href = "fausto.html"; 
         });
     }
 
-    database.ref('archivioCinzia').on('value', (snapshot) => {
+    database.ref('archivioFausto').on('value', (snapshot) => {
         const contenitore = document.getElementById('lista-post');
         contenitore.innerHTML = "";
         snapshot.forEach((child) => {
@@ -113,8 +122,8 @@
     });
 
     function eliminaPost(id) {
-        if(confirm("Vuoi davvero cancellare questo articolo?")) {
-            database.ref('archivioCinzia/' + id).remove();
+        if(confirm("Vuoi davvero cancellare questo bollettino?")) {
+            database.ref('archivioFausto/' + id).remove();
         }
     }
 </script>
