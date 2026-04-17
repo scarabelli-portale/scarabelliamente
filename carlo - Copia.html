@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCHIVIO SCARABELLI - Carlo</title>
+    <style>
+        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
+        .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 280px; overflow: hidden; border-bottom: 5px solid #0056b3; }
+        .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+        #scritta-animata { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 2.2rem; font-weight: 900; color: #ffffff; text-shadow: 2px 2px 10px rgba(0,0,0,1); text-transform: uppercase; letter-spacing: 4px; white-space: nowrap; z-index: 10; }
+        
+        .nav-bar { max-width: 900px; margin: 15px auto; display: flex; align-items: center; background: white; padding: 0 20px; border-radius: 50px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative; height: 50px; }
+        .identita-redattore { display: flex; align-items: center; gap: 10px; z-index: 1; }
+        .foto-redattore-mini { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #0056b3; object-fit: cover; }
+        .nome-redattore { font-size: 0.8rem; font-weight: bold; color: #0056b3; text-transform: uppercase; }
+        
+        .btn-home { position: absolute; left: 50%; transform: translateX(-50%); background: #0056b3; color: white; padding: 4px 12px; text-decoration: none; border-radius: 20px; font-weight: bold; font-size: 0.6rem; text-transform: uppercase; transition: 0.3s; white-space: nowrap; }
+        .btn-home:hover { background: #2c3e50; transform: translateX(-50%) scale(1.05); }
+        
+        .box-borsa { background: white; border: 1px solid #ddd; border-top: 4px solid #0056b3; padding: 10px; border-radius: 8px; margin: 10px auto 25px auto; max-width: 860px; transition: opacity 0.3s; }
+        
+        .main-container { max-width: 900px; margin: 0 auto; padding: 10px 20px; }
+        
+        /* Gestione visibilità articoli */
+        .box-articolo { background: white; border: 1px solid #ddd; border-left: 6px solid #0056b3; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 25px; display: none; }
+        
+        h1 { color: #0056b3; font-size: 1.7rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        
+        @media (max-width: 850px) { .copertina-container { height: 160px; } #scritta-animata { font-size: 1.2rem; } .nome-redattore { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="copertina-container"><img src="immagini/scuola.jpg" class="foto-scuola"><div id="scritta-animata"></div></div>
+    
+    <div class="nav-bar">
+        <div class="identita-redattore"><img src="immagini/carlo.jpg" class="foto-redattore-mini" onerror="this.src='immagini/scuola.jpg'"><span class="nome-redattore">Carlo</span></div>
+        <a href="index.html" class="btn-home">Home Page</a>
+    </div>
+
+    <div class="main-container">
+        <div class="box-borsa" id="widget-borsa">
+            <iframe src="https://s.tradingview.com/embed-widget/market-overview/?theme=light&width=100%&height=180&tabs=%5B%7B%22symbols%22%3A%5B%7B%22s%22%3A%22CME_MINI%3AWE1!%22%2C%22d%22%3A%22FRUMENTO%22%7D%2C%7B%22s%22%3A%22NYMEX%3ACL1!%22%2C%22d%22%3A%22PETROLIO%22%7D%5D%7D%5D" width="100%" height="180" frameborder="0" scrolling="no"></iframe>
+        </div>
+        <div id="lista-articoli"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        
+        const firebaseConfig = { 
+            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app" 
+        };
+        const app = initializeApp(firebaseConfig); 
+        const db = getDatabase(app);
+
+        // Controllo ID dall'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const idDaAprire = urlParams.get('id');
+
+        onValue(ref(db, 'archivioCarlo'), (snapshot) => {
+            const container = document.getElementById("lista-articoli"); 
+            container.innerHTML = "";
+            const data = snapshot.val();
+            
+            if (data) { 
+                Object.keys(data).reverse().forEach(id => { 
+                    const art = data[id];
+                    const displayStyle = idDaAprire ? (id === idDaAprire ? 'block' : 'none') : 'block';
+                    
+                    // Se stiamo guardando un articolo specifico, nascondiamo il widget borsa
+                    if(idDaAprire) document.getElementById('widget-borsa').style.display = 'none';
+
+                    container.innerHTML += `
+                        <div class="box-articolo" id="${id}" style="display: ${displayStyle}">
+                            <span style="font-size:0.75rem; color:#888;">Data: ${art.data || ''}</span>
+                            <h1>${art.titolo}</h1>
+                            <div style="font-size:1.1rem; text-align:justify; white-space:pre-wrap;">${art.testo}</div>
+                            ${idDaAprire ? '<br><a href="carlo.html" style="color:#0056b3; font-weight:bold; text-decoration:none;">← Mostra tutto l\'archivio</a>' : ''}
+                        </div>`; 
+                }); 
+            }
+        });
+
+        // Animazione Titolo
+        const testoScritta = "ECONOMIA E MERCATI"; 
+        let j = 0;
+        function animaTitolo() { 
+            const el = document.getElementById("scritta-animata"); 
+            if (el && j < testoScritta.length) { 
+                el.innerHTML += testoScritta.charAt(j); 
+                j++; 
+                setTimeout(animaTitolo, 130); 
+            } 
+        }
+        animaTitolo();
+    </script>
+</body>
+</html>

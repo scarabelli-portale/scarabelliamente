@@ -3,115 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MONDO DEL LAVORO E SCUOLA - CINZIA</title>
+    <title>Area Didattica - Cinzia</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; }
-        .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #0056b3; background: #000; }
-        .foto-scuola-header { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
-        #contenitore-titolo { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; width: 100%; }
-        .titolo-stampato { font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase; color: white; margin-bottom: 2px; font-weight: bold; }
-        .firma-persona { font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); }
-        .btn-nav { position: absolute; top: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 40; border: none; cursor: pointer; }
-        .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
-        .btn-gest { right: 15px; background: #0056b3; color: white; }
-        .griglia-multimedia { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 30px; max-width: 1200px; margin: auto; }
-        .elemento-album { background: white; border-radius: 10px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #ddd; display: flex; flex-direction: column; min-height: 220px; transition: 0.3s; }
-        .elemento-album:hover { transform: scale(1.02); }
-        .media-box-post { width: 100%; height: 180px; background: #001a33; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .media-box-post img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .info-post { padding: 12px; text-align: left; }
-        .titolo-post { font-size: 0.95rem; font-weight: bold; color: #0056b3; text-transform: uppercase; }
+        body { font-family: 'Times New Roman', serif; background-color: #f4f4f2; color: #1a1a1a; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid #27ae60; }
+        h1 { color: #27ae60; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-torna { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #27ae60; font-weight: bold; border: 1px solid #27ae60; padding: 8px 15px; border-radius: 6px; transition: 0.3s; }
+        .btn-torna:hover { background: #27ae60; color: white; }
         
-        /* OVERLAY DETTAGLIO */
-        #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 40, 100, 0.98); z-index: 9999; color: white; padding: 25px; box-sizing: border-box; overflow-y: auto; }
-        .img-overlay { width: 100%; max-height: 550px; object-fit: contain; border-radius: 10px; border: 3px solid #FFD700; background: #000; }
-        .chiudi-btn { background: white; color: #0056b3; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; font-size: 1rem; }
+        /* CRUCIALE: Nasconde gli articoli di base per permettere il filtro */
+        .articolo-scheda { display: none; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .articolo-scheda img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #ddd; }
+        .articolo-scheda h2 { color: #2c3e50; margin-top: 0; }
+        .testo-articolo { line-height: 1.6; font-size: 1.1rem; white-space: pre-wrap; }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
 
-    <div class="copertina-container">
-        <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
-        <button class="btn-nav btn-gest" onclick="vaiAGestione()">⚙ GESTIONE</button>
-        
-        <img src="immagini/scuola.jpg" class="foto-scuola-header">
-        <div id="contenitore-titolo">
-            <div class="titolo-stampato">MONDO DEL LAVORO E SCUOLA</div>
-            <div class="firma-persona">Cinzia</div>
+    <div class="container">
+        <a href="index.html" class="btn-torna">← Torna alla Home</a>
+        <h1>Area Didattica & Lavoro</h1>
+        <div id="container-articoli-cinzia">
+            <p style="text-align:center; color:#999;">Caricamento lezioni in corso...</p>
         </div>
     </div>
 
-    <div class="griglia-multimedia" id="lista-multimedia"></div>
-
-    <div id="overlay-blu">
-        <div style="max-width:800px; margin:auto; text-align:center;">
-            <div id="media-display"></div> 
-            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 2.8rem; margin: 15px 0;"></h2>
-            <div id="testo-view" style="text-align:justify; white-space:pre-wrap; padding:20px; font-size: 1.2rem; line-height: 1.6;"></div>
-            <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI X</button>
-        </div>
-    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
         const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-        const database = firebase.database();
+        const db = firebase.database();
 
-        // FUNZIONE PER PULIRE I LINK FOTO (Estrae solo l'URL se Cinzia incolla tutto il codice)
-        function pulisciLink(stringa) {
-            if (!stringa) return 'immagini/scuola.jpg';
-            // Se la stringa contiene un tag HTML <img>, estraiamo l'attributo src
-            if (stringa.includes('<img')) {
-                const match = stringa.match(/src=["']([^"']+)["']/);
-                return match ? match[1] : stringa;
-            }
-            // Se contiene un tag <a>, cerchiamo di non visualizzarlo come testo
-            if (stringa.includes('<a ')) {
-                // In questo caso è meglio restituire una stringa vuota o il default se non troviamo l'immagine
-                const matchImg = stringa.match(/src=["']([^"']+)["']/);
-                return matchImg ? matchImg[1] : 'immagini/scuola.jpg';
-            }
-            return stringa.trim();
+        // FUNZIONE PER PULIRE IL TESTO
+        function cleanText(text) {
+            return text ? text.replace(/[^a-zA-Z0-9\sàèìòùÁÉÍÓÚáéíóú,.!?;:()\-]/g, '').trim() : "";
         }
 
-        // Carica i post
-        database.ref('archivioCinzia').on('value', (snapshot) => {
-            const lista = document.getElementById('lista-multimedia');
-            lista.innerHTML = "";
+        // LOGICA DI CARICAMENTO E FILTRO
+        db.ref('archivioCinzia').on('value', (snapshot) => {
+            const container = document.getElementById('container-articoli-cinzia');
+            container.innerHTML = "";
+            
+            // 1. Leggiamo l'ID dall'indirizzo (es: cinzia.html?id=-Nxyz...)
+            const urlParams = new URLSearchParams(window.location.search);
+            const idDaAprire = urlParams.get('id');
+
             snapshot.forEach((child) => {
-                const data = child.val();
-                const chiave = child.key;
-                const linkFoto = pulisciLink(data.immagine);
+                const id = child.key;
+                const art = child.val();
                 
-                lista.insertAdjacentHTML('afterbegin', `
-                    <div class="elemento-album" onclick="apriContenuto('${chiave}')">
-                        <div class="media-box-post"><img src="${linkFoto}"></div>
-                        <div class="info-post"><div class="titolo-post">${data.titolo}</div></div>
-                    </div>`);
+                const div = document.createElement('div');
+                div.className = "articolo-scheda";
+                div.id = id;
+
+                // 2. DECIDIAMO SE MOSTRARE L'ARTICOLO
+                // Se c'è un ID specifico nell'URL, mostriamo solo quello
+                if (idDaAprire && id === idDaAprire) {
+                    div.style.display = "block";
+                } 
+                // Se NON c'è nessun ID nell'URL, mostriamo tutto l'archivio
+                else if (!idDaAprire) {
+                    div.style.display = "block";
+                }
+
+                div.innerHTML = `
+                    <h2>${cleanText(art.titolo)}</h2>
+                    ${(art.immagine || art.urlImmagine) ? `<img src="${art.immagine || art.urlImmagine}">` : ""}
+                    <div class="testo-articolo">${cleanText(art.testo)}</div>
+                `;
+                // Inseriamo in alto l'ultimo post
+                container.insertBefore(div, container.firstChild);
             });
+
+            // Se abbiamo filtrato un articolo, facciamo un piccolo scroll per centrarlo
+            if (idDaAprire) {
+                setTimeout(() => {
+                    const el = document.getElementById(idDaAprire);
+                    if(el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }
         });
-
-        function apriContenuto(id) {
-            database.ref('archivioCinzia/' + id).once('value').then((snapshot) => {
-                const data = snapshot.val();
-                const linkFotoGrande = pulisciLink(data.immagine);
-                
-                document.getElementById('titolo-view').innerText = data.titolo;
-                document.getElementById('testo-view').innerText = data.testo;
-                document.getElementById('media-display').innerHTML = `<img src="${linkFotoGrande}" class="img-overlay" onerror="this.src='immagini/scuola.jpg'">`;
-                document.getElementById('overlay-blu').style.display = 'block';
-            });
-        }
-
-        function chiudiTutto() { document.getElementById('overlay-blu').style.display = 'none'; }
-
-        function vaiAGestione() {
-            sessionStorage.removeItem('autorizzato');
-            window.location.href = 'gestione_cinzia.html';
-        }
     </script>
 </body>
 </html>

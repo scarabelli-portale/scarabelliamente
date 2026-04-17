@@ -19,10 +19,8 @@
         .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
         .btn-gest { right: 15px; background: #FFD700; color: #143ca0; }
 
-        /* LAYOUT A DUE COLONNE */
+        /* LAYOUT */
         .main-wrapper { display: flex; max-width: 1300px; margin: 30px auto; gap: 20px; padding: 0 15px; }
-        
-        /* COLONNA SINISTRA */
         .sidebar-servizi { width: 280px; flex-shrink: 0; }
         .tabellina-box { background: white; border-radius: 12px; border: 1px solid #ddd; border-top: 5px solid #143ca0; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 20px; }
         .tabellina-box h4 { margin: 0 0 15px 0; font-size: 0.9rem; color: #143ca0; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 8px; }
@@ -30,20 +28,16 @@
         .servizio-item:hover { color: #143ca0; padding-left: 5px; }
         .icona-s { margin-right: 10px; font-size: 1.1rem; width: 25px; text-align: center; }
 
-        .btn-wz { background: #25D366 !important; color: white !important; border: none !important; margin-top: 15px; justify-content: center; border-radius: 8px; font-weight: bold; }
-        .btn-mail { background: #143ca0 !important; color: white !important; border: none !important; margin-top: 5px; justify-content: center; border-radius: 8px; font-weight: bold; }
-
         /* GRIGLIA MULTIMEDIALE */
-        .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; transition: opacity 0.5s; }
         .elemento-album { background: white; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; }
         .elemento-album:hover { transform: translateY(-5px); border-color: #FFD700; }
         .media-box { width: 100%; height: 160px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #eee; overflow: hidden; }
         .media-box img { width: 100%; height: 100%; object-fit: cover; }
         .info-box { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .titolo-post { font-size: 0.9rem; font-weight: bold; color: #143ca0; text-transform: uppercase; margin-bottom: 8px; }
-        .anteprima-testo { font-size: 0.85rem; color: #666; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-style: italic; }
-
-        /* OVERLAY STILE CINZIA */
+        
+        /* OVERLAY BLU */
         #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 60, 160, 0.98); z-index: 9999; color: white; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #box-contenuto { max-width: 850px; margin: auto; text-align: center; }
         .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
@@ -71,15 +65,6 @@
                 <div class="servizio-item"><span class="icona-s">📁</span> Archivio Foto</div>
                 <div class="servizio-item"><span class="icona-s">🎥</span> Filmati Storici</div>
                 <div class="servizio-item"><span class="icona-s">🌍</span> Ricerca Locale</div>
-                
-                <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
-                
-                <a href="https://wa.me/393331234567?text=Ciao Sergio, ti scrivo dal sito Scarabellianamente" target="_blank" class="servizio-item btn-wz">
-                    <span class="icona-s">📱</span> WHATSAPP
-                </a>
-                <a href="mailto:tuaemail@esempio.it" class="servizio-item btn-mail">
-                    <span class="icona-s">✉</span> EMAIL
-                </a>
             </div>
         </aside>
 
@@ -99,13 +84,19 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
         const firebaseConfig = { 
-            apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
-            authDomain: "sito-sergio-b19ce.firebaseapp.com",
-            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
-            projectId: "sito-sergio-b19ce"
+            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/"
         };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
+
+        // Controllo immediato dell'ID nell'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const idArticoloUrl = urlParams.get('id');
+        
+        // Se stiamo cercando un articolo, nascondiamo la griglia subito
+        if(idArticoloUrl) {
+            document.getElementById('lista-multimedia').style.opacity = "0";
+        }
 
         function ottieniYoutubeID(url) {
             if (!url) return null;
@@ -114,13 +105,13 @@
             return (match && match[2].length == 11) ? match[2] : null;
         }
 
+        // CARICAMENTO GRIGLIA
         database.ref('archivioSergio').on('value', (snapshot) => {
             const lista = document.getElementById('lista-multimedia');
             lista.innerHTML = "";
             snapshot.forEach((child) => {
                 const data = child.val();
                 const id = child.key;
-                // CORREZIONE 2: Lettura flessibile dell'immagine
                 const link = (data.immagine || data.video || "").trim();
                 let vId = ottieniYoutubeID(link);
                 let anteprima = vId ? `https://img.youtube.com/vi/${vId}/hqdefault.jpg` : link;
@@ -130,15 +121,20 @@
                         <div class="media-box"><img src="${anteprima}" onerror="this.src='immagini/scuola.jpg'"></div>
                         <div class="info-box">
                             <div class="titolo-post">📷 ${data.titolo || 'Senza titolo'}</div>
-                            <div class="anteprima-testo">${data.testo || ""}</div>
                         </div>
                     </div>`);
             });
+            
+            // Se non c'è ID, mostriamo la griglia
+            if(!idArticoloUrl) {
+                lista.style.opacity = "1";
+            }
         });
 
-        function apriContenuto(id) {
+        window.apriContenuto = function(id) {
             database.ref('archivioSergio/' + id).once('value').then((snapshot) => {
                 const data = snapshot.val();
+                if(!data) return;
                 document.getElementById('titolo-view').innerText = data.titolo || "";
                 document.getElementById('testo-view').innerText = data.testo || "";
                 const display = document.getElementById('media-display');
@@ -157,9 +153,16 @@
             });
         }
 
-        function chiudiTutto() { 
+        window.chiudiTutto = function() { 
             document.getElementById('overlay-blu').style.display = 'none'; 
             document.body.style.overflow = 'auto'; 
+            // Quando chiudi l'articolo singolo, riappari la griglia con una bella sfumatura
+            document.getElementById('lista-multimedia').style.opacity = "1";
+        }
+
+        // Lancio immediato se c'è l'ID
+        if (idArticoloUrl) {
+            apriContenuto(idArticoloUrl);
         }
     </script>
 </body>
