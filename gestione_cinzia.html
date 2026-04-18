@@ -39,7 +39,7 @@
         <div class="box-foto">
             <p style="color:#e67e22; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
             <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">CLICCA QUI E CARICA</a>
-            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA QUI SOTTO IL LINK OTTENUTO:</p>
+            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA IL LINK:</p>
             <input type="text" id="img" placeholder="Incolla il link (es. https://ibb.co/...)">
         </div>
         
@@ -63,9 +63,18 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
+    // --- FUNZIONE MEMORIA PASSWORD ---
+    window.onload = function() {
+        if (sessionStorage.getItem("login_cinzia") === "ok") {
+            document.getElementById('area-login').style.display = 'none';
+            document.getElementById('redazione').style.display = 'block';
+        }
+    };
+
     function login() {
         const p = document.getElementById('pass').value;
         if (p === "aiznic") {
+            sessionStorage.setItem("login_cinzia", "ok"); // Salva l'accesso
             document.getElementById('area-login').style.display = 'none';
             document.getElementById('redazione').style.display = 'block';
         } else { alert("Password Errata"); }
@@ -79,7 +88,6 @@
         if(!t) { alert("Metti un titolo!"); return; }
 
         let immaginePulita = iRaw.trim();
-        // FILTRO MAGICO PER ESTRARRE IL LINK VERO
         if (immaginePulita.includes('<img src="')) {
             immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
         } else if (immaginePulita.includes('[img]')) {
