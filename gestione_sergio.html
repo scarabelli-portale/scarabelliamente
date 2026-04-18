@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>REDAZIONE SERGIO - GESTIONE</title>
+    <style>
+        body { font-family: sans-serif; background: #003366; color: white; text-align: center; padding: 20px; }
+        .box { max-width: 550px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #FFD700; }
+        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        .box-foto { background: #fff5eb; border: 2px dashed #e67e22; padding: 15px; border-radius: 12px; margin: 15px 0; }
+        .btn-carica { background: #e67e22; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; transition: 0.3s; }
+        .btn-carica:hover { background: #d35400; }
+        #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; }
+        .sezione-lista { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; text-align: left; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.8rem; color: #333; }
+        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        #area-login { margin-top: 100px; }
+        .login-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; color: #333; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+
+<div id="area-login">
+    <div class="login-box">
+        <h2 style="color:#003366;">Area Sergio ⚓</h2>
+        <input type="password" id="pass" placeholder="Password di accesso">
+        <button onclick="login()" style="background:#003366; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer;">ENTRA</button>
+    </div>
+</div>
+
+<div id="redazione" style="display:none;">
+    <div class="box">
+        <h2 style="color:#003366; margin-top:0;">✍️ Redazione di Sergio</h2>
+        
+        <input type="text" id="tit" placeholder="TITOLO DEL RACCONTO">
+        <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TUO TESTO..."></textarea>
+        
+        <div class="box-foto">
+            <p style="color:#e67e22; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
+            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
+            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA IL LINK QUI SOTTO:</p>
+            <input type="text" id="img" placeholder="Incolla link foto o video Youtube">
+        </div>
+        
+        <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
+
+        <div class="sezione-lista">
+            <h3 style="color:#003366; text-align:center;">🗑️ I TUOI POST ONLINE</h3>
+            <div id="lista-post"></div>
+        </div>
+        
+        <button onclick="location.href='sergio.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO PUBBLICO</button>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        authDomain: "sito-sergio-b19ce.firebaseapp.com",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "sito-sergio-b19ce"
+    };
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const database = firebase.database();
+
+    // Funzione Login (Password: sergio)
+    function login() {
+        const p = document.getElementById('pass').value.toLowerCase();
+        if (p === "oigres") { 
+            document.getElementById('area-login').style.display = 'none';
+            document.getElementById('redazione').style.display = 'block';
+        } else { alert("Password Errata"); }
+    }
+
+    // Funzione Invia con FILTRO MAGICO
+    function invia() {
+        let t = document.getElementById('tit').value;
+        let s = document.getElementById('tes').value;
+        let iRaw = document.getElementById('img').value.trim();
+
+        if(!t) { alert("Inserisci un titolo!"); return; }
+
+        let immaginePulita = iRaw;
+        // Pulizia link ImgBB
+        if (immaginePulita.includes('<img src="')) {
+            immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
+        } else if (immaginePulita.includes('[img]')) {
+            immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
+        }
+
+        database.ref('archivioSergio').push({
+            titolo: t, 
+            testo: s, 
+            immagine: immaginePulita, 
+            data: new Date().toLocaleString()
+        }).then(() => {
+            alert("✅ POST PUBBLICATO!");
+            window.location.href = "sergio.html"; 
+        });
+    }
+
+    // Carica lista post per eliminazione
+    database.ref('archivioSergio').on('value', (snapshot) => {
+        const contenitore = document.getElementById('lista-post');
+        contenitore.innerHTML = "";
+        snapshot.forEach((child) => {
+            const post = child.val();
+            const id = child.key;
+            contenitore.insertAdjacentHTML('afterbegin', `
+                <div class="riga-post">
+                    <span>• ${post.titolo}</span>
+                    <button class="btn-elimina" onclick="eliminaPost('${id}')">ELIMINA</button>
+                </div>
+            `);
+        });
+    });
+
+    function eliminaPost(id) {
+        if(confirm("Vuoi davvero cancellare questo post?")) {
+            database.ref('archivioSergio/' + id).remove();
+        }
+    }
+</script>
+</body>
+</html>
