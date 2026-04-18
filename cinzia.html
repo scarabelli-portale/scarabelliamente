@@ -5,26 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Area Didattica - Cinzia</title>
     <style>
-        body { font-family: 'Times New Roman', serif; background-color: #f4f4f2; color: #1a1a1a; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid #27ae60; }
-        h1 { color: #27ae60; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
-        .btn-torna { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #27ae60; font-weight: bold; border: 1px solid #27ae60; padding: 8px 15px; border-radius: 6px; transition: 0.3s; }
-        .btn-torna:hover { background: #27ae60; color: white; }
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; line-height: 1.5; }
+
+        .header-fissa {
+            position: relative; /* Cambiato da fixed a relative per ora, così è più semplice */
+            width: 100%;
+            height: 250px;
+            background: #000;
+            border-bottom: 5px solid #27ae60;
+            overflow: hidden;
+        }
+        .foto-header { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; opacity: 0.7; }
+        #contenitore-titolo { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 100%; }
+        .titolo-stampato { font-size: 0.9rem; letter-spacing: 6px; text-transform: uppercase; color: white; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        .firma-persona { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #27ae60; text-shadow: 3px 3px 8px rgba(0,0,0,1); margin-top: -10px; }
+
+        .btn-nav { position: absolute; top: 15px; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 1001; }
+        .btn-home { left: 15px; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; }
+        .btn-gest { right: 15px; background: #27ae60; color: white; border: none; cursor: pointer; }
+
+        .content-wrapper { padding: 20px; }
+        .container-articoli { max-width: 850px; margin: auto; }
         
-        /* CRUCIALE: Nasconde gli articoli di base per permettere il filtro */
-        .articolo-scheda { display: none; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .articolo-scheda { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            margin-bottom: 30px; 
+            display: block; /* IMPORTANTE: Ora sono visibili di default */
+        }
         .articolo-scheda img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #ddd; }
-        .articolo-scheda h2 { color: #2c3e50; margin-top: 0; }
-        .testo-articolo { line-height: 1.6; font-size: 1.1rem; white-space: pre-wrap; }
+        .testo-articolo { line-height: 1.6; font-size: 1.1rem; white-space: pre-wrap; text-align: justify; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <a href="index.html" class="btn-torna">← Torna alla Home</a>
-        <h1>Area Didattica & Lavoro</h1>
-        <div id="container-articoli-cinzia">
-            <p style="text-align:center; color:#999;">Caricamento lezioni in corso...</p>
+    <div class="header-fissa">
+        <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
+        <button class="btn-nav btn-gest" onclick="window.location.href='gestione_cinzia.html'">⚙ GESTIONE</button>
+        <img src="immagini/scuola.jpg" class="foto-header">
+        <div id="contenitore-titolo">
+            <div class="titolo-stampato">Area Didattica & Lavoro</div>
+            <div class="firma-persona">Cinzia</div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="container-articoli" id="container-articoli-cinzia">
+            <p style="text-align:center; color:#999;">Caricamento lezioni...</p>
         </div>
     </div>
 
@@ -36,17 +66,9 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
-        // FUNZIONE PER PULIRE IL TESTO
-        function cleanText(text) {
-            return text ? text.replace(/[^a-zA-Z0-9\sàèìòùÁÉÍÓÚáéíóú,.!?;:()\-]/g, '').trim() : "";
-        }
-
-        // LOGICA DI CARICAMENTO E FILTRO
         db.ref('archivioCinzia').on('value', (snapshot) => {
             const container = document.getElementById('container-articoli-cinzia');
             container.innerHTML = "";
-            
-            // 1. Leggiamo l'ID dall'indirizzo (es: cinzia.html?id=-Nxyz...)
             const urlParams = new URLSearchParams(window.location.search);
             const idDaAprire = urlParams.get('id');
 
@@ -54,36 +76,23 @@
                 const id = child.key;
                 const art = child.val();
                 
-                const div = document.createElement('div');
-                div.className = "articolo-scheda";
-                div.id = id;
-
-                // 2. DECIDIAMO SE MOSTRARE L'ARTICOLO
-                // Se c'è un ID specifico nell'URL, mostriamo solo quello
-                if (idDaAprire && id === idDaAprire) {
-                    div.style.display = "block";
-                } 
-                // Se NON c'è nessun ID nell'URL, mostriamo tutto l'archivio
-                else if (!idDaAprire) {
-                    div.style.display = "block";
+                // Se c'è un ID nell'URL, mostriamo SOLO quello. 
+                // Altrimenti (se idDaAprire è null) mostriamo tutto.
+                if (idDaAprire && id !== idDaAprire) {
+                    return; // Salta questo articolo
                 }
 
+                const div = document.createElement('div');
+                div.className = "articolo-scheda";
                 div.innerHTML = `
-                    <h2>${cleanText(art.titolo)}</h2>
+                    <h2 style="color:#27ae60; margin-top:0;">${art.titolo}</h2>
+                    <div style="color:#888; font-size:0.8rem; margin-bottom:10px;">Pubblicato il: ${art.data || ''}</div>
                     ${(art.immagine || art.urlImmagine) ? `<img src="${art.immagine || art.urlImmagine}">` : ""}
-                    <div class="testo-articolo">${cleanText(art.testo)}</div>
+                    <div class="testo-articolo">${art.testo}</div>
+                    ${idDaAprire ? `<div style="text-align:center; margin-top:20px;"><button onclick="window.location.href='cinzia.html'" style="padding:10px 20px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">MOSTRA TUTTO L'ARCHIVIO</button></div>` : ""}
                 `;
-                // Inseriamo in alto l'ultimo post
                 container.insertBefore(div, container.firstChild);
             });
-
-            // Se abbiamo filtrato un articolo, facciamo un piccolo scroll per centrarlo
-            if (idDaAprire) {
-                setTimeout(() => {
-                    const el = document.getElementById(idDaAprire);
-                    if(el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 500);
-            }
         });
     </script>
 </body>

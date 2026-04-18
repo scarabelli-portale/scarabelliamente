@@ -63,8 +63,18 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    // --- CONTROLLO MEMORIA LOGIN ALL'AVVIO ---
+    window.onload = function() {
+        if (sessionStorage.getItem("login_carlo") === "ok") {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('blocco-gestione').style.display = 'block';
+            caricaLista();
+        }
+    };
+
     window.verifica = function() {
         if (document.getElementById('pass-field').value === "olrac") {
+            sessionStorage.setItem("login_carlo", "ok"); // Salva l'accesso
             document.getElementById('login-box').style.display = 'none';
             document.getElementById('blocco-gestione').style.display = 'block';
             caricaLista();
@@ -95,6 +105,7 @@
     function caricaLista() {
         onValue(ref(db, 'archivioCarlo'), (snap) => {
             const list = document.getElementById('lista-articoli');
+            if(!list) return; // Sicurezza
             list.innerHTML = "";
             const data = snap.val();
             if (data) {

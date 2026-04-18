@@ -26,43 +26,54 @@
         
         .info-post { display: flex; flex-direction: column; }
         .autore-label { font-size: 0.7rem; text-transform: uppercase; color: #143ca0; font-weight: bold; }
+
+        /* STILE LOGIN */
+        #area-login { margin-top: 100px; text-align: center; }
+        .login-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; color: #333; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     </style>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
 
-<script>
-    if (sessionStorage.getItem("accesso_presidente") !== "autorizzato") {
-        window.location.href = "login_presidente.html";
-    }
-</script>
-
-<div class="container">
-    <div class="box">
-        <h2>✍️ Editoriale di Francesco Mariani</h2>
-        <a href="index.html" style="color: #143ca0; font-weight: bold; text-decoration: none;">⬅️ ESCI E TORNA AL SITO</a>
-        
-        <input type="text" id="tit" placeholder="TITOLO DELL'EDITORIALE">
-        <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TESTO..."></textarea>
-        
-        <div class="box-foto">
-            <p style="margin:0 0 10px 0; color:#d35400; font-weight:bold;">📸 AGGIUNGI FOTO</p>
-            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">1. CARICA FOTO SU IMGBB</a>
-            <input type="text" id="img" placeholder="2. Incolla qui il codice o link della foto">
-        </div>
-
-        <div class="scelta-manifesto">
-            <input type="checkbox" id="is-manifesto" style="width:20px; height:20px; margin-right:10px; cursor:pointer;">
-            <label for="is-manifesto" style="cursor:pointer;"><b>ATTIVA COME MANIFESTO</b></label>
-        </div>
-
-        <button id="btn-pubblica" onclick="inviaEditoriale()">🚀 PUBBLICA IN PRIMA PAGINA</button>
+<div id="area-login">
+    <div class="login-box">
+        <h2 style="color:#143ca0;">Accesso Presidenza 🏛️</h2>
+        <input type="password" id="pass" placeholder="Password di sicurezza">
+        <button onclick="login()" style="background:#143ca0; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer; font-weight:bold;">ENTRA NELLA SALA COMANDI</button>
     </div>
+</div>
 
-    <div class="radar">
-        <h3 style="margin-top:0;">📡 Radar Redazioni (Ultimi inserimenti)</h3>
-        <div id="elenco-radar">Caricamento radar...</div>
+<div id="redazione" style="display:none;">
+    <div class="container">
+        <div class="box">
+            <h2>✍️ Editoriale di Francesco Mariani</h2>
+            <div style="margin-bottom: 15px;">
+                <a href="index.html" style="color: #143ca0; font-weight: bold; text-decoration: none;">⬅️ TORNA ALLA HOME</a> | 
+                <a href="francesco.html" style="color: #27ae60; font-weight: bold; text-decoration: none;">📄 VEDI PAGINA EDITORIALI</a>
+            </div>
+            
+            <input type="text" id="tit" placeholder="TITOLO DELL'EDITORIALE">
+            <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TESTO..."></textarea>
+            
+            <div class="box-foto">
+                <p style="margin:0 0 10px 0; color:#d35400; font-weight:bold;">📸 AGGIUNGI FOTO</p>
+                <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">1. CARICA FOTO SU IMGBB</a>
+                <input type="text" id="img" placeholder="2. Incolla qui il codice o link della foto">
+            </div>
+
+            <div class="scelta-manifesto">
+                <input type="checkbox" id="is-manifesto" style="width:20px; height:20px; margin-right:10px; cursor:pointer;">
+                <label for="is-manifesto" style="cursor:pointer;"><b>ATTIVA COME MANIFESTO (Prima Pagina)</b></label>
+            </div>
+
+            <button id="btn-pubblica" onclick="inviaEditoriale()">🚀 PUBBLICA IN PRIMA PAGINA</button>
+        </div>
+
+        <div class="radar">
+            <h3 style="margin-top:0;">📡 Radar Redazioni (Ultimi inserimenti)</h3>
+            <div id="elenco-radar">Caricamento radar...</div>
+        </div>
     </div>
 </div>
 
@@ -75,6 +86,23 @@
     };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
+
+    // --- LOGICA MEMORIA SESSIONE ---
+    window.onload = function() {
+        if (sessionStorage.getItem("login_presidente") === "ok") {
+            document.getElementById('area-login').style.display = 'none';
+            document.getElementById('redazione').style.display = 'block';
+        }
+    };
+
+    function login() {
+        const p = document.getElementById('pass').value;
+        if (p === "ocsecnarf") {
+            sessionStorage.setItem("login_presidente", "ok");
+            document.getElementById('area-login').style.display = 'none';
+            document.getElementById('redazione').style.display = 'block';
+        } else { alert("Password Errata"); }
+    }
 
     function inviaEditoriale() {
         const t = document.getElementById('tit').value;
@@ -99,19 +127,19 @@
             autore: "PRESIDENTE",
             data: new Date().toLocaleString()
         }).then(() => {
-            alert("✅ Pubblicato!");
-            location.reload();
+            alert("✅ Pubblicato con successo!");
+            window.location.href = "francesco.html";
         });
     }
 
-    // --- LOGICA RADAR OTTIMIZZATA ---
     function aggiornaRadar() {
-        const redazioni = ['archivioSergio', 'archivioCinzia'];
+        // Ho aggiunto anche gli altri archivi così Francesco vede tutto
+        const redazioni = ['archivioSergio', 'archivioCinzia', 'archivioFausto'];
         const contenitore = document.getElementById('elenco-radar');
-        contenitore.innerHTML = ""; // Pulisce prima di caricare
+        contenitore.innerHTML = "";
 
         redazioni.forEach(red => {
-            database.ref(red).limitToLast(3).once('value', (snap) => {
+            database.ref(red).limitToLast(2).once('value', (snap) => {
                 snap.forEach(child => {
                     const post = child.val();
                     const nomeAutore = red.replace('archivio', '').toUpperCase();
@@ -124,7 +152,7 @@
                             <button class="btn-promuovi" onclick="promuovi('${child.key}', '${red}')">Promuovi</button>
                         </div>
                     `;
-                    contenitore.innerHTML = html + contenitore.innerHTML; // Mette i più nuovi in alto
+                    contenitore.innerHTML = html + contenitore.innerHTML;
                 });
             });
         });
@@ -139,12 +167,11 @@
                     autore: red.replace('archivio', '').toUpperCase(),
                     tipo: 'normale',
                     data_promozione: new Date().toLocaleString() 
-                }).then(() => alert("✅ Post clonato con successo!"));
+                }).then(() => alert("✅ Post promosso in Prima Pagina!"));
             });
         }
     }
 
-    // Avvio radar
     aggiornaRadar();
 </script>
 </body>
