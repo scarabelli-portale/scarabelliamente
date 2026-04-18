@@ -10,19 +10,35 @@
         /* COPERTINA */
         .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 220px; overflow: hidden; border-bottom: 4px solid #0056b3; }
         .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+        
         #fondalino-animato {
             position: absolute; bottom: 0; left: -100%; width: 100%; height: 60px;
             background: linear-gradient(to bottom, rgba(173, 216, 230, 0.5) 0%, rgba(173, 216, 230, 0.5) 50%, rgba(135, 206, 235, 0.6) 50%, rgba(135, 206, 235, 0.6) 100%);
             z-index: 9; animation: entraFondale 9s forwards ease-in-out;
         }
+
         #scritta-fiori { 
             position: absolute; bottom: 15px; right: -100%; width: 100%; text-align: center;
             font-size: 1.9rem; font-weight: 900; color: #ffffff; text-transform: uppercase; 
             letter-spacing: 3px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7); 
             z-index: 10; animation: entraTitolo 9s forwards ease-in-out;
+            white-space: nowrap; /* Forza la parola su una sola riga */
         }
-        @keyframes entraFondale { 0% { left: -100%; } 12% { left: 0; } 88% { left: 0; } 100% { left: 100%; } }
-        @keyframes entraTitolo { 0% { right: -100%; } 12% { right: 0; } 88% { right: 0; } 100% { right: 100%; } }
+
+        /* ANIMAZIONI SISTEMATE PER SPARIRE DEL TUTTO (110%) */
+        @keyframes entraFondale { 0% { left: -100%; } 12% { left: 0; } 88% { left: 0; } 100% { left: 110%; } }
+        @keyframes entraTitolo { 0% { right: -100%; } 12% { right: 0; } 88% { right: 0; } 100% { right: 110%; } }
+
+        /* --- CORREZIONE PER CELLULARE --- */
+        @media (max-width: 600px) {
+            #scritta-fiori {
+                font-size: 1.05rem; /* Più piccolo così non deborda */
+                letter-spacing: 1px; /* Lettere un po' più vicine */
+                bottom: 12px;
+            }
+            #fondalino-animato { height: 40px; }
+            .copertina-container { height: 180px; } /* Leggermente più bassa su mobile */
+        }
 
         /* LISTE E SIMBOLI */
         .riga-titolo {
@@ -137,24 +153,24 @@
         </div>
 
         <div class="colonna-lato">
-      <div class="box" style="border-top: 4px solid #e67e22;">
-    <button class="btn-gestione" onclick="location.href='gestione_carlo.html'">⚙️</button>
-    <div style="display: flex; gap: 15px; cursor: pointer;" onclick="location.href='carlo.html'">
-        <img src="immagini/carlo.jpg" class="foto-profilo" style="border-color:#e67e22">
-        <div style="flex:1">
-            <h5 style="color:#e67e22; margin:0; font-size:0.75rem; text-transform:uppercase;">Economia & Mercati</h5>
-            
-            <div style="height: 42px; margin: 8px 0; border-radius: 4px; overflow: hidden; border: 1px solid #eee; background: #fff;">
-                <iframe src="https://s.tradingview.com/embed-widget/ticker-tape/?locale=it#%7B%22symbols%22%3A%5B%7B%22proName%22%3A%22INDEX%3AFTSEMIB%22%2C%22title%22%3A%22Milano%22%7D%2C%7B%22proName%22%3A%22BITSTAMP%3ABTCUSD%22%2C%22title%22%3A%22BTC%22%7D%2C%7B%22proName%22%3A%22TVC%3AGOLD%22%2C%22title%22%3A%22Oro%22%7D%5D%2C%22showSymbolLogo%22%3Afalse%2C%22colorTheme%22%3A%22light%22%2C%22isTransparent%22%3Atrue%2C%22displayMode%22%3A%22adaptive%22%7D" width="100%" height="42" frameborder="0" scrolling="no"></iframe>
-            </div>
+            <div class="box" style="border-top: 4px solid #e67e22;">
+                <button class="btn-gestione" onclick="location.href='gestione_carlo.html'">⚙️</button>
+                <div style="display: flex; gap: 15px; cursor: pointer;" onclick="location.href='carlo.html'">
+                    <img src="immagini/carlo.jpg" class="foto-profilo" style="border-color:#e67e22">
+                    <div style="flex:1">
+                        <h5 style="color:#e67e22; margin:0; font-size:0.75rem; text-transform:uppercase;">Economia & Mercati</h5>
+                        
+                        <div style="height: 42px; margin: 8px 0; border-radius: 4px; overflow: hidden; border: 1px solid #eee; background: #fff;">
+                            <iframe src="https://s.tradingview.com/embed-widget/ticker-tape/?locale=it#%7B%22symbols%22%3A%5B%7B%22proName%22%3A%22INDEX%3AFTSEMIB%22%2C%22title%22%3A%22Milano%22%7D%2C%7B%22proName%22%3A%22BITSTAMP%3ABTCUSD%22%2C%22title%22%3A%22BTC%22%7D%2C%7B%22proName%22%3A%22TVC%3AGOLD%22%2C%22title%22%3A%22Oro%22%7D%5D%2C%22showSymbolLogo%22%3Afalse%2C%22colorTheme%22%3A%22light%22%2C%22isTransparent%22%3Atrue%2C%22displayMode%22%3A%22adaptive%22%7D" width="100%" height="42" frameborder="0" scrolling="no"></iframe>
+                        </div>
 
-            <div class="tab-rubriche">
-                <div class="voce-rubrica">📊 Analisi & Focus Mercati</div>
-            </div>
-        </div>
-    </div>
-    <button class="btn-entra bg-orange" onclick="location.href='carlo.html'">ENTRA DA CARLO</button>
-</div>      
+                        <div class="tab-rubriche">
+                            <div class="voce-rubrica">📊 Analisi & Focus Mercati</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-entra bg-orange" onclick="location.href='carlo.html'">ENTRA DA CARLO</button>
+            </div>      
 
             <div class="box" style="border-top: 4px solid #143ca0; min-height: 440px; display: flex; flex-direction: column; gap: 10px;">
                 <button class="btn-gestione" onclick="location.href='gestione_sergio.html'">⚙️</button>
@@ -173,7 +189,7 @@
                     <ul id="lista-titoli-sergio" style="list-style: none; padding: 0; margin: 0; font-size: 0.75rem;"></ul>
                 </div>
                 <button class="btn-entra" style="background: #143ca0; margin-top: auto;" onclick="location.href='sergio.html'">ENTRA NELL'ARCHIVIO</button>
-            </div>        
+            </div>          
         </div>
     </div>
 
@@ -208,63 +224,4 @@
         };
 
         // PRESIDENTE
-        db.ref('archivioCentrale').limitToLast(5).on('value', (snap) => {
-            const listaF = document.getElementById('lista-home-francesco');
-            listaF.innerHTML = ""; let keys = [];
-            snap.forEach(c => {
-                const id = c.key; const p = c.val(); datiPresidente[id] = p; keys.push(id);
-                let simb = "★"; let col = "#0056b3"; let sigla = "Pres";
-                if(p.autore === "CINZIA") { simb = "✍"; col = "#27ae60"; sigla = "Cinz"; }
-                if(p.autore === "SERGIO") { simb = "📷"; col = "#143ca0"; sigla = "Serg"; }
-                const li = document.createElement('li'); li.className = 'riga-titolo';
-                li.onclick = () => cambiaFocusPresidente(id);
-                li.innerHTML = `<span class='simbolo-autore' style='color:${col}'>${simb}</span><span class='sigla-autore'>${sigla}</span>${cleanText(p.titolo)}`;
-                listaF.insertBefore(li, listaF.firstChild);
-            });
-            if(keys.length > 0) cambiaFocusPresidente(keys[keys.length-1]);
-        });
-
-        // CINZIA
-        db.ref('archivioCinzia').limitToLast(6).on('value', (snap) => {
-            const listaC = document.getElementById('lista-home-cinzia');
-            listaC.innerHTML = ""; 
-            snap.forEach(c => {
-                const idArt = c.key; const p = c.val();
-                const li = document.createElement('li'); li.className = 'riga-titolo';
-                li.onclick = () => location.href = 'cinzia.html?id=' + idArt;
-                li.innerHTML = `<span class='simbolo-autore' style='color:#27ae60'>✍</span>${cleanText(p.titolo)}`;
-                listaC.insertBefore(li, listaC.firstChild);
-            });
-        });
-
-        // FAUSTO
-        db.ref('archivioFausto').limitToLast(3).on('value', (snap) => {
-            const listaF = document.getElementById('lista-titoli-fausto');
-            if(!listaF) return; 
-            listaF.innerHTML = "";
-            snap.forEach(c => {
-                const idArticolo = c.key;
-                const p = c.val(); 
-                const li = document.createElement('li'); 
-                li.className = 'riga-titolo';
-                li.onclick = () => location.href = 'fausto.html?id=' + idArticolo;
-                li.innerHTML = `<span class='simbolo-autore' style='color:#00a8e8'>📡</span>${cleanText(p.titolo)}`;
-                listaF.insertBefore(li, listaF.firstChild);
-            });
-        });
-
-        // SERGIO
-        db.ref('archivioSergio').limitToLast(6).on('value', (snap) => {
-            const listaS = document.getElementById('lista-titoli-sergio');
-            listaS.innerHTML = "";
-            snap.forEach(c => {
-                const idArt = c.key; const p = c.val();
-                const li = document.createElement('li'); li.className = 'riga-titolo';
-                li.onclick = () => location.href = 'sergio.html?id=' + idArt;
-                li.innerHTML = `<span class='simbolo-autore' style='color:#143ca0'>📷</span>${cleanText(p.titolo)}`;
-                listaS.insertBefore(li, listaS.firstChild);
-            });
-        });
-    </script>
-</body>
-</html>
+        db.ref('archivioCentrale').limitToLast(5
