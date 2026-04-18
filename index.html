@@ -223,5 +223,65 @@
             if(imgHome.src) { modal.style.display = "block"; modalImg.src = imgHome.src; }
         };
 
-        // PRESIDENTE
-        db.ref('archivioCentrale').limitToLast(5
+       // --- 1. CARICAMENTO DATI PRESIDENTE (BOX CENTRALE) ---
+        db.ref('archivioCentrale').limitToLast(5).on('value', (snap) => {
+            const listaF = document.getElementById('lista-home-francesco');
+            if(!listaF) return;
+            listaF.innerHTML = ""; let keys = [];
+            snap.forEach(c => {
+                const id = c.key; const p = c.val(); datiPresidente[id] = p; keys.push(id);
+                let simb = "★"; let col = "#0056b3"; let sigla = "Pres";
+                if(p.autore === "CINZIA") { simb = "✍"; col = "#27ae60"; sigla = "Cinz"; }
+                if(p.autore === "SERGIO") { simb = "📷"; col = "#143ca0"; sigla = "Serg"; }
+                const li = document.createElement('li'); li.className = 'riga-titolo';
+                li.onclick = () => cambiaFocusPresidente(id);
+                li.innerHTML = `<span class='simbolo-autore' style='color:${col}'>${simb}</span><span class='sigla-autore'>${sigla}</span>${cleanText(p.titolo)}`;
+                listaF.insertBefore(li, listaF.firstChild);
+            });
+            if(keys.length > 0) cambiaFocusPresidente(keys[keys.length-1]);
+        });
+
+        // --- 2. CARICAMENTO DATI CINZIA ---
+        db.ref('archivioCinzia').limitToLast(6).on('value', (snap) => {
+            const listaC = document.getElementById('lista-home-cinzia');
+            if(!listaC) return;
+            listaC.innerHTML = ""; 
+            snap.forEach(c => {
+                const idArt = c.key; const p = c.val();
+                const li = document.createElement('li'); li.className = 'riga-titolo';
+                li.onclick = () => location.href = 'cinzia.html?id=' + idArt;
+                li.innerHTML = `<span class='simbolo-autore' style='color:#27ae60'>✍</span>${cleanText(p.titolo)}`;
+                listaC.insertBefore(li, listaC.firstChild);
+            });
+        });
+
+        // --- 3. CARICAMENTO DATI FAUSTO (METEO) ---
+        db.ref('archivioFausto').limitToLast(5).on('value', (snap) => {
+            const listaF = document.getElementById('lista-titoli-fausto');
+            if(!listaF) return; 
+            listaF.innerHTML = "";
+            snap.forEach(c => {
+                const p = c.val(); 
+                const li = document.createElement('li'); li.className = 'riga-titolo';
+                li.onclick = () => location.href = 'fausto.html?id=' + c.key;
+                li.innerHTML = `<span class='simbolo-autore' style='color:#00a8e8'>📡</span>${cleanText(p.titolo)}`;
+                listaF.insertBefore(li, listaF.firstChild);
+            });
+        });
+
+        // --- 4. CARICAMENTO DATI SERGIO (ARCHIVIO) ---
+        db.ref('archivioSergio').limitToLast(6).on('value', (snap) => {
+            const listaS = document.getElementById('lista-titoli-sergio');
+            if(!listaS) return;
+            listaS.innerHTML = "";
+            snap.forEach(c => {
+                const p = c.val();
+                const li = document.createElement('li'); li.className = 'riga-titolo';
+                li.onclick = () => location.href = 'sergio.html?id=' + c.key;
+                li.innerHTML = `<span class='simbolo-autore' style='color:#143ca0'>📷</span>${cleanText(p.titolo)}`;
+                listaS.insertBefore(li, listaS.firstChild);
+            });
+        });
+    </script>
+</body>
+</html>
