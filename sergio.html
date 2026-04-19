@@ -4,17 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCHIVIO STORICO - SERGIO SILVESTRINI</title>
-    
-    <meta property="og:title" content="Archivio Storico - Sergio Silvestrini">
-    <meta property="og:description" content="Guarda i ricordi e i filmati dei Luoghi Scarabelli.">
-    <meta property="og:image" content="https://sergiosilvestrini.github.io/immagini/scuola.jpg">
-    <meta property="og:url" content="https://sergiosilvestrini.github.io/sergio.html">
-    <meta property="og:type" content="website">
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
 
+        /* TESTATA ORIGINALE DI SERGIO */
         .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #143ca0; background: #000; }
         .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         #contenitore-titolo { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; width: 100%; }
@@ -25,6 +19,7 @@
         .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
         .btn-gest { right: 15px; background: #FFD700; color: #143ca0; }
 
+        /* LAYOUT */
         .main-wrapper { display: flex; max-width: 1300px; margin: 30px auto; gap: 20px; padding: 0 15px; }
         .sidebar-servizi { width: 280px; flex-shrink: 0; }
         .tabellina-box { background: white; border-radius: 12px; border: 1px solid #ddd; border-top: 5px solid #143ca0; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 20px; }
@@ -33,6 +28,7 @@
         .servizio-item:hover { color: #143ca0; padding-left: 5px; }
         .icona-s { margin-right: 10px; font-size: 1.1rem; width: 25px; text-align: center; }
 
+        /* GRIGLIA MULTIMEDIALE */
         .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; transition: opacity 0.5s; }
         .elemento-album { background: white; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; }
         .elemento-album:hover { transform: translateY(-5px); border-color: #FFD700; }
@@ -41,6 +37,7 @@
         .info-box { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .titolo-post { font-size: 0.9rem; font-weight: bold; color: #143ca0; text-transform: uppercase; margin-bottom: 8px; }
         
+        /* OVERLAY BLU */
         #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 60, 160, 0.98); z-index: 9999; color: white; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #box-contenuto { max-width: 850px; margin: auto; text-align: center; }
         .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
@@ -164,7 +161,7 @@
                 let vId = ottieniYoutubeID(link);
 
                 // --- LOGICA CONDIVISIONE WHATSAPP ---
-                const urlSito = "https://sergiosilvestrini.github.io/sergio.html?id=" + id;
+                const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
                 const testoWA = encodeURIComponent("✨ Guarda questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + data.titolo + "*\n\nLink:\n" + urlSito);
                 const linkWA = `https://api.whatsapp.com/send?text=${testoWA}`;
                 
@@ -190,7 +187,8 @@
             document.getElementById('overlay-blu').style.display = 'none'; 
             document.body.style.overflow = 'auto'; 
             document.getElementById('lista-multimedia').style.opacity = "1";
-            window.history.pushState({}, "", "sergio.html");
+            // Puliamo l'URL quando chiudiamo (opzionale ma pulito)
+            window.history.pushState({}, "", window.location.pathname);
         }
 
         if (idArticoloUrl) {
