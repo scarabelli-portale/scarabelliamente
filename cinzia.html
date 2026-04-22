@@ -3,47 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Area Didattica - Cinzia</title>
+    <title>Archivio Didattica - Cinzia</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
         body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; line-height: 1.5; }
 
-        .header-fissa {
-            position: relative; /* Cambiato da fixed a relative per ora, così è più semplice */
-            width: 100%;
-            height: 250px;
-            background: #000;
-            border-bottom: 5px solid #27ae60;
-            overflow: hidden;
-        }
+        /* TESTATA FISSA */
+        .header-fissa { position: fixed; top: 0; width: 100%; height: 250px; z-index: 1000; background: #000; border-bottom: 5px solid #27ae60; overflow: hidden; }
         .foto-header { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; opacity: 0.7; }
         #contenitore-titolo { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 100%; }
         .titolo-stampato { font-size: 0.9rem; letter-spacing: 6px; text-transform: uppercase; color: white; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
         .firma-persona { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #27ae60; text-shadow: 3px 3px 8px rgba(0,0,0,1); margin-top: -10px; }
 
-        .btn-nav { position: absolute; top: 15px; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 1001; }
+        /* PULSANTI NAVIGAZIONE */
+        .btn-nav { position: absolute; top: 15px; padding: 10px 18px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 0.7rem; z-index: 1001; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
         .btn-home { left: 15px; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; }
         .btn-gest { right: 15px; background: #27ae60; color: white; border: none; cursor: pointer; }
+        .btn-wz { right: 140px; background: #25d366; color: white; border: none; cursor: pointer; text-decoration: none; }
 
-        .content-wrapper { padding: 20px; }
-        .container-articoli { max-width: 850px; margin: auto; }
+        /* CORPO PAGINA - PROTEZIONE ANTI-LAMPO */
+        .content-wrapper { margin-top: 270px; padding: 20px; text-align: center; opacity: 0; transition: opacity 0.4s ease-in-out; }
+        .griglia-articoli { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: auto; padding: 20px; }
         
-        .articolo-scheda { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            margin-bottom: 30px; 
-            display: block; /* IMPORTANTE: Ora sono visibili di default */
-        }
-        .articolo-scheda img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #ddd; }
-        .testo-articolo { line-height: 1.6; font-size: 1.1rem; white-space: pre-wrap; text-align: justify; }
+        /* CARD */
+        .card-didattica { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer; border: 1px solid #eee; transition: 0.3s; display: flex; flex-direction: column; text-align: left; }
+        .card-didattica:hover { transform: translateY(-5px); border-color: #27ae60; }
+        .card-didattica img { width: 100%; height: 180px; object-fit: cover; display: block; }
+        .card-info { padding: 12px; }
+        .card-data { color: #888; font-size: 0.7rem; font-weight: bold; }
+        .card-titolo { font-weight: bold; color: #1e8449; font-size: 1rem; margin-top: 5px; line-height: 1.2; }
+
+        /* OVERLAY */
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 2000; overflow-y: auto; padding-top: 50px; }
+        .content-view { max-width: 800px; margin: 20px auto; background: #f4f4f2; padding: 30px; border-radius: 15px; position: relative; text-align: left; }
+        .chiudi-btn { position: absolute; top: -15px; right: -15px; background: #ff4444; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 22px; }
+        .img-view { width: 100%; height: auto; max-height: 500px; object-fit: contain; background: #e0e0e0; border-radius: 10px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
     <div class="header-fissa">
         <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
+        <a href="https://wa.me/39XXXXXXXXXX" target="_blank" class="btn-nav btn-wz"><span>💬</span> WHATSAPP</a>
         <button class="btn-nav btn-gest" onclick="window.location.href='gestione_cinzia.html'">⚙ GESTIONE</button>
         <img src="immagini/scuola.jpg" class="foto-header">
         <div id="contenitore-titolo">
@@ -52,9 +53,18 @@
         </div>
     </div>
 
-    <div class="content-wrapper">
-        <div class="container-articoli" id="container-articoli-cinzia">
-            <p style="text-align:center; color:#999;">Caricamento lezioni...</p>
+    <div class="content-wrapper" id="main-wrapper">
+        <div style="text-align:center; margin-bottom: 20px; color: #27ae60; font-weight: bold; font-size: 1.2rem; letter-spacing: 3px;">— ARCHIVIO —</div>
+        <div class="griglia-articoli" id="container-articoli-cinzia"></div>
+    </div>
+
+    <div id="overlay">
+        <div class="content-view">
+            <button class="chiudi-btn" onclick="chiudiOverlay()">&times;</button>
+            <img id="img-view" src="" style="display:none;" class="img-view">
+            <h2 id="titolo-view" style="color: #27ae60; font-family: 'Dancing Script', cursive; font-size: 2.5rem; margin-top:0;"></h2>
+            <div id="data-view" style="color: #888; margin-bottom: 15px; font-weight: bold;"></div>
+            <div id="testo-view" style="text-align:justify; white-space:pre-wrap; font-family: serif; font-size: 1.1rem;"></div>
         </div>
     </div>
 
@@ -66,33 +76,65 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
+        // 1. APERTURA ARTICOLO (FULMINEA)
+        window.apri = function(id) {
+            db.ref('archivioCinzia/' + id).once('value').then((snap) => {
+                const art = snap.val();
+                if(!art) return;
+                const imgV = document.getElementById('img-view');
+                if(art.immagine || art.urlImmagine) {
+                    imgV.src = art.immagine || art.urlImmagine;
+                    imgV.style.display = 'block';
+                } else { imgV.style.display = 'none'; }
+                document.getElementById('titolo-view').innerText = art.titolo;
+                document.getElementById('data-view').innerText = "Pubblicato il: " + (art.data || 'N.D.');
+                document.getElementById('testo-view').innerText = art.testo;
+                document.getElementById('overlay').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        window.chiudiOverlay = function() {
+            document.getElementById('overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            window.history.replaceState({}, document.title, "cinzia.html");
+        }
+
+        // 2. CARICAMENTO INTELLIGENTE ANTI-FLASH
         db.ref('archivioCinzia').on('value', (snapshot) => {
             const container = document.getElementById('container-articoli-cinzia');
+            const wrapper = document.getElementById('main-wrapper');
             container.innerHTML = "";
-            const urlParams = new URLSearchParams(window.location.search);
-            const idDaAprire = urlParams.get('id');
+            const data = snapshot.val();
+            
+            if (data) {
+                // Carica le card in memoria
+                Object.keys(data).reverse().forEach(id => {
+                    const art = data[id];
+                    const img = art.immagine || art.urlImmagine || 'https://via.placeholder.com/400x250?text=Didattica';
+                    container.innerHTML += `
+                        <div class="card-didattica" onclick="apri('${id}')">
+                            <img src="${img}">
+                            <div class="card-info">
+                                <div class="card-data">📅 ${art.data || ''}</div>
+                                <div class="card-titolo">${art.titolo}</div>
+                            </div>
+                        </div>`;
+                });
 
-            snapshot.forEach((child) => {
-                const id = child.key;
-                const art = child.val();
-                
-                // Se c'è un ID nell'URL, mostriamo SOLO quello. 
-                // Altrimenti (se idDaAprire è null) mostriamo tutto.
-                if (idDaAprire && id !== idDaAprire) {
-                    return; // Salta questo articolo
+                // CONTROLLO URL PRIMA DI MOSTRARE IL WRAPPER
+                const urlParams = new URLSearchParams(window.location.search);
+                const articoloId = urlParams.get('id');
+
+                if (articoloId) {
+                    // Se c'è un ID, apri l'articolo e rendi il wrapper visibile subito
+                    apri(articoloId);
+                    wrapper.style.opacity = "1";
+                } else {
+                    // Se è l'archivio normale, fallo apparire con la sfumatura
+                    wrapper.style.opacity = "1";
                 }
-
-                const div = document.createElement('div');
-                div.className = "articolo-scheda";
-                div.innerHTML = `
-                    <h2 style="color:#27ae60; margin-top:0;">${art.titolo}</h2>
-                    <div style="color:#888; font-size:0.8rem; margin-bottom:10px;">Pubblicato il: ${art.data || ''}</div>
-                    ${(art.immagine || art.urlImmagine) ? `<img src="${art.immagine || art.urlImmagine}">` : ""}
-                    <div class="testo-articolo">${art.testo}</div>
-                    ${idDaAprire ? `<div style="text-align:center; margin-top:20px;"><button onclick="window.location.href='cinzia.html'" style="padding:10px 20px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">MOSTRA TUTTO L'ARCHIVIO</button></div>` : ""}
-                `;
-                container.insertBefore(div, container.firstChild);
-            });
+            }
         });
     </script>
 </body>
