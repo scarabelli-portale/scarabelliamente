@@ -144,30 +144,22 @@
                 const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
                 const titoloArticolo = data.titolo || "un ricordo";
 
-                // OPZIONE A: Messaggio "A ME" (Privato)
-                // SOSTITUISCI IL NUMERO QUI SOTTO CON IL TUO VERO!
-                const tuoNumero = "393398329580"; 
-                const messaggioPerSergio = encodeURIComponent("Ciao Sergio, ti seguo sul sito e volevo scriverti per: " + titoloArticolo);
-                const linkAMe = `https://wa.me/${tuoNumero}?text=${messaggioPerSergio}`;
+                // DATI CONFIGURATI
+                const mioNumero = "393398329580"; 
+                const msgMe = encodeURIComponent("Ciao Sergio, ti seguo sul sito e volevo scriverti per: " + titoloArticolo);
+                const msgTutti = encodeURIComponent("✨ Guardate questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + titoloArticolo + "*\n\nLink:\n" + urlSito);
 
-                // OPZIONE B: Messaggio "A TUTTI" (Gruppo)
-                const messaggioPerGruppo = encodeURIComponent("✨ Guardate questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + titoloArticolo + "*\n\nLink:\n" + urlSito);
-                const linkATutti = `https://api.whatsapp.com/send?text=${messaggioPerGruppo}`;
-
+                // CREAZIONE TASTI
                 document.getElementById('container-wz').innerHTML = `
-                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
-                        
-                        <a href="${linkATutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0;">
+                        <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22">
                             A TUTTI (Gruppo)
                         </a>
-
-                        <a href="${linkAMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">
+                        <a href="https://wa.me/${mioNumero}?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">
                             💬 A ME (Privato)
                         </a>
-
-                    </div>
-                `;
+                    </div>`;
 
                 if (vId) {
                     display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;">
