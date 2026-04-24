@@ -7,50 +7,26 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
-
-        /* TESTATA ORIGINALE DI SERGIO */
         .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #143ca0; background: #000; }
         .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         #contenitore-titolo { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; width: 100%; }
         .titolo-stampato { font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold; }
         .firma-sergio { font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); }
-
         .btn-nav { position: absolute; top: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 20; border: none; cursor: pointer; }
         .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
         .btn-gest { right: 15px; background: #FFD700; color: #143ca0; }
-
-        /* LAYOUT */
         .main-wrapper { display: flex; max-width: 1300px; margin: 30px auto; gap: 20px; padding: 0 15px; }
-        .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; transition: opacity 0.5s; }
+        .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .elemento-album { background: white; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; }
-        .elemento-album:hover { transform: translateY(-5px); border-color: #FFD700; }
-        .media-box { width: 100%; height: 160px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #eee; overflow: hidden; }
+        .media-box { width: 100%; height: 160px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .media-box img { width: 100%; height: 100%; object-fit: cover; }
-        .info-box { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .titolo-post { font-size: 0.9rem; font-weight: bold; color: #143ca0; text-transform: uppercase; margin-bottom: 8px; }
-        
-        /* OVERLAY BLU */
+        .info-box { padding: 15px; flex-grow: 1; text-align: center; }
+        .titolo-post { font-size: 0.9rem; font-weight: bold; color: #143ca0; text-transform: uppercase; }
         #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 60, 160, 0.98); z-index: 9999; color: white; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #box-contenuto { max-width: 850px; margin: auto; text-align: center; }
         .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
         .chiudi-btn { background: white; color: #143ca0; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
-
-        /* TASTI WHATSAPP */
-        .btn-condividi-wz {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .btn-condividi-wz:hover { transform: scale(1.05); opacity: 0.9; }
-
-        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } }
+        .btn-wz { display: inline-flex; align-items: center; gap: 10px; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1rem; margin: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -72,12 +48,8 @@
     <div id="overlay-blu">
         <div id="box-contenuto">
             <div id="media-display"></div> 
-            
-            <div id="container-wz" style="margin: 20px 0;"></div>
-
-            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem; margin-bottom:10px;"></h2>
+            <div id="container-wz"></div> <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem;"></h2>
             <div id="testo-view" class="testo-storia"></div>
-            
             <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI X</button>
         </div>
     </div>
@@ -85,18 +57,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        const firebaseConfig = { 
-            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/"
-        };
+        const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const idArticoloUrl = urlParams.get('id');
-        
-        if(idArticoloUrl) {
-            document.getElementById('lista-multimedia').style.opacity = "0";
-        }
 
         function ottieniYoutubeID(url) {
             if (!url) return null;
@@ -105,82 +68,48 @@
             return (match && match[2].length == 11) ? match[2] : null;
         }
 
-        // Caricamento griglia
         database.ref('archivioSergio').on('value', (snapshot) => {
             const lista = document.getElementById('lista-multimedia');
             lista.innerHTML = "";
             snapshot.forEach((child) => {
                 const data = child.val();
                 const id = child.key;
-                const link = (data.immagine || data.video || "").trim();
-                let vId = ottieniYoutubeID(link);
-                let anteprima = vId ? `https://img.youtube.com/vi/${vId}/hqdefault.jpg` : link;
-
+                const link = (data.immagine || "").trim();
                 lista.insertAdjacentHTML('afterbegin', `
                     <div class="elemento-album" onclick="apriContenuto('${id}')">
-                        <div class="media-box"><img src="${anteprima}" onerror="this.src='immagini/scuola.jpg'"></div>
-                        <div class="info-box">
-                            <div class="titolo-post">📷 ${data.titolo || 'Senza titolo'}</div>
-                        </div>
+                        <div class="media-box"><img src="${link}" onerror="this.src='immagini/scuola.jpg'"></div>
+                        <div class="info-box"><div class="titolo-post">${data.titolo}</div></div>
                     </div>`);
             });
-            
-            if(!idArticoloUrl) { lista.style.opacity = "1"; }
         });
 
-        // Funzione per aprire il contenuto
         window.apriContenuto = function(id) {
             database.ref('archivioSergio/' + id).once('value').then((snapshot) => {
                 const data = snapshot.val();
-                if(!data) return;
+                document.getElementById('titolo-view').innerText = data.titolo;
+                document.getElementById('testo-view').innerText = data.testo;
                 
-                document.getElementById('titolo-view').innerText = data.titolo || "";
-                document.getElementById('testo-view').innerText = data.testo || "";
-                const display = document.getElementById('media-display');
-                const link = (data.immagine || data.video || "").trim();
-                let vId = ottieniYoutubeID(link);
+                const urlSito = window.location.href.split('?')[0] + "?id=" + id;
+                const mioNumero = "393398329580";
+                
+                const msgTutti = encodeURIComponent("✨ Guarda questo ricordo di Sergio Silvestrini:\n" + data.titolo + "\n\nLink:\n" + urlSito);
+                const msgMe = encodeURIComponent("Ciao Sergio, ti seguo sul sito. Ti scrivo per: " + data.titolo);
 
-                // --- LOGICA WHATSAPP: "A ME" e "A TUTTI" ---
-                const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
-                const titoloArticolo = data.titolo || "un ricordo";
-
-                // DATI CONFIGURATI
-                const mioNumero = "393398329580"; 
-                const msgMe = encodeURIComponent("Ciao Sergio, ti seguo sul sito e volevo scriverti per: " + titoloArticolo);
-                const msgTutti = encodeURIComponent("✨ Guardate questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + titoloArticolo + "*\n\nLink:\n" + urlSito);
-
-                // CREAZIONE TASTI
                 document.getElementById('container-wz').innerHTML = `
-                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0;">
-                        <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22">
-                            A TUTTI (Gruppo)
-                        </a>
-                        <a href="https://wa.me/${mioNumero}?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">
-                            💬 A ME (Privato)
-                        </a>
-                    </div>`;
+                    <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-wz" style="background:#25D366;">A TUTTI (Gruppo)</a>
+                    <a href="https://wa.me/${mioNumero}?text=${msgMe}" target="_blank" class="btn-wz" style="background:#128C7E;">A ME (Privato)</a>
+                `;
 
-                if (vId) {
-                    display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;">
-                        <a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:inline-block; background:#FFD700; color:#143ca0; padding:15px 40px; border-radius:50px; text-decoration:none; font-weight:bold; font-size:1.2rem;">GUARDA IL VIDEO 🎥</a>
-                    </div>`;
-                } else {
-                    display.innerHTML = `<img src="${link}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`;
-                }
+                const link = (data.immagine || "").trim();
+                document.getElementById('media-display').innerHTML = `<img src="${link}" style="max-width:100%; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;">`;
                 document.getElementById('overlay-blu').style.display = 'block';
-                document.body.style.overflow = 'hidden';
             });
         }
 
         window.chiudiTutto = function() { 
             document.getElementById('overlay-blu').style.display = 'none'; 
-            document.body.style.overflow = 'auto'; 
-            document.getElementById('lista-multimedia').style.opacity = "1";
             window.history.pushState({}, "", window.location.pathname);
         }
-
-        if (idArticoloUrl) { apriContenuto(idArticoloUrl); }
     </script>
 </body>
 </html>
