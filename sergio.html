@@ -21,14 +21,6 @@
 
         /* LAYOUT */
         .main-wrapper { display: flex; max-width: 1300px; margin: 30px auto; gap: 20px; padding: 0 15px; }
-        .sidebar-servizi { width: 280px; flex-shrink: 0; }
-        .tabellina-box { background: white; border-radius: 12px; border: 1px solid #ddd; border-top: 5px solid #143ca0; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 20px; }
-        .tabellina-box h4 { margin: 0 0 15px 0; font-size: 0.9rem; color: #143ca0; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-        .servizio-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f9f9f9; font-size: 0.85rem; color: #444; text-decoration: none; transition: 0.2s; }
-        .servizio-item:hover { color: #143ca0; padding-left: 5px; }
-        .icona-s { margin-right: 10px; font-size: 1.1rem; width: 25px; text-align: center; }
-
-        /* GRIGLIA MULTIMEDIALE */
         .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; transition: opacity 0.5s; }
         .elemento-album { background: white; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; }
         .elemento-album:hover { transform: translateY(-5px); border-color: #FFD700; }
@@ -43,25 +35,22 @@
         .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
         .chiudi-btn { background: white; color: #143ca0; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
 
-        /* TASTO WHATSAPP */
+        /* TASTI WHATSAPP */
         .btn-condividi-wz {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: #25D366;
             color: white;
-            padding: 15px 30px;
+            padding: 15px 25px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        .btn-condividi-wz:hover { transform: scale(1.05); background: #1ebe57; }
+        .btn-condividi-wz:hover { transform: scale(1.05); opacity: 0.9; }
 
-        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } .sidebar-servizi { width: 100%; } }
+        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -77,8 +66,6 @@
     </div>
 
     <div class="main-wrapper">
-        
-
         <div class="griglia-multimedia" id="lista-multimedia"></div>
     </div>
 
@@ -86,7 +73,7 @@
         <div id="box-contenuto">
             <div id="media-display"></div> 
             
-            <div id="container-wz" style="margin-top: 10px;"></div>
+            <div id="container-wz" style="margin: 20px 0;"></div>
 
             <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem; margin-bottom:10px;"></h2>
             <div id="testo-view" class="testo-storia"></div>
@@ -118,6 +105,7 @@
             return (match && match[2].length == 11) ? match[2] : null;
         }
 
+        // Caricamento griglia
         database.ref('archivioSergio').on('value', (snapshot) => {
             const lista = document.getElementById('lista-multimedia');
             lista.innerHTML = "";
@@ -137,11 +125,10 @@
                     </div>`);
             });
             
-            if(!idArticoloUrl) {
-                lista.style.opacity = "1";
-            }
+            if(!idArticoloUrl) { lista.style.opacity = "1"; }
         });
 
+        // Funzione per aprire il contenuto
         window.apriContenuto = function(id) {
             database.ref('archivioSergio/' + id).once('value').then((snapshot) => {
                 const data = snapshot.val();
@@ -153,16 +140,34 @@
                 const link = (data.immagine || data.video || "").trim();
                 let vId = ottieniYoutubeID(link);
 
-                // --- LOGICA CONDIVISIONE WHATSAPP ---
+                // --- LOGICA WHATSAPP: "A ME" e "A TUTTI" ---
                 const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
-                const testoWA = encodeURIComponent("✨ Guarda questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + data.titolo + "*\n\nLink:\n" + urlSito);
-                const linkWA = `https://api.whatsapp.com/send?text=${testoWA}`;
-                
+                const titoloArticolo = data.titolo || "un ricordo";
+
+                // OPZIONE A: Messaggio "A ME" (Privato)
+                // SOSTITUISCI IL NUMERO QUI SOTTO CON IL TUO VERO!
+                const tuoNumero = "393398329580"; 
+                const messaggioPerSergio = encodeURIComponent("Ciao Sergio, ti seguo sul sito e volevo scriverti per: " + titoloArticolo);
+                const linkAMe = `https://wa.me/${tuoNumero}?text=${messaggioPerSergio}`;
+
+                // OPZIONE B: Messaggio "A TUTTI" (Gruppo)
+                const messaggioPerGruppo = encodeURIComponent("✨ Guardate questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + titoloArticolo + "*\n\nLink:\n" + urlSito);
+                const linkATutti = `https://api.whatsapp.com/send?text=${messaggioPerGruppo}`;
+
                 document.getElementById('container-wz').innerHTML = `
-                    <a href="${linkWA}" target="_blank" class="btn-condividi-wz">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="25">
-                        CONDIVIDI NEL GRUPPO WZ
-                    </a>`;
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+                        
+                        <a href="${linkATutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22">
+                            A TUTTI (Gruppo)
+                        </a>
+
+                        <a href="${linkAMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">
+                            💬 A ME (Privato)
+                        </a>
+
+                    </div>
+                `;
 
                 if (vId) {
                     display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;">
@@ -180,13 +185,10 @@
             document.getElementById('overlay-blu').style.display = 'none'; 
             document.body.style.overflow = 'auto'; 
             document.getElementById('lista-multimedia').style.opacity = "1";
-            // Puliamo l'URL quando chiudiamo (opzionale ma pulito)
             window.history.pushState({}, "", window.location.pathname);
         }
 
-        if (idArticoloUrl) {
-            apriContenuto(idArticoloUrl);
-        }
+        if (idArticoloUrl) { apriContenuto(idArticoloUrl); }
     </script>
 </body>
 </html>
