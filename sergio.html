@@ -2,6 +2,10 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+	<meta property="og:title" content="ARCHIVIO STORICO - SERGIO SILVESTRINI">
+<meta property="og:description" content="Guarda i ricordi e i documenti dell'Archivio Scarabelli">
+<meta property="og:image" content="https://scarabelli-portale.github.io/scarabelliamente/immagini/scuola.jpg">
+<meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCHIVIO STORICO - SERGIO SILVESTRINI</title>
     <style>
@@ -26,7 +30,22 @@
         #box-contenuto { max-width: 850px; margin: auto; text-align: center; }
         .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
         .chiudi-btn { background: white; color: #143ca0; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
-        .btn-wz { display: inline-flex; align-items: center; gap: 10px; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1rem; margin: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        
+        /* STILE TASTI WHATSAPP */
+        .btn-condividi-wz {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: white !important;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .btn-condividi-wz:hover { transform: scale(1.05); opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -48,7 +67,8 @@
     <div id="overlay-blu">
         <div id="box-contenuto">
             <div id="media-display"></div> 
-            <div id="container-wz"></div> <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem;"></h2>
+            <div id="container-wz"></div>
+            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem;"></h2>
             <div id="testo-view" class="testo-storia"></div>
             <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI X</button>
         </div>
@@ -86,28 +106,51 @@
         window.apriContenuto = function(id) {
             database.ref('archivioSergio/' + id).once('value').then((snapshot) => {
                 const data = snapshot.val();
-                document.getElementById('titolo-view').innerText = data.titolo;
-                document.getElementById('testo-view').innerText = data.testo;
+                if(!data) return;
                 
-                const urlSito = window.location.href.split('?')[0] + "?id=" + id;
-                const mioNumero = "393398329580";
+                document.getElementById('titolo-view').innerText = data.titolo || "";
+                document.getElementById('testo-view').innerText = data.testo || "";
                 
-                const msgTutti = encodeURIComponent("✨ Guarda questo ricordo di Sergio Silvestrini:\n" + data.titolo + "\n\nLink:\n" + urlSito);
-                const msgMe = encodeURIComponent("Ciao Sergio, ti seguo sul sito. Ti scrivo per: " + data.titolo);
+                const display = document.getElementById('media-display');
+                const link = (data.immagine || data.video || "").trim();
+                let vId = ottieniYoutubeID(link);
 
-                document.getElementById('container-wz').innerHTML = `
-                    <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-wz" style="background:#25D366;">A TUTTI (Gruppo)</a>
-                    <a href="https://wa.me/${mioNumero}?text=${msgMe}" target="_blank" class="btn-wz" style="background:#128C7E;">A ME (Privato)</a>
-                `;
+                if (vId) {
+                    display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;">
+                        <a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:inline-block; background:#FFD700; color:#143ca0; padding:15px 40px; border-radius:50px; text-decoration:none; font-weight:bold; font-size:1.2rem;">GUARDA IL VIDEO 🎥</a>
+                    </div>`;
+                } else {
+                    display.innerHTML = `<img src="${link}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`;
+                }
 
-                const link = (data.immagine || "").trim();
-                document.getElementById('media-display').innerHTML = `<img src="${link}" style="max-width:100%; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;">`;
+                const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
+                const mioNumero = "393398329580"; 
+                
+                const msgTutti = encodeURIComponent("✨ Guarda questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + data.titolo + "*\n\nLink:\n" + urlSito);
+                const msgMe = encodeURIComponent("Ciao Sergio, ti seguo sul sito. Ti scrivo per: " + data.titolo + "\n\nGuarda qui:\n" + urlSito); 
+
+                const areaWz = document.getElementById('container-wz');
+                if(areaWz) {
+                    areaWz.innerHTML = `
+                        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0;">
+                            <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22">
+                                A TUTTI (Gruppo)
+                            </a>
+                            <a href="https://wa.me/${mioNumero}?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">
+                                💬 A ME (Privato)
+                            </a>
+                        </div>`;
+                }
+
                 document.getElementById('overlay-blu').style.display = 'block';
+                document.body.style.overflow = 'hidden';
             });
         }
 
         window.chiudiTutto = function() { 
             document.getElementById('overlay-blu').style.display = 'none'; 
+            document.body.style.overflow = 'auto';
             window.history.pushState({}, "", window.location.pathname);
         }
     </script>
