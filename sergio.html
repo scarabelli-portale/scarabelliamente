@@ -99,7 +99,7 @@
             return (match && match[2].length == 11) ? match[2] : null;
         }
 
-        // Caricamento con ordine cronologico inverso (Ultimo inserito, primo visto)
+        // CARICAMENTO DA FIREBASE
         database.ref('archivioSergio').on('value', (snapshot) => {
             const lista = document.getElementById('lista-multimedia');
             lista.innerHTML = "";
@@ -114,13 +114,19 @@
                 const id = child.key;
                 const linkPulito = pulisciLink(data.immagine || "");
                 
-                // Usiamo afterbegin per mettere l'ultimo in cima alla griglia
                 lista.insertAdjacentHTML('afterbegin', `
                     <div class="elemento-album" onclick="apriContenuto('${id}')">
                         <div class="media-box"><img src="${linkPulito}" onerror="this.src='immagini/scuola.jpg'"></div>
                         <div class="info-box"><div class="titolo-post">${data.titolo}</div></div>
                     </div>`);
             });
+
+            // MAGGIORDOMO: Controlla se il link ha un ID dopo che Firebase ha caricato tutto
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            if (postId) {
+                setTimeout(() => { apriContenuto(postId); }, 500); // Aspetta un attimo che la grafica sia pronta
+            }
         });
 
         window.apriContenuto = function(id) {
