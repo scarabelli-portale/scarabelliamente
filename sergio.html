@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Meta Tag per WhatsApp (Anteprima) -->
     <meta property="og:title" content="ARCHIVIO STORICO - SERGIO SILVESTRINI">
     <meta property="og:description" content="Guarda i ricordi e i documenti dell'Archivio Scarabelli">
     <meta property="og:image" content="https://scarabelli-portale.github.io/scarabelliamente/immagini/scuola.jpg">
     <meta property="og:type" content="website">
-    
     <title>ARCHIVIO STORICO - SERGIO SILVESTRINI</title>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
@@ -35,20 +31,7 @@
         #box-contenuto { max-width: 850px; margin: auto; text-align: center; }
         .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
         .chiudi-btn { background: white; color: #143ca0; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
-        
-        .btn-condividi-wz {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: white !important;
-            padding: 12px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: 0.3s;
-        }
+        .btn-condividi-wz { display: inline-flex; align-items: center; gap: 10px; color: white !important; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s; }
     </style>
 </head>
 <body>
@@ -86,12 +69,6 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
-        function pulisciLink(url) {
-            if (!url) return "";
-            let trovato = url.match(/https?:\/\/[^"'>\s]+\.(?:jpg|jpeg|gif|png|webp)/i);
-            return trovato ? trovato[0] : url.trim();
-        }
-
         function ottieniYoutubeID(url) {
             if (!url) return null;
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -99,34 +76,32 @@
             return (match && match[2].length == 11) ? match[2] : null;
         }
 
-        // CARICAMENTO DA FIREBASE
         database.ref('archivioSergio').on('value', (snapshot) => {
             const lista = document.getElementById('lista-multimedia');
             lista.innerHTML = "";
-            
-            if (!snapshot.exists()) {
-                lista.innerHTML = "<p style='text-align:center; grid-column:1/-1;'>Nessun ricordo presente.</p>";
-                return;
-            }
+            if (!snapshot.exists()) return;
 
             snapshot.forEach((child) => {
                 const data = child.val();
                 const id = child.key;
-                const linkPulito = pulisciLink(data.immagine || "");
+                let anteprima = data.immagine || "";
+                
+                // MAGIA: Se è un video, usa l'anteprima di YouTube
+                const vId = ottieniYoutubeID(anteprima);
+                if (vId) {
+                    anteprima = `https://img.youtube.com/vi/${vId}/hqdefault.jpg`;
+                }
                 
                 lista.insertAdjacentHTML('afterbegin', `
                     <div class="elemento-album" onclick="apriContenuto('${id}')">
-                        <div class="media-box"><img src="${linkPulito}" onerror="this.src='immagini/scuola.jpg'"></div>
+                        <div class="media-box"><img src="${anteprima}" onerror="this.src='immagini/scuola.jpg'"></div>
                         <div class="info-box"><div class="titolo-post">${data.titolo}</div></div>
                     </div>`);
             });
 
-            // MAGGIORDOMO: Controlla se il link ha un ID dopo che Firebase ha caricato tutto
             const urlParams = new URLSearchParams(window.location.search);
             const postId = urlParams.get('id');
-            if (postId) {
-                setTimeout(() => { apriContenuto(postId); }, 500); // Aspetta un attimo che la grafica sia pronta
-            }
+            if (postId) setTimeout(() => { apriContenuto(postId); }, 500);
         });
 
         window.apriContenuto = function(id) {
@@ -138,37 +113,26 @@
                 document.getElementById('testo-view').innerText = data.testo || "";
                 
                 const display = document.getElementById('media-display');
-                const linkOriginale = (data.immagine || data.video || "").trim();
-                const linkPulito = pulisciLink(linkOriginale);
-                let vId = ottieniYoutubeID(linkPulito);
+                const link = (data.immagine || "").trim();
+                const vId = ottieniYoutubeID(link);
 
                 if (vId) {
                     display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;">
-                        <a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:inline-block; background:#FFD700; color:#143ca0; padding:15px 40px; border-radius:50px; text-decoration:none; font-weight:bold; font-size:1.2rem;">GUARDA IL VIDEO 🎥</a>
+                        <iframe width="100%" height="400" src="https://www.youtube.com/embed/${vId}" frameborder="0" allowfullscreen style="border-radius:15px;"></iframe>
                     </div>`;
                 } else {
-                    display.innerHTML = `<img src="${linkPulito}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`;
+                    display.innerHTML = `<img src="${link}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`;
                 }
 
                 const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
-                const mioNumero = "393398329580"; 
-                
                 const msgTutti = encodeURIComponent("✨ Guarda questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + data.titolo + "*\n\nLink:\n" + urlSito);
                 const msgMe = encodeURIComponent("Ciao Sergio, ti seguo sul sito. Ti scrivo per: " + data.titolo + "\n\nGuarda qui:\n" + urlSito); 
 
-                const areaWz = document.getElementById('container-wz');
-                if(areaWz) {
-                    areaWz.innerHTML = `
-                        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0;">
-                            <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22">
-                                A TUTTI (Gruppo)
-                            </a>
-                            <a href="https://wa.me/${mioNumero}?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">
-                                💬 A ME (Privato)
-                            </a>
-                        </div>`;
-                }
+                document.getElementById('container-wz').innerHTML = `
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0;">
+                        <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">A TUTTI</a>
+                        <a href="https://wa.me/393398329580?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">A ME</a>
+                    </div>`;
 
                 document.getElementById('overlay-blu').style.display = 'block';
                 document.body.style.overflow = 'hidden';
