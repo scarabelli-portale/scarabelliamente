@@ -21,8 +21,10 @@
         .btn-gestione:hover { color: #0056b3; transform: rotate(90deg); }
         
         .container-pulsanti { display: flex; gap: 8px; margin-top: auto; padding-top: 10px; }
-        .btn-mezza { flex: 1; padding: 10px 5px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.75rem; text-align: center; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .bg-wz { background: #25d366; } .bg-sky { background: #00a8e8; } .bg-green { background: #27ae60; } .bg-orange { background: #e67e22; } .bg-navy { background: #143ca0; } .bg-blue { background: #0056b3; }
+        .btn-mezza { flex: 1; padding: 10px 5px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-align: center; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .btn-mezza:hover { opacity: 0.8; transform: translateY(-2px); }
+        
+        .bg-sky { background: #00a8e8; } .bg-green { background: #27ae60; } .bg-orange { background: #e67e22; } .bg-navy { background: #143ca0; } .bg-blue { background: #0056b3; }
         
         .main-container { max-width: 1300px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 20px; padding: 0 15px; }
         .colonna-lato { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px; }
@@ -50,6 +52,7 @@
 
     <div class="main-container">
         <div class="colonna-lato">
+            <!-- FAUSTO -->
             <div class="box" style="border-top: 4px solid #00a8e8; min-height: 420px;">
                 <button class="btn-gestione" onclick="location.href='gestione_fausto.html'">⚙️</button>
                 <h3 style="color:#00a8e8; text-align:center; font-size:1.1rem; text-transform:uppercase; margin-top:0;">Meteo & Satellite</h3>
@@ -63,11 +66,11 @@
                     <ul id="lista-titoli-fausto" style="list-style: none; padding: 0; margin: 0;"></ul>
                 </div>
                 <div class="container-pulsanti">
-                    <a href="fausto.html" class="btn-mezza bg-sky">ARCHIVIO</a>
-                    <a href="#" class="btn-mezza bg-wz">💬 WZ</a>
+                    <a href="fausto.html" class="btn-mezza bg-sky">ENTRA NELL'ARCHIVIO</a>
                 </div>
             </div>
 
+            <!-- CINZIA -->
             <div class="box" style="border-top: 4px solid #27ae60; min-height: 420px;">
                 <button class="btn-gestione" onclick="location.href='gestione_cinzia.html'">⚙️</button>
                 <h3 style="color:#27ae60; text-align:center; font-size:1.1rem; text-transform:uppercase; margin-top:0;">Didattica & Lavoro</h3>
@@ -81,13 +84,13 @@
                     <ul id="lista-home-cinzia" style="list-style: none; padding: 0; margin: 0;"></ul>
                 </div>
                 <div class="container-pulsanti">
-                    <a href="cinzia.html" class="btn-mezza bg-green">ARCHIVIO</a>
-                    <a href="#" class="btn-mezza bg-wz">💬 WZ</a>
+                    <a href="cinzia.html" class="btn-mezza bg-green">ENTRA NELL'ARCHIVIO</a>
                 </div>
             </div>
         </div>
 
         <div class="colonna-centro">
+            <!-- FRANCESCO -->
             <div class="box" style="min-height: 550px; border-top: 4px solid #0056b3;">
                 <button class="btn-gestione" onclick="location.href='gestione_presidente.html'">⚙️</button>
                 <div class="label-presidente">Presidente Francesco Mariani</div>
@@ -107,13 +110,13 @@
                 <div id="anteprima-testo-francesco" style="font-size: 0.88rem; font-style: italic; color: #555; margin: 10px 0; border-top: 1px solid #ddd; padding-top: 5px; min-height: 50px;">In attesa di selezione...</div>
                 
                 <div class="container-pulsanti">
-                    <a href="francesco.html" class="btn-mezza bg-blue">ARCHIVIO</a>
-                    <a href="#" class="btn-mezza bg-wz">💬 WZ</a>
+                    <a href="francesco.html" class="btn-mezza bg-blue">ENTRA NELL'ARCHIVIO</a>
                 </div>
             </div>
         </div>
 
         <div class="colonna-lato">
+            <!-- CARLO -->
             <div class="box" style="border-top: 4px solid #e67e22; min-height: 420px;">
                 <button class="btn-gestione" onclick="location.href='gestione_carlo.html'">⚙️</button>
                 <h3 style="color:#e67e22; text-align:center; font-size:1.1rem; text-transform:uppercase; margin-top:0;">Economia & Mercati</h3>
@@ -127,11 +130,11 @@
                     <ul id="lista-titoli-carlo" style="list-style: none; padding: 0; margin: 0;"></ul>
                 </div>
                 <div class="container-pulsanti">
-                    <a href="carlo.html" class="btn-mezza bg-orange">ARCHIVIO</a>
-                    <a href="#" class="btn-mezza bg-wz">💬 WZ</a>
+                    <a href="carlo.html" class="btn-mezza bg-orange">ENTRA NELL'ARCHIVIO</a>
                 </div>
             </div>
 
+            <!-- SERGIO -->
             <div class="box" style="border-top: 4px solid #143ca0; min-height: 420px;">
                 <button class="btn-gestione" onclick="location.href='gestione_sergio.html'">⚙️</button>
                 <h3 style="color:#143ca0; text-align:center; font-size:1.1rem; text-transform:uppercase; margin-top:0;">Archivio & Ricerca</h3>
@@ -145,8 +148,7 @@
                     <ul id="lista-titoli-sergio" style="list-style: none; padding: 0; margin: 0;"></ul>
                 </div>
                 <div class="container-pulsanti">
-                    <a href="sergio.html" class="btn-mezza bg-navy">ARCHIVIO</a>
-                    <a href="#" class="btn-mezza bg-wz">💬 WZ</a>
+                    <a href="sergio.html" class="btn-mezza bg-navy">ENTRA NELL'ARCHIVIO</a>
                 </div>
             </div>
         </div>
@@ -154,7 +156,7 @@
 
     <footer><p>© 2026 Progetto Scarabellianamente</p></footer>
 
- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
@@ -185,7 +187,6 @@
                 });
                 articoli.reverse();
 
-                // --- ACCENSIONE FORZATA ---
                 setTimeout(() => {
                     if (articoli.length > 0 && area.monitor) {
                         const ultimo = articoli[0];
@@ -193,14 +194,13 @@
                         const monitorEl = document.getElementById(area.monitor);
                         if(monitorEl) {
                             monitorEl.src = imgDaCaricare;
-                            console.log("Accendo monitor " + area.monitor + " con: " + imgDaCaricare);
                         }
                         
                         if(area.preview && document.getElementById('anteprima-testo-francesco')) {
                             document.getElementById('anteprima-testo-francesco').innerText = cleanText(ultimo.testo).substring(0, 120) + "...";
                         }
                     }
-                }, 500); // Aspetta mezzo secondo per sicurezza
+                }, 500);
 
                 articoli.forEach((art) => {
                     const li = document.createElement('li');
