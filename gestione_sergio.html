@@ -52,6 +52,7 @@
         </div>
         
         <button onclick="location.href='sergio.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO PUBBLICO</button>
+        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.7rem; margin-top:10px;">Esci e chiedi password la prossima volta</button>
     </div>
 </div>
 
@@ -65,16 +66,32 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    // Funzione Login (Password: sergio)
+    // CONTROLLO SESSIONE (Appena apri la pagina)
+    window.onload = function() {
+        if (sessionStorage.getItem("sergioAmmesso") === "si") {
+            mostraRedazione();
+        }
+    }
+
     function login() {
         const p = document.getElementById('pass').value.toLowerCase();
         if (p === "oigres") { 
-            document.getElementById('area-login').style.display = 'none';
-            document.getElementById('redazione').style.display = 'block';
+            sessionStorage.setItem("sergioAmmesso", "si"); // Salva l'accesso nel browser
+            mostraRedazione();
         } else { alert("Password Errata"); }
     }
 
-    // Funzione Invia con FILTRO MAGICO
+    function mostraRedazione() {
+        document.getElementById('area-login').style.display = 'none';
+        document.getElementById('redazione').style.display = 'block';
+    }
+
+    function logout() {
+        sessionStorage.removeItem("sergioAmmesso");
+        location.reload();
+    }
+
+    // Funzione Invia corretta per VIDEO e FOTO
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
@@ -83,12 +100,16 @@
         if(!t) { alert("Inserisci un titolo!"); return; }
 
         let immaginePulita = iRaw;
-        // Pulizia link ImgBB
-        if (immaginePulita.includes('<img src="')) {
-            immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
-        } else if (immaginePulita.includes('[img]')) {
-            immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
+
+        // Se NON è un video di YouTube, allora applica il filtro per ImgBB
+        if (!iRaw.includes("youtube.com") && !iRaw.includes("youtu.be")) {
+            if (immaginePulita.includes('<img src="')) {
+                immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
+            } else if (immaginePulita.includes('[img]')) {
+                immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
+            }
         }
+        // Se è YouTube, immaginePulita resta il link intero così come l'hai incollato
 
         database.ref('archivioSergio').push({
             titolo: t, 
@@ -101,7 +122,6 @@
         });
     }
 
-    // Carica lista post per eliminazione
     database.ref('archivioSergio').on('value', (snapshot) => {
         const contenitore = document.getElementById('lista-post');
         contenitore.innerHTML = "";
