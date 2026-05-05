@@ -33,17 +33,26 @@
 <div id="redazione" style="display:none;">
     <div class="box">
         <h2 style="color:#003366; margin-top:0;">✍️ Redazione di Sergio</h2>
+        
         <input type="text" id="tit" placeholder="TITOLO DEL RACCONTO">
         <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TUO TESTO..."></textarea>
+        
         <div class="box-foto">
-            <p style="color:#e67e22; font-weight:bold; margin-top:0;">📸 CARICA LINK (FOTO O YOUTUBE)</p>
-            <input type="text" id="img" placeholder="Incolla link qui">
+            <p style="color:#e67e22; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
+            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
+            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA IL LINK QUI SOTTO:</p>
+            <input type="text" id="img" placeholder="Incolla link foto o video Youtube">
         </div>
+        
         <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
+
         <div class="sezione-lista">
+            <h3 style="color:#003366; text-align:center;">🗑️ I TUOI POST ONLINE</h3>
             <div id="lista-post"></div>
         </div>
+        
         <button onclick="location.href='sergio.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO PUBBLICO</button>
+        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.7rem; margin-top:10px;">Esci e chiedi password la prossima volta</button>
     </div>
 </div>
 
@@ -57,9 +66,9 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    // CONTROLLO MEMORIA (Appena apri la pagina)
+    // CONTROLLO SESSIONE (Appena apri la pagina)
     window.onload = function() {
-        if (sessionStorage.getItem("sergioEntrato") === "si") {
+        if (sessionStorage.getItem("sergioAmmesso") === "si") {
             mostraRedazione();
         }
     }
@@ -67,7 +76,7 @@
     function login() {
         const p = document.getElementById('pass').value.toLowerCase();
         if (p === "oigres") { 
-            sessionStorage.setItem("sergioEntrato", "si"); // Qui il browser "si ricorda"
+            sessionStorage.setItem("sergioAmmesso", "si"); // Salva l'accesso nel browser
             mostraRedazione();
         } else { alert("Password Errata"); }
     }
@@ -77,14 +86,40 @@
         document.getElementById('redazione').style.display = 'block';
     }
 
+    function logout() {
+        sessionStorage.removeItem("sergioAmmesso");
+        location.reload();
+    }
+
+    // Funzione Invia corretta per VIDEO e FOTO
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
         let iRaw = document.getElementById('img').value.trim();
-        if(!t) { alert("Metti un titolo!"); return; }
+
+        if(!t) { alert("Inserisci un titolo!"); return; }
+
+        let immaginePulita = iRaw;
+
+        // Se NON è un video di YouTube, allora applica il filtro per ImgBB
+        if (!iRaw.includes("youtube.com") && !iRaw.includes("youtu.be")) {
+            if (immaginePulita.includes('<img src="')) {
+                immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
+            } else if (immaginePulita.includes('[img]')) {
+                immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
+            }
+        }
+        // Se è YouTube, immaginePulita resta il link intero così come l'hai incollato
+
         database.ref('archivioSergio').push({
-            titolo: t, testo: s, immagine: iRaw, data: new Date().toLocaleString()
-        }).then(() => { alert("PUBBLICATO!"); location.href = "sergio.html"; });
+            titolo: t, 
+            testo: s, 
+            immagine: immaginePulita, 
+            data: new Date().toLocaleString()
+        }).then(() => {
+            alert("✅ POST PUBBLICATO!");
+            window.location.href = "sergio.html"; 
+        });
     }
 
     database.ref('archivioSergio').on('value', (snapshot) => {
@@ -93,12 +128,19 @@
         snapshot.forEach((child) => {
             const post = child.val();
             const id = child.key;
-            contenitore.insertAdjacentHTML('afterbegin', `<div class="riga-post"><span>${post.titolo}</span><button class="btn-elimina" onclick="eliminaPost('${id}')">ELIMINA</button></div>`);
+            contenitore.insertAdjacentHTML('afterbegin', `
+                <div class="riga-post">
+                    <span>• ${post.titolo}</span>
+                    <button class="btn-elimina" onclick="eliminaPost('${id}')">ELIMINA</button>
+                </div>
+            `);
         });
     });
 
     function eliminaPost(id) {
-        if(confirm("Cancello?")) { database.ref('archivioSergio/' + id).remove(); }
+        if(confirm("Vuoi davvero cancellare questo post?")) {
+            database.ref('archivioSergio/' + id).remove();
+        }
     }
 </script>
 </body>
