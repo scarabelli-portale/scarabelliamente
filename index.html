@@ -19,41 +19,30 @@
         @keyframes entraFondale { 0% { left: -100%; } 12% { left: 0; } 88% { left: 0; } 100% { left: 110%; } }
         @keyframes entraTitolo { 0% { right: -100%; } 12% { right: 0; } 88% { right: 0; } 100% { right: 110%; } }
         
-        /* --- LAYOUT INTELLIGENTE --- */
-        .main-container { 
-            max-width: 1300px; 
-            margin: 20px auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px; 
-            padding: 0 15px; 
-        }
-
+        /* --- LAYOUT --- */
+        .main-container { max-width: 1300px; margin: 20px auto; display: flex; flex-direction: column; gap: 20px; padding: 0 15px; }
         @media (min-width: 900px) {
-            .main-container { 
-                flex-direction: row; 
-                justify-content: center; 
-                align-items: flex-start;
-            }
+            .main-container { flex-direction: row; justify-content: center; align-items: flex-start; }
             .colonna-sinistra { order: 1; flex: 1; }
             .colonna-centro { order: 2; flex: 1.8; } 
             .colonna-destra { order: 3; flex: 1; }
         }
 
         .colonna-centro, .colonna-sinistra, .colonna-destra { display: flex; flex-direction: column; gap: 20px; }
-        
         .box { background: white; border: 1px solid #ddd; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; display: flex; flex-direction: column; }
-        .btn-mezza { flex: 1; padding: 10px 5px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.75rem; text-align: center; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .bg-wz { background: #25d366; } .bg-sky { background: #00a8e8; } .bg-green { background: #27ae60; } .bg-orange { background: #e67e22; } .bg-navy { background: #143ca0; } .bg-blue { background: #0056b3; }
         
-        .riga-titolo { display: flex; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.88rem; font-weight: bold; cursor: pointer; color: #333; transition: background 0.2s; }
-        .riga-titolo:hover { background-color: #f9f9f9; color: #0056b3; }
-        .foto-profilo { width: 75px; height: 100px; object-fit: cover; border-radius: 6px; border: 2px solid #ddd; }
-        footer { margin-top: 50px; padding: 30px; background: #2c3e50; color: white; text-align: center; }
+        /* PULSANTI GESTIONE */
+        .container-pulsanti { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-link { flex: 1; padding: 12px 5px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85rem; text-align: center; color: white; transition: 0.3s; }
+        .btn-link:hover { opacity: 0.8; transform: translateY(-2px); }
         
-        /* Monitor di anteprima */
-        .monitor-anteprima { background: #000; flex-grow: 1; border-radius: 6px; overflow: hidden; position: relative; min-height: 150px; }
+        .bg-blue { background: #0056b3; } .bg-sky { background: #00a8e8; } .bg-green { background: #27ae60; } .bg-orange { background: #e67e22; } .bg-navy { background: #143ca0; } .bg-gestione { background: #2c3e50; }
+
+        .riga-titolo { display: flex; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.88rem; font-weight: bold; cursor: pointer; color: #333; }
+        .foto-profilo { width: 80px; height: 100px; object-fit: cover; border-radius: 6px; border: 2px solid #ddd; }
+        .monitor-anteprima { background: #000; flex-grow: 1; border-radius: 6px; overflow: hidden; position: relative; min-height: 150px; display: flex; align-items: center; justify-content: center; }
         .monitor-anteprima img { width: 100%; height: 100%; object-fit: cover; }
+        footer { margin-top: 50px; padding: 30px; background: #2c3e50; color: white; text-align: center; }
     </style>
 </head>
 
@@ -73,84 +62,90 @@
         <!-- FRANCESCO (CENTRO) -->
         <div class="colonna-centro">
             <div class="box" style="min-height: 550px; border-top: 4px solid #0056b3;">
-                <div style="background: #0056b3; color: white; text-align: center; padding: 5px; border-radius: 20px; font-weight: bold; margin-bottom: 15px;">Presidente Francesco Mariani</div>
+                <div style="background: #0056b3; color: white; text-align: center; padding: 5px; border-radius: 20px; font-weight: bold; margin-bottom: 15px;">Pres. Francesco Mariani</div>
                 <div style="display:flex; gap:15px; align-items: flex-start; margin-bottom: 15px;">
-                    <img src="immagini/francesco.jpg" class="foto-profilo" style="width: 90px; height: 120px; border-color: #0056b3;">
+                    <img src="immagini/francesco.jpg" class="foto-profilo" style="border-color: #0056b3;">
                     <div style="background: #fcfcfc; border: 1px solid #eee; padding: 8px; flex-grow: 1; height: 120px; overflow-y: auto;">
-                        <ul id="lista-home-francesco" style="list-style:none; padding:0;"></ul>
+                        <ul id="lista-home-francesco" style="list-style:none; padding:0; margin:0;"></ul>
                     </div>
                 </div>
                 <div class="monitor-anteprima" style="border: 3px solid #0056b3;">
                     <img id="img-francesco-dinamica" src="immagini/francesco.jpg">
                 </div>
-                <div class="container-pulsanti" style="display:flex; gap:8px; margin-top: 10px;">
-                    <a href="francesco.html" class="btn-mezza bg-blue">ARCHIVIO</a>
-                    <a href="#" class="btn-mezza bg-wz">💬 WZ</a>
+                <div class="container-pulsanti">
+                    <a href="francesco.html" class="btn-link bg-blue">ARCHIVIO</a>
+                    <a href="gestione_francesco.html" class="btn-link bg-gestione">GESTIONE</a>
                 </div>
             </div>
         </div>
 
         <!-- FAUSTO E CINZIA (SINISTRA) -->
         <div class="colonna-sinistra">
-            <div class="box" style="border-top: 4px solid #00a8e8; min-height: 420px;">
-                <h3 style="color:#00a8e8; text-align:center; font-size:1.1rem; text-transform:uppercase; margin-top:0;">Meteo & Satellite</h3>
+            <div class="box" style="border-top: 4px solid #00a8e8;">
+                <h3 style="color:#00a8e8; text-align:center; font-size:1rem; text-transform:uppercase; margin:0 0 10px 0;">Meteo & Satellite</h3>
                 <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
                     <img src="immagini/fausto.jpg" class="foto-profilo" style="border-color:#00a8e8">
                     <div style="flex: 1; border: 1px solid #eee; border-radius: 6px; overflow: hidden; height: 100px; background:#000;">
                         <img src="immagini/satellite.gif" style="width: 100%; height: 100%; object-fit: contain;">
                     </div>
                 </div>
-                <div style="background: #fdfdfd; padding: 8px; flex-grow: 1; overflow-y: auto;">
-                    <ul id="lista-titoli-fausto" style="list-style: none; padding: 0;"></ul>
+                <div style="background: #fdfdfd; padding: 8px; height: 100px; overflow-y: auto; border: 1px solid #eee;">
+                    <ul id="lista-titoli-fausto" style="list-style: none; padding: 0; margin:0;"></ul>
                 </div>
-                <div class="container-pulsanti" style="display:flex; gap:8px;">
-                    <a href="fausto.html" class="btn-mezza bg-sky">ARCHIVIO</a>
-                    <a href="#" class="btn-mezza bg-wz">💬 WZ</a>
+                <div class="container-pulsanti">
+                    <a href="fausto.html" class="btn-link bg-sky">ARCHIVIO</a>
+                    <a href="gestione_fausto.html" class="btn-link bg-gestione">GESTIONE</a>
                 </div>
             </div>
 
-            <div class="box" style="border-top: 4px solid #27ae60; min-height: 420px;">
-                <h3 style="color:#27ae60; text-align:center; font-size:1.1rem; text-transform:uppercase; margin-top:0;">Didattica & Lavoro</h3>
+            <div class="box" style="border-top: 4px solid #27ae60;">
+                <h3 style="color:#27ae60; text-align:center; font-size:1rem; text-transform:uppercase; margin:0 0 10px 0;">Didattica & Lavoro</h3>
                 <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
                     <img src="immagini/cinzia.jpg" class="foto-profilo" style="border-color:#27ae60">
-                    <div class="monitor-anteprima" style="height: 100px;">
+                    <div class="monitor-anteprima" style="height: 100px; min-height: 100px;">
                         <img id="img-cinzia-dinamica" src="immagini/cinzia.jpg">
                     </div>
                 </div>
-                <div style="background: #fdfdfd; padding: 8px; flex-grow: 1;">
-                    <ul id="lista-home-cinzia" style="list-style: none; padding: 0;"></ul>
+                <div style="background: #fdfdfd; padding: 8px; height: 100px; overflow-y: auto; border: 1px solid #eee;">
+                    <ul id="lista-home-cinzia" style="list-style: none; padding: 0; margin:0;"></ul>
                 </div>
-                <div class="container-pulsanti" style="display:flex; gap:8px;">
-                    <a href="cinzia.html" class="btn-mezza bg-green">ARCHIVIO</a>
-                    <a href="#" class="btn-mezza bg-wz">💬 WZ</a>
+                <div class="container-pulsanti">
+                    <a href="cinzia.html" class="btn-link bg-green">ARCHIVIO</a>
+                    <a href="gestione_cinzia.html" class="btn-link bg-gestione">GESTIONE</a>
                 </div>
             </div>
         </div>
 
         <!-- CARLO E SERGIO (DESTRA) -->
         <div class="colonna-destra">
-            <div class="box" style="border-top: 4px solid #e67e22; min-height: 420px;">
-                <h3 style="color:#e67e22; text-align:center; font-size:1.1rem;">Economia</h3>
+            <div class="box" style="border-top: 4px solid #e67e22;">
+                <h3 style="color:#e67e22; text-align:center; font-size:1rem; margin:0 0 10px 0;">Economia</h3>
                 <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
                     <img src="immagini/carlo.jpg" class="foto-profilo" style="border-color:#e67e22">
+                    <div style="background: #fdfdfd; padding: 8px; flex-grow: 1; height: 100px; overflow-y: auto; border: 1px solid #eee;">
+                        <ul id="lista-titoli-carlo" style="list-style: none; padding: 0; margin:0;"></ul>
+                    </div>
                 </div>
-                <ul id="lista-titoli-carlo" style="list-style: none; padding: 0;"></ul>
-                <div class="container-pulsanti" style="display:flex; gap:8px; margin-top:auto;">
-                    <a href="carlo.html" class="btn-mezza bg-orange">ARCHIVIO</a>
+                <div class="container-pulsanti">
+                    <a href="carlo.html" class="btn-link bg-orange">ARCHIVIO</a>
+                    <a href="gestione_carlo.html" class="btn-link bg-gestione">GESTIONE</a>
                 </div>
             </div>
 
-            <div class="box" style="border-top: 4px solid #143ca0; min-height: 420px;">
-                <h3 style="color:#143ca0; text-align:center; font-size:1.1rem;">Archivio Sergio</h3>
+            <div class="box" style="border-top: 4px solid #143ca0;">
+                <h3 style="color:#143ca0; text-align:center; font-size:1rem; margin:0 0 10px 0;">Archivio Sergio</h3>
                 <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
                     <img src="immagini/sergio.jpg" class="foto-profilo" style="border-color:#143ca0">
-                    <div class="monitor-anteprima" style="height: 100px;">
+                    <div class="monitor-anteprima" style="height: 100px; min-height: 100px;">
                         <img id="img-sergio-dinamica" src="immagini/sergio.jpg">
                     </div>
                 </div>
-                <ul id="lista-titoli-sergio" style="list-style: none; padding: 0;"></ul>
-                <div class="container-pulsanti" style="display:flex; gap:8px; margin-top:auto;">
-                    <a href="sergio.html" class="btn-mezza bg-navy">ARCHIVIO</a>
+                <div style="background: #fdfdfd; padding: 8px; height: 100px; overflow-y: auto; border: 1px solid #eee;">
+                    <ul id="lista-titoli-sergio" style="list-style: none; padding: 0; margin:0;"></ul>
+                </div>
+                <div class="container-pulsanti">
+                    <a href="sergio.html" class="btn-link bg-navy">ARCHIVIO</a>
+                    <a href="gestione_sergio.html" class="btn-link bg-gestione">GESTIONE</a>
                 </div>
             </div>
         </div>
@@ -166,7 +161,6 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
-        // --- FUNZIONE YOUTUBE (ESTRAE ANTEPRIMA) ---
         function getYTThumb(url) {
             if (url && url.includes('youtube.com')) {
                 const vid = url.split('v=')[1]?.split('&')[0];
@@ -175,7 +169,6 @@
             return null;
         }
 
-        // --- GESTIONE AUDIO E FARFALLA ---
         let attivaMusica = false;
         function avviaTutto() {
             if (attivaMusica) return;
@@ -193,13 +186,12 @@
             document.getElementById('farfalla-animata').classList.add('volo-farfalla');
         }
 
-        // --- CARICAMENTO DATI ---
         const archivi = [
-            { ref: 'archivioCentrale', lista: 'lista-home-francesco', link: 'francesco.html', monitor: 'img-francesco-dinamica', def: 'immagini/francesco.jpg' },
-            { ref: 'archivioCinzia', lista: 'lista-home-cinzia', link: 'cinzia.html', monitor: 'img-cinzia-dinamica', def: 'immagini/cinzia.jpg' },
-            { ref: 'archivioFausto', lista: 'lista-titoli-fausto', link: 'fausto.html' },
-            { ref: 'archivioCarlo', lista: 'lista-titoli-carlo', link: 'carlo.html' },
-            { ref: 'archivioSergio', lista: 'lista-titoli-sergio', link: 'sergio.html', monitor: 'img-sergio-dinamica', def: 'immagini/sergio.jpg' }
+            { ref: 'archivioCentrale', lista: 'lista-home-francesco', monitor: 'img-francesco-dinamica', def: 'immagini/francesco.jpg', link: 'francesco.html' },
+            { ref: 'archivioCinzia', lista: 'lista-home-cinzia', monitor: 'img-cinzia-dinamica', def: 'immagini/cinzia.jpg', link: 'cinzia.html' },
+            { ref: 'archivioFausto', lista: 'lista-titoli-fausto', monitor: null, link: 'fausto.html' },
+            { ref: 'archivioCarlo', lista: 'lista-titoli-carlo', monitor: null, link: 'carlo.html' },
+            { ref: 'archivioSergio', lista: 'lista-titoli-sergio', monitor: 'img-sergio-dinamica', def: 'immagini/sergio.jpg', link: 'sergio.html' }
         ];
 
         archivi.forEach(area => {
@@ -207,12 +199,10 @@
                 const listEl = document.getElementById(area.lista);
                 if(!listEl) return;
                 listEl.innerHTML = "";
-                
                 let articoli = [];
                 snap.forEach(c => { articoli.push({ id: c.key, ...c.val() }); });
                 articoli.reverse();
 
-                // Aggiorna il monitor con l'ultimo post (con logica YouTube)
                 if (articoli.length > 0 && area.monitor) {
                     const ultimo = articoli[0];
                     const yt = getYTThumb(ultimo.immagine);
@@ -224,8 +214,6 @@
                     li.className = 'riga-titolo';
                     li.innerHTML = art.titolo;
                     li.onclick = () => { window.location.href = area.link; };
-                    
-                    // Al passaggio del mouse cambia l'anteprima nel monitor
                     if(area.monitor) {
                         li.onmouseenter = () => {
                             const ytThumb = getYTThumb(art.immagine);
