@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gestione Carlo</title>
+    <style>
+        body { font-family: sans-serif; background-color: #0056b3; margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .container { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        h2 { color: #0056b3; text-align: center; margin-top: 0; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
+        .btn-invia { background-color: #27ae60; color: white; }
+        .btn-home { background-color: #7f8c8d; color: white; }
+        .btn-foto { background-color: #f39c12; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .lista-articoli { margin-top: 20px; border-top: 2px solid #eee; padding-top: 10px; }
+        .item-archivio { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .btn-elimina { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Gestione Carlo</h2>
+    
+    <input type="text" id="titolo" placeholder="Titolo dell'articolo">
+    <textarea id="testo" rows="4" placeholder="Testo o descrizione..."></textarea>
+    
+    <!-- Pulsante per la nuvoletta delle foto -->
+    <button id="upload_widget" class="btn-foto">☁️📷 CARICA FOTO</button>
+    
+    <input type="text" id="immagine" placeholder="Link immagine (si compila da solo)">
+    
+    <button class="btn-invia" onclick="pubblica()">🚀 PUBBLICA ARTICOLO</button>
+    <button class="btn-home" onclick="window.location.href='index.html'">🏠 TORNA ALLA HOME</button>
+
+    <div class="lista-articoli" id="lista-articoli">
+        <!-- Qui appariranno gli articoli caricati -->
+    </div>
+</div>
+
+<!-- Script Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<!-- Script Cloudinary per la nuvoletta -->
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
+<script>
+    const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    
+    // QUI C'È IL TUO ARCHIVIO CARLO
+    const db = firebase.database().ref('archivioCarlo');
+
+    // Funzionamento della nuvoletta Cloudinary
+    var myWidget = cloudinary.createUploadWidget({
+      cloudName: 'dmv76p870', 
+      uploadPreset: 'ml_default'}, (error, result) => { 
+        if (!error && result && result.event === "success") { 
+          document.getElementById('immagine').value = result.info.secure_url;
+        }
+      }
+    );
+
+    document.getElementById("upload_widget").addEventListener("click", function(){
+        myWidget.open();
+      }, false);
+
+    function pubblica() {
+        const titolo = document.getElementById('titolo').value;
+        const testo = document.getElementById('testo').value;
+        const immagine = document.getElementById('immagine').value;
+
+        if (titolo === "") { alert("Inserisci almeno il titolo!"); return; }
+
+        db.push({
+            titolo: titolo,
+            testo: testo,
+            immagine: immagine,
+            data: new Date().toISOString()
+        }).then(() => {
+            alert("Articolo di Carlo pubblicato!");
+            document.getElementById('titolo').value = "";
+            document.getElementById('testo').value = "";
+            document.getElementById('immagine').value = "";
+        });
+    }
+
+    // Carica lista per eliminare
+    db.limitToLast(10).on('value', snap => {
+        const lista = document.getElementById('lista-articoli');
+        lista.innerHTML = "<h4>Ultimi post di Carlo:</h4>";
+        snap.forEach(child => {
+            const art = child.val();
+            const div = document.createElement('div');
+            div.className = 'item-archivio';
+            div.innerHTML = `<span>${art.titolo}</span> 
+                             <button class="btn-elimina" onclick="elimina('${child.key}')">🗑️</button>`;
+            lista.appendChild(div);
+        });
+    });
+
+    function elimina(id) {
+        if(confirm("Vuoi davvero eliminare questo post?")) {
+            db.child(id).remove();
+        }
+    }
+</script>
+
+</body>
+</html>
