@@ -4,20 +4,15 @@
     <meta charset="UTF-8">
     <title>REDAZIONE FAUSTO - GESTIONE</title>
     <style>
-        body { font-family: sans-serif; background: #00a8e8; color: white; text-align: center; padding: 20px; }
-        .box { max-width: 550px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #FFD700; }
-        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
-        .box-foto { background: #f0faff; border: 2px dashed #00a8e8; padding: 15px; border-radius: 12px; margin: 15px 0; }
-        .btn-carica { background: #e67e22; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; transition: 0.3s; margin-bottom: 10px; }
-        .btn-carica:hover { background: #d35400; }
-        #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; margin-top: 10px; }
-        #pubblica:disabled { background: #ccc; cursor: not-allowed; }
-        
-        /* Anteprima immagine */
-        #anteprima-img { width: 100%; height: 150px; object-fit: contain; background: #eee; border-radius: 8px; margin-top: 10px; display: none; border: 1px solid #ddd; }
-        
+        body { font-family: sans-serif; background: #004d66; color: white; text-align: center; padding: 20px; }
+        .box { max-width: 550px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #00a8e8; }
+        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        .box-foto { background: #e0f7fa; border: 2px dashed #00a8e8; padding: 15px; border-radius: 12px; margin: 15px 0; }
+        .btn-carica { background: #00a8e8; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; transition: 0.3s; }
+        .btn-carica:hover { background: #008eb3; }
+        #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; }
         .sezione-lista { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; text-align: left; }
-        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.85rem; color: #333; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.8rem; color: #333; }
         .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
         #area-login { margin-top: 100px; }
         .login-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; color: #333; }
@@ -29,116 +24,92 @@
 
 <div id="area-login">
     <div class="login-box">
-        <h2 style="color:#00a8e8;">Area Fausto ☁️</h2>
+        <h2 style="color:#004d66;">Area Fausto 🌤️</h2>
         <input type="password" id="pass" placeholder="Password di accesso">
-        <button onclick="login()" style="background:#00a8e8; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer; font-weight:bold;">ENTRA</button>
+        <button onclick="login()" style="background:#004d66; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer;">ENTRA</button>
     </div>
 </div>
 
 <div id="redazione" style="display:none;">
     <div class="box">
-        <h2 style="color:#00a8e8; margin-top:0;">☁️ Redazione di Fausto</h2>
+        <h2 style="color:#004d66; margin-top:0;">✍️ Redazione di Fausto</h2>
         
-        <input type="text" id="tit" placeholder="TITOLO DEL BOLLETTINO">
-        <textarea id="tes" rows="5" placeholder="SCRIVI QUI LE PREVISIONI..."></textarea>
+        <input type="text" id="tit" placeholder="TITOLO DEL POST">
+        <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TESTO..."></textarea>
         
         <div class="box-foto">
-            <p style="color:#e67e22; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
-            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">CLICCA QUI E CARICA</a>
-            
-            <p style="font-size: 0.75rem; color: #666; margin: 10px 0 5px 0;">📸 2. INCOLLA IL LINK (O IL CODICE) QUI:</p>
-            <input type="text" id="img" placeholder="Incolla il link di ImgBB..." oninput="mostraAnteprima(this.value)">
-            
-            <img id="anteprima-img" src="" alt="Anteprima">
+            <p style="color:#00a8e8; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
+            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
+            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA IL LINK QUI SOTTO:</p>
+            <input type="text" id="img" placeholder="Incolla link foto o video Youtube">
         </div>
         
-        <button id="pubblica" onclick="invia()">🚀 PUBBLICA BOLLETTINO</button>
+        <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
 
         <div class="sezione-lista">
-            <h3 style="color:#00a8e8; text-align:center;">🗑️ GESTIONE BOLLETTINI</h3>
+            <h3 style="color:#004d66; text-align:center;">🗑️ I TUOI POST ONLINE</h3>
             <div id="lista-post"></div>
         </div>
         
-        <button onclick="location.href='fausto.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO</button>
+        <button onclick="location.href='fausto.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO PUBBLICO</button>
+        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.7rem; margin-top:10px;">Esci e chiedi password la prossima volta</button>
     </div>
 </div>
 
 <script>
     const firebaseConfig = {
-        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
-        authDomain: "sito-sergio-b19ce.firebaseapp.com",
-        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
-        projectId: "sito-sergio-b19ce"
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/"
     };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
     window.onload = function() {
-        if (sessionStorage.getItem("login_fausto") === "ok") {
-            document.getElementById('area-login').style.display = 'none';
-            document.getElementById('redazione').style.display = 'block';
+        if (sessionStorage.getItem("faustoAmmesso") === "si") {
+            mostraRedazione();
         }
-    };
+    }
 
     function login() {
-        const p = document.getElementById('pass').value;
-        if (p === "otsuaf") {
-            sessionStorage.setItem("login_fausto", "ok");
-            document.getElementById('area-login').style.display = 'none';
-            document.getElementById('redazione').style.display = 'block';
+        const p = document.getElementById('pass').value.toLowerCase();
+        if (p === "123") { // nuova password
+            sessionStorage.setItem("faustoAmmesso", "si");
+            mostraRedazione();
         } else { alert("Password Errata"); }
     }
-
-    // --- FUNZIONE PER PULIRE IL LINK E MOSTRARE ANTEPRIMA ---
-    function pulisciLink(link) {
-        let url = link.trim();
-        // Se incolla il codice HTML <img src="...">
-        if (url.includes('<img src="')) {
-            url = url.split('<img src="')[1].split('"')[0];
-        } 
-        // Se incolla il codice Forum [img]...[/img]
-        else if (url.includes('[img]')) {
-            url = url.split('[img]')[1].split('[/img]')[0];
-        }
-        // Se è un link di ImgBB non diretto (es. ibb.co/XYZ), proviamo a suggerire il caricamento diretto
-        return url;
+    function mostraRedazione() {
+        document.getElementById('area-login').style.display = 'none';
+        document.getElementById('redazione').style.display = 'block';
     }
 
-    function mostraAnteprima(valore) {
-        const urlPulito = pulisciLink(valore);
-        const imgAnteprima = document.getElementById('anteprima-img');
-        if(urlPulito.length > 10) {
-            imgAnteprima.src = urlPulito;
-            imgAnteprima.style.display = 'block';
-        } else {
-            imgAnteprima.style.display = 'none';
-        }
+    function logout() {
+        sessionStorage.removeItem("faustoAmmesso");
+        location.reload();
     }
 
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
-        let iRaw = document.getElementById('img').value;
+        let iRaw = document.getElementById('img').value.trim();
 
-        if(!t || !s) { alert("Metti titolo e testo!"); return; }
+        if(!t) { alert("Inserisci un titolo!"); return; }
 
-        let immagineFinale = pulisciLink(iRaw);
-
-        document.getElementById('pubblica').disabled = true;
-        document.getElementById('pubblica').innerText = "CARICAMENTO...";
+        let immaginePulita = iRaw;
+        if (!iRaw.includes("youtube.com") && !iRaw.includes("youtu.be")) {
+            if (immaginePulita.includes('<img src="')) {
+                immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
+            } else if (immaginePulita.includes('[img]')) {
+                immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
+            }
+        }
 
         database.ref('archivioFausto').push({
             titolo: t, 
             testo: s, 
-            immagine: immagineFinale, 
-            data: new Date().toLocaleDateString('it-IT')
+            immagine: immaginePulita, 
+            data: new Date().toLocaleString()
         }).then(() => {
-            alert("✅ BOLLETTINO PUBBLICATO!");
+            alert("✅ POST PUBBLICATO!");
             window.location.href = "fausto.html"; 
-        }).catch((error) => {
-            alert("Errore: " + error);
-            document.getElementById('pubblica').disabled = false;
-            document.getElementById('pubblica').innerText = "🚀 PUBBLICA BOLLETTINO";
         });
     }
 
@@ -150,7 +121,7 @@
             const id = child.key;
             contenitore.insertAdjacentHTML('afterbegin', `
                 <div class="riga-post">
-                    <span><strong>${post.data || ''}</strong> - ${post.titolo}</span>
+                    <span>• ${post.titolo}</span>
                     <button class="btn-elimina" onclick="eliminaPost('${id}')">ELIMINA</button>
                 </div>
             `);
@@ -158,7 +129,7 @@
     });
 
     function eliminaPost(id) {
-        if(confirm("Vuoi davvero cancellare questo bollettino?")) {
+        if(confirm("Vuoi davvero cancellare questo post?")) {
             database.ref('archivioFausto/' + id).remove();
         }
     }
