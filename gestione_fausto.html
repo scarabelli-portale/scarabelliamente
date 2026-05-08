@@ -2,20 +2,50 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REDAZIONE FAUSTO - GESTIONE</title>
     <style>
-        body { font-family: sans-serif; background: #004d66; color: white; text-align: center; padding: 20px; }
-        .box { max-width: 550px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #00a8e8; }
-        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        body { font-family: sans-serif; background: #004d66; color: white; text-align: center; padding: 10px; margin: 0; }
+        
+        /* Box adattabile per cellulare */
+        .box { 
+            width: 95%; 
+            max-width: 550px; 
+            margin: 20px auto; 
+            background: white; 
+            color: #333; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+            border-top: 6px solid #00a8e8; 
+            box-sizing: border-box; 
+        }
+
+        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
+        
         .box-foto { background: #e0f7fa; border: 2px dashed #00a8e8; padding: 15px; border-radius: 12px; margin: 15px 0; }
-        .btn-carica { background: #00a8e8; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; transition: 0.3s; }
-        .btn-carica:hover { background: #008eb3; }
+        
+        .btn-carica { background: #00a8e8; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; }
+        
         #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; }
-        .sezione-lista { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; text-align: left; }
-        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.8rem; color: #333; }
-        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        #area-login { margin-top: 100px; }
-        .login-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; color: #333; }
+        
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; color: #333; text-align: left; }
+        
+        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+        
+        /* Area Login CORRETTA per cellulare */
+        #area-login { margin-top: 50px; }
+        .login-box { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            display: block; 
+            width: 90%; 
+            max-width: 400px; 
+            margin: auto; 
+            color: #333; 
+            box-sizing: border-box; 
+        }
     </style>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -24,45 +54,51 @@
 
 <div id="area-login">
     <div class="login-box">
-        <h2 style="color:#004d66;">Area Fausto 🌤️</h2>
+        <h2 style="color:#004d66; margin-top:0;">Area Fausto ⚓</h2>
+        <p style="font-size:0.9rem;">Inserisci password per accedere</p>
         <input type="password" id="pass" placeholder="Password di accesso">
-        <button onclick="login()" style="background:#004d66; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer;">ENTRA</button>
+        <button onclick="login()" style="background:#004d66; color:white; border:none; padding:15px; border-radius:8px; width:100%; cursor:pointer; font-weight:bold; font-size:1.1rem;">ENTRA</button>
     </div>
 </div>
 
 <div id="redazione" style="display:none;">
     <div class="box">
-        <h2 style="color:#004d66; margin-top:0;">✍️ Redazione di Fausto</h2>
+        <h2 style="color:#004d66; margin-top:0; text-align:center;">✍️ Redazione Fausto</h2>
         
-        <input type="text" id="tit" placeholder="TITOLO DEL POST">
+        <input type="text" id="tit" placeholder="TITOLO">
         <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TESTO..."></textarea>
         
         <div class="box-foto">
-            <p style="color:#00a8e8; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
+            <p style="color:#00a8e8; font-weight:bold; margin-top:0;">📸 CARICA FOTO</p>
             <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
-            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA IL LINK QUI SOTTO:</p>
-            <input type="text" id="img" placeholder="Incolla link foto o video Youtube">
+            <p style="font-size: 0.75rem; color: #666; margin: 10px 0 5px 0;">INCOLLA IL LINK QUI SOTTO:</p>
+            <input type="text" id="img" placeholder="Link ImgBB o YouTube">
         </div>
         
         <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
 
-        <div class="sezione-lista">
-            <h3 style="color:#004d66; text-align:center;">🗑️ I TUOI POST ONLINE</h3>
+        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
+            <h3 style="color:#004d66; text-align:center;">🗑️ GESTISCI POST</h3>
             <div id="lista-post"></div>
         </div>
         
-        <button onclick="location.href='fausto.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO PUBBLICO</button>
-        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.7rem; margin-top:10px;">Esci e chiedi password la prossima volta</button>
+        <button onclick="location.href='fausto.html'" style="background:#888; color:white; border:none; padding:15px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;">TORNA AL SITO</button>
+        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.8rem; margin-top:20px; display:block; width:100%;">Esci (Chiedi password dopo)</button>
     </div>
 </div>
 
 <script>
+    // Configurazione Database (lo stesso di Sergio)
     const firebaseConfig = {
-        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/"
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        authDomain: "sito-sergio-b19ce.firebaseapp.com",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "sito-sergio-b19ce"
     };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
+    // Controllo se è già loggato
     window.onload = function() {
         if (sessionStorage.getItem("faustoAmmesso") === "si") {
             mostraRedazione();
@@ -71,11 +107,12 @@
 
     function login() {
         const p = document.getElementById('pass').value.toLowerCase();
-        if (p === "123") { // nuova password
+        if (p === "123") { 
             sessionStorage.setItem("faustoAmmesso", "si");
             mostraRedazione();
         } else { alert("Password Errata"); }
     }
+
     function mostraRedazione() {
         document.getElementById('area-login').style.display = 'none';
         document.getElementById('redazione').style.display = 'block';
@@ -94,6 +131,7 @@
         if(!t) { alert("Inserisci un titolo!"); return; }
 
         let immaginePulita = iRaw;
+        // Filtro per estrarre link pulito se si incolla codice ImgBB
         if (!iRaw.includes("youtube.com") && !iRaw.includes("youtu.be")) {
             if (immaginePulita.includes('<img src="')) {
                 immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
@@ -113,6 +151,7 @@
         });
     }
 
+    // Carica la lista dei post per poterli eliminare
     database.ref('archivioFausto').on('value', (snapshot) => {
         const contenitore = document.getElementById('lista-post');
         contenitore.innerHTML = "";
