@@ -18,7 +18,6 @@
         .firma-sergio { font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); }
         .btn-nav { position: absolute; top: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 20; border: none; cursor: pointer; }
         .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
-        .btn-gest { right: 15px; background: #FFD700; color: #143ca0; }
         .main-wrapper { display: flex; max-width: 1300px; margin: 30px auto; gap: 20px; padding: 0 15px; }
         .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .elemento-album { background: white; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; }
@@ -35,23 +34,15 @@
     </style>
 </head>
 <body>
-
     <div class="copertina-container">
         <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
-        <button class="btn-nav btn-gest" onclick="location.href='gestione_sergio.html'">⚙ GESTIONE</button>
         <img src="immagini/scuola.jpg" class="foto-scuola">
         <div id="contenitore-titolo">
             <div class="titolo-stampato">Archivio Storico & Iconografico</div>
             <div class="firma-sergio">Sergio Silvestrini</div>
         </div>
     </div>
-
-    <div class="main-wrapper">
-        <div class="griglia-multimedia" id="lista-multimedia">
-            <p style="color: #666; text-align: center; grid-column: 1/-1;">Caricamento ricordi...</p>
-        </div>
-    </div>
-
+    <div class="main-wrapper"><div class="griglia-multimedia" id="lista-multimedia"></div></div>
     <div id="overlay-blu">
         <div id="box-contenuto">
             <div id="media-display"></div> 
@@ -61,89 +52,39 @@
             <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI X</button>
         </div>
     </div>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
         const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
-
-        function ottieniYoutubeID(url) {
-            if (!url) return null;
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length == 11) ? match[2] : null;
-        }
-
+        function pulisciLink(url) { if (!url) return ""; let trovato = url.match(/https?:\/\/[^"'>\s]+\.(?:jpg|jpeg|gif|png|webp)/i); return trovato ? trovato[0] : url.trim(); }
+        function ottieniYoutubeID(url) { if (!url) return null; const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/; const match = url.match(regExp); return (match && match[2].length == 11) ? match[2] : null; }
         database.ref('archivioSergio').on('value', (snapshot) => {
-            const lista = document.getElementById('lista-multimedia');
-            lista.innerHTML = "";
-            if (!snapshot.exists()) return;
-
+            const lista = document.getElementById('lista-multimedia'); lista.innerHTML = "";
             snapshot.forEach((child) => {
-                const data = child.val();
-                const id = child.key;
-                let anteprima = data.immagine || "";
-                
-                // MAGIA: Se è un video, usa l'anteprima di YouTube
-                const vId = ottieniYoutubeID(anteprima);
-                if (vId) {
-                    anteprima = `https://img.youtube.com/vi/${vId}/hqdefault.jpg`;
-                }
-                
-                lista.insertAdjacentHTML('afterbegin', `
-                    <div class="elemento-album" onclick="apriContenuto('${id}')">
-                        <div class="media-box"><img src="${anteprima}" onerror="this.src='immagini/scuola.jpg'"></div>
-                        <div class="info-box"><div class="titolo-post">${data.titolo}</div></div>
-                    </div>`);
+                const data = child.val(); const id = child.key; const linkPulito = pulisciLink(data.immagine || "");
+                lista.insertAdjacentHTML('afterbegin', `<div class="elemento-album" onclick="apriContenuto('${id}')"><div class="media-box"><img src="${linkPulito}" onerror="this.src='immagini/scuola.jpg'"></div><div class="info-box"><div class="titolo-post">${data.titolo}</div></div></div>`);
             });
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const postId = urlParams.get('id');
-            if (postId) setTimeout(() => { apriContenuto(postId); }, 500);
         });
-
         window.apriContenuto = function(id) {
             database.ref('archivioSergio/' + id).once('value').then((snapshot) => {
-                const data = snapshot.val();
-                if(!data) return;
-                
+                const data = snapshot.val(); if(!data) return;
                 document.getElementById('titolo-view').innerText = data.titolo || "";
                 document.getElementById('testo-view').innerText = data.testo || "";
-                
                 const display = document.getElementById('media-display');
-                const link = (data.immagine || "").trim();
-                const vId = ottieniYoutubeID(link);
-
-                if (vId) {
-                    display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;">
-                        <iframe width="100%" height="400" src="https://www.youtube.com/embed/${vId}" frameborder="0" allowfullscreen style="border-radius:15px;"></iframe>
-                    </div>`;
-                } else {
-                    display.innerHTML = `<img src="${link}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`;
-                }
-
+                const linkPulito = pulisciLink(data.immagine || "");
+                let vId = ottieniYoutubeID(linkPulito);
+                if (vId) { display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;"><a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:inline-block; background:#FFD700; color:#143ca0; padding:15px 40px; border-radius:50px; text-decoration:none; font-weight:bold; font-size:1.2rem;">GUARDA IL VIDEO 🎥</a></div>`; }
+                else { display.innerHTML = `<img src="${linkPulito}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`; }
                 const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
-                const msgTutti = encodeURIComponent("✨ Guarda questo ricordo dall'Archivio di Sergio Silvestrini:\n*" + data.titolo + "*\n\nLink:\n" + urlSito);
-                const msgMe = encodeURIComponent("Ciao Sergio, ti seguo sul sito. Ti scrivo per: " + data.titolo + "\n\nGuarda qui:\n" + urlSito); 
-
-                document.getElementById('container-wz').innerHTML = `
-                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0;">
-                        <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">A TUTTI</a>
-                        <a href="https://wa.me/393398329580?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">A ME</a>
-                    </div>`;
-
-                document.getElementById('overlay-blu').style.display = 'block';
-                document.body.style.overflow = 'hidden';
+                const msgTutti = encodeURIComponent("✨ Guarda questo ricordo:\n*" + data.titolo + "*\n\nLink:\n" + urlSito);
+                const msgMe = encodeURIComponent("Ciao Sergio, riguardo a: " + data.titolo + "\n" + urlSito); 
+                document.getElementById('container-wz').innerHTML = `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0;"><a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: #25D366;">A TUTTI (Gruppo)</a><a href="https://wa.me/393398329580?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E;">💬 A ME (Privato)</a></div>`;
+                document.getElementById('overlay-blu').style.display = 'block'; document.body.style.overflow = 'hidden';
             });
         }
-
-        window.chiudiTutto = function() { 
-            document.getElementById('overlay-blu').style.display = 'none'; 
-            document.body.style.overflow = 'auto';
-            window.history.pushState({}, "", window.location.pathname);
-        }
+        window.chiudiTutto = function() { document.getElementById('overlay-blu').style.display = 'none'; document.body.style.overflow = 'auto'; }
     </script>
 </body>
 </html>
