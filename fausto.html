@@ -2,61 +2,72 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gestione Fausto</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivio Fausto</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .login-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
-        h2 { color: #1a73e8; margin-bottom: 25px; font-size: 24px; }
-        .input-group { position: relative; margin-bottom: 20px; }
-        input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 18px; box-sizing: border-box; }
-        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; font-size: 20px; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; font-size: 18px; cursor: pointer; transition: 0.3s; }
-        .btn-entra { background-color: #1a73e8; color: white; margin-bottom: 15px; }
-        .btn-home { background-color: #f8f9fa; color: #5f6368; border: 1px solid #dadce0; }
+        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; padding: 20px; }
+        .header { background: #00a8e8; color: white; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .container-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+        .btn-home { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #00a8e8; font-weight: bold; }
+        /* Stili per il login se necessario */
+        .login-box { display: none; background: white; padding: 30px; border-radius: 20px; max-width: 400px; margin: 50px auto; text-align: center; border: 1px solid #ddd; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; }
+        .btn-entra { background: #00a8e8; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="login-container">
-    <h2>Gestione Fausto</h2>
-    <div class="input-group">
-        <input type="password" id="password" placeholder="Password di accesso">
-        <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+    <div id="area-gallery">
+        <a href="index.html" class="btn-home">⬅ TORNA ALLA HOME</a>
+        <div class="header">
+            <h1>Archivio Meteo & Satellite</h1>
+            <p>I post di Fausto</p>
+        </div>
+        <div id="gallery" class="container-gallery"></div>
     </div>
-    <button class="btn-entra" onclick="checkPassword()">ENTRA</button>
-    <button class="btn-home" onclick="window.location.href='index.html'">🏠 HOME</button>
-</div>
 
-<script>
-    function togglePassword() {
-        const passwordInput = document.getElementById('password');
-        const icon = document.querySelector('.toggle-password');
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
+    <div id="area-login" class="login-box">
+        <h2>Accesso Riservato Fausto</h2>
+        <input type="password" id="pass" placeholder="Inserisci Password">
+        <br>
+        <button class="btn-entra" onclick="check()">ENTRA NELLA GESTIONE</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database().ref('archivioFausto');
+
+        // Controllo: se nell'URL c'è scritto ?login allora mostro la password
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('login')) {
+            document.getElementById('area-gallery').style.display = 'none';
+            document.getElementById('area-login').style.display = 'block';
         }
-    }
 
-    function checkPassword() {
-        const pass = document.getElementById('password').value;
-        // PASSWORD QUI SOTTO: ora è 'otsua'
-        if (pass === 'otsua') { 
-            window.location.href = 'gestione_fausto.html';
-        } else {
-            alert('Password errata!');
+        function check() {
+            if (document.getElementById('pass').value === '123') { // Metti la tua pass
+                sessionStorage.setItem('accesso_fausto', 'ok');
+                window.location.href = 'gestione_fausto.html';
+            } else { alert("Password errata!"); }
         }
-    }
 
-    document.getElementById('password').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') { checkPassword(); }
-    });
-</script>
+        // Caricamento galleria
+        db.on('value', snap => {
+            const container = document.getElementById('gallery');
+            container.innerHTML = "";
+            const dati = snap.val();
+            if(dati) {
+                Object.keys(dati).reverse().forEach(id => {
+                    const post = dati[id];
+                    container.innerHTML += `<div class="card">${post.immagine ? `<img src="${post.immagine}">` : ''}<h3>${post.titolo}</h3></div>`;
+                });
+            }
+        });
+    </script>
 </body>
 </html>
