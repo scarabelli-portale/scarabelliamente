@@ -2,111 +2,119 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gestione Carlo</title>
+    <title>REDAZIONE CINZIA - GESTIONE</title>
     <style>
-        body { font-family: sans-serif; background-color: #0056b3; margin: 0; padding: 10px; display: flex; justify-content: center; }
-        .container { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        h2 { color: #0056b3; text-align: center; margin-top: 0; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
-        .btn-invia { background-color: #27ae60; color: white; }
-        .btn-home { background-color: #7f8c8d; color: white; }
-        .btn-foto { background-color: #f39c12; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .lista-articoli { margin-top: 20px; border-top: 2px solid #eee; padding-top: 10px; }
-        .item-archivio { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .btn-elimina { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        body { font-family: sans-serif; background: #1b5e20; color: white; text-align: center; padding: 20px; }
+        .box { max-width: 550px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #27ae60; text-align: left; }
+        label { font-weight: bold; color: #1b5e20; display: block; margin-top: 15px; }
+        input, textarea { width: 100%; margin: 5px 0 15px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        
+        /* BOX FOTO DAL CELLULARE */
+        .box-foto-diretta { background: #e8f5e9; border: 2px solid #27ae60; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
+        .input-file-nascosto { display: none; }
+        .btn-cellulare { background: #27ae60; color: white; padding: 12px; display: block; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
+        #anteprima { max-width: 100%; border-radius: 8px; margin-top: 10px; display: none; }
+        
+        #pubblica { background: #2e7d32; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.2rem; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; color: #333; font-size: 0.8rem;}
+        #area-login { margin-top: 100px; text-align: center; }
+        .login-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; color: #333; }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
 
-<div class="container">
-    <h2>Gestione Carlo</h2>
-    
-    <input type="text" id="titolo" placeholder="Titolo dell'articolo">
-    <textarea id="testo" rows="4" placeholder="Testo o descrizione..."></textarea>
-    
-    <!-- Pulsante per la nuvoletta delle foto -->
-    <button id="upload_widget" class="btn-foto">☁️📷 CARICA FOTO</button>
-    
-    <input type="text" id="immagine" placeholder="Link immagine (si compila da solo)">
-    
-    <button class="btn-invia" onclick="pubblica()">🚀 PUBBLICA ARTICOLO</button>
-    <button class="btn-home" onclick="window.location.href='index.html'">🏠 TORNA ALLA HOME</button>
-
-    <div class="lista-articoli" id="lista-articoli">
-        <!-- Qui appariranno gli articoli caricati -->
+<div id="area-login">
+    <div class="login-box">
+        <h2 style="color:#1b5e20;">Gestione Carlo 📚</h2>
+        <input type="password" id="pass" placeholder="Password (123)">
+        <button onclick="login()" style="background:#1b5e20; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer; font-weight:bold;">ENTRA</button>
     </div>
 </div>
 
-<!-- Script Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-<!-- Script Cloudinary per la nuvoletta -->
-<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+<div id="redazione" style="display:none;">
+    <div class="box">
+        <h2 style="color:#1b5e20; margin-top:0; text-align:center;">✍️ Redazione di carlo</h2>
+        
+        <label>✍️ Titolo</label>
+        <input type="text" id="tit" placeholder="Titolo...">
+        
+        <label>📝 Racconto</label>
+        <textarea id="tes" rows="5" placeholder="Scrivi qui..."></textarea>
+        
+        <div class="box-foto-diretta">
+            <label style="color:#27ae60; margin-top:0;">📸 CARICA DAL CELLULARE</label>
+            <label for="foto-file" class="btn-cellulare">📁 SCEGLI FOTO O SCATTA</label>
+            <input type="file" id="foto-file" class="input-file-nascosto" accept="image/*" onchange="anteprimaFoto(this)">
+            <img id="anteprima" src="" alt="Anteprima">
+            
+            <p style="font-size: 0.7rem; color: #666; margin: 15px 0 5px 0;">🎥 OPPURE INCOLLA LINK (YOUTUBE/IMGBB):</p>
+            <input type="text" id="img-link" placeholder="Incolla link qui...">
+        </div>
+        
+        <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
+        
+        <div id="lista-post" style="margin-top:20px;"></div>
+    </div>
+</div>
 
 <script>
     const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-    
-    // QUI C'È IL TUO ARCHIVIO CARLO
-    const db = firebase.database().ref('archivioCarlo');
+    const database = firebase.database();
+    let immagineBase64 = ""; // Qui salviamo la foto del cellulare
 
-    // Funzionamento della nuvoletta Cloudinary
-    var myWidget = cloudinary.createUploadWidget({
-      cloudName: 'dmv76p870', 
-      uploadPreset: 'ml_default'}, (error, result) => { 
-        if (!error && result && result.event === "success") { 
-          document.getElementById('immagine').value = result.info.secure_url;
+    function login() {
+        if (document.getElementById('pass').value === "123") {
+            sessionStorage.setItem("cinziaAmmesso", "si");
+            mostraRedazione();
+        } else { alert("Password Errata"); }
+    }
+
+    function mostraRedazione() {
+        document.getElementById('area-login').style.display = 'none';
+        document.getElementById('redazione').style.display = 'block';
+    }
+
+    // Funzione magica per leggere la foto dal cellulare
+    function anteprimaFoto(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('anteprima').src = e.target.result;
+                document.getElementById('anteprima').style.display = 'block';
+                immagineBase64 = e.target.result; // Salva la foto come testo lungo
+            }
+            reader.readAsDataURL(input.files[0]);
         }
-      }
-    );
+    }
 
-    document.getElementById("upload_widget").addEventListener("click", function(){
-        myWidget.open();
-      }, false);
+    function invia() {
+        let t = document.getElementById('tit').value;
+        let s = document.getElementById('tes').value;
+        let linkEsterno = document.getElementById('img-link').value.trim();
+        
+        // Se c'è una foto dal cellulare usa quella, altrimenti usa il link incollato
+        let fotoFinale = immagineBase64 ? immagineBase64 : linkEsterno;
 
-    function pubblica() {
-        const titolo = document.getElementById('titolo').value;
-        const testo = document.getElementById('testo').value;
-        const immagine = document.getElementById('immagine').value;
+        if(!t) return alert("Metti un titolo!");
 
-        if (titolo === "") { alert("Inserisci almeno il titolo!"); return; }
-
-        db.push({
-            titolo: titolo,
-            testo: testo,
-            immagine: immagine,
-            data: new Date().toISOString()
+        database.ref('archivioCinzia').push({
+            titolo: t, testo: s, immagine: fotoFinale, data: new Date().toLocaleString()
         }).then(() => {
-            alert("Articolo di Carlo pubblicato!");
-            document.getElementById('titolo').value = "";
-            document.getElementById('testo').value = "";
-            document.getElementById('immagine').value = "";
+            alert("✅ PUBBLICATO!");
+            window.location.href = "cinzia.html";
         });
     }
 
-    // Carica lista per eliminare
-    db.limitToLast(10).on('value', snap => {
-        const lista = document.getElementById('lista-articoli');
-        lista.innerHTML = "<h4>Ultimi post di Carlo:</h4>";
-        snap.forEach(child => {
-            const art = child.val();
-            const div = document.createElement('div');
-            div.className = 'item-archivio';
-            div.innerHTML = `<span>${art.titolo}</span> 
-                             <button class="btn-elimina" onclick="elimina('${child.key}')">🗑️</button>`;
-            lista.appendChild(div);
+    // (Qui sotto la solita funzione per la lista post...)
+    database.ref('archivioCinzia').on('value', (snapshot) => {
+        const c = document.getElementById('lista-post'); c.innerHTML = "";
+        snapshot.forEach((child) => {
+            c.insertAdjacentHTML('afterbegin', `<div class="riga-post"><span>• ${child.val().titolo}</span><button onclick="database.ref('archivioCinzia/${child.key}').remove()">X</button></div>`);
         });
     });
-
-    function elimina(id) {
-        if(confirm("Vuoi davvero eliminare questo post?")) {
-            db.child(id).remove();
-        }
-    }
 </script>
-
 </body>
 </html>
