@@ -2,21 +2,19 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REDAZIONE FRANCESCO - GESTIONE</title>
     <style>
-        body { font-family: sans-serif; background: #0d47a1; color: white; text-align: center; padding: 20px; }
-        .box { max-width: 550px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #0056b3; text-align: left; }
-        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-        .box-foto { background: #e3f2fd; border: 2px dashed #0056b3; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
-        .btn-carica { background: #0056b3; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; transition: 0.3s; }
-        .btn-carica:hover { background: #004494; }
-        #pubblica { background: #1565c0; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.2rem; }
-        #pubblica:hover { background: #104e96; }
-        .sezione-lista { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; text-align: left; }
-        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; color: #333; font-size: 0.8rem;}
-        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        #area-login { margin-top: 100px; text-align: center; }
-        .login-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; color: #333; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        body { font-family: sans-serif; background: #333333; color: white; text-align: center; padding: 10px; margin: 0; }
+        .box { width: 95%; max-width: 550px; margin: 20px auto; background: white; color: #333; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #cccccc; box-sizing: border-box; }
+        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
+        .box-foto { background: #f9f9f9; border: 2px dashed #999; padding: 15px; border-radius: 12px; margin: 15px 0; }
+        .btn-carica { background: #444; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; }
+        #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; color: #333; text-align: left; }
+        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+        #area-login { margin-top: 50px; }
+        .login-box { background: white; padding: 25px; border-radius: 15px; display: block; width: 90%; max-width: 400px; margin: auto; color: #333; box-sizing: border-box; }
     </style>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -25,121 +23,78 @@
 
 <div id="area-login">
     <div class="login-box">
-        <h2 style="color:#0d47a1;">Area Francesco 🏛️</h2>
+        <h2 style="color:#333;">Area Francesco ✍️</h2>
+        <p style="font-size:0.9rem;">Inserisci password</p>
         <input type="password" id="pass" placeholder="Password di accesso">
-        <button onclick="login()" style="background:#0d47a1; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer; font-weight:bold;">ENTRA</button>
+        <button onclick="login()" style="background:#333; color:white; border:none; padding:15px; border-radius:8px; width:100%; cursor:pointer; font-weight:bold; font-size:1.1rem;">ENTRA</button>
     </div>
 </div>
 
 <div id="redazione" style="display:none;">
     <div class="box">
-        <h2 style="color:#0d47a1; margin-top:0; text-align:center;">✍️ Redazione di Francesco</h2>
-        
-        <input type="text" id="tit" placeholder="TITOLO DEL POST">
-        <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TUO TESTO..."></textarea>
-        
+        <h2 style="color:#333; margin-top:0;">✍️ Redazione Francesco</h2>
+        <input type="text" id="tit" placeholder="TITOLO">
+        <textarea id="tes" rows="5" placeholder="SCRIVI QUI..."></textarea>
         <div class="box-foto">
-            <p style="color:#0056b3; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
+            <p style="color:#666; font-weight:bold; margin-top:0;">📸 FOTO O VIDEO</p>
             <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
-            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA IL LINK QUI SOTTO:</p>
-            <input type="text" id="img" placeholder="Incolla link foto o video Youtube">
+            <input type="text" id="img" placeholder="Incolla link qui" style="margin-top:10px;">
         </div>
-        
         <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
-
-        <div class="sezione-lista">
-            <h3 style="color:#0d47a1; text-align:center;">🗑️ I TUOI POST ONLINE</h3>
+        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
+            <h3 style="color:#333;">🗑️ ELIMINA POST</h3>
             <div id="lista-post"></div>
         </div>
-        
-        <button onclick="location.href='francesco.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO PUBBLICO</button>
-        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.7rem; margin-top:10px; width:100%;">Esci e chiedi password la prossima volta</button>
+        <button onclick="location.href='francesco.html'" style="background:#888; color:white; border:none; padding:15px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO</button>
     </div>
 </div>
 
 <script>
-    // Configurazione Firebase (Usa la tua!)
     const firebaseConfig = {
-        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/"
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        authDomain: "sito-sergio-b19ce.firebaseapp.com",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "sito-sergio-b19ce"
     };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    // CONTROLLO SESSIONE
-    window.onload = function() {
-        if (sessionStorage.getItem("fraAmmesso") === "si") {
-            mostraRedazione();
-        }
-    }
-
-    // FUNZIONE LOGIN
     function login() {
-        const p = document.getElementById('pass').value.toLowerCase();
-        if (p === "123") { // Password: 123
-            sessionStorage.setItem("fraAmmesso", "si");
-            mostraRedazione();
-        } else { alert("Password Errata!"); }
+        if (document.getElementById('pass').value.toLowerCase() === "123") {
+            document.getElementById('area-login').style.display = 'none';
+            document.getElementById('redazione').style.display = 'block';
+        } else { alert("Password Errata"); }
     }
 
-    function mostraRedazione() {
-        document.getElementById('area-login').style.display = 'none';
-        document.getElementById('redazione').style.display = 'block';
-    }
-
-    function logout() {
-        sessionStorage.removeItem("fraAmmesso");
-        location.reload();
-    }
-
-    // FUNZIONE PUBBLICA
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
-        let iRaw = document.getElementById('img').value.trim();
+        let i = document.getElementById('img').value.trim();
+        if(!t) return alert("Manca il titolo!");
 
-        if(!t) { alert("Inserisci almeno un titolo!"); return; }
-
-        let immaginePulita = iRaw;
-        // Filtro per ImgBB (come Sergio)
-        if (!iRaw.includes("youtube.com") && !iRaw.includes("youtu.be")) {
-            if (immaginePulita.includes('<img src="')) {
-                immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
-            } else if (immaginePulita.includes('[img]')) {
-                immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
-            }
-        }
-
-        database.ref('archivioCentrale').push({ // Francesco usa archivioCentrale
-            titolo: t, 
-            testo: s, 
-            immagine: immaginePulita, 
-            data: new Date().toLocaleString()
+        database.ref('archivioFrancesco').push({
+            titolo: t, testo: s, immagine: i, data: new Date().toLocaleString()
         }).then(() => {
-            alert("✅ POST PUBBLICATO!");
-            window.location.href = "francesco.html"; // Torna all'archivio pubblico
+            alert("✅ PUBBLICATO!");
+            window.location.href = "francesco.html";
         });
     }
 
-    // Carica lista post per eliminarli
-    database.ref('archivioCentrale').on('value', (snapshot) => {
-        const contenitore = document.getElementById('lista-post');
-        contenitore.innerHTML = "";
-        snapshot.forEach((child) => {
-            const post = child.val();
-            const id = child.key;
-            contenitore.insertAdjacentHTML('afterbegin', `
+    database.ref('archivioFrancesco').on('value', (snap) => {
+        const cont = document.getElementById('lista-post');
+        cont.innerHTML = "";
+        snap.forEach((child) => {
+            cont.insertAdjacentHTML('afterbegin', `
                 <div class="riga-post">
-                    <span>• ${post.titolo}</span>
-                    <button class="btn-elimina" onclick="eliminaPost('${id}')">ELIMINA</button>
+                    <span>• ${child.val().titolo}</span>
+                    <button class="btn-elimina" onclick="elimina('${child.key}')">X</button>
                 </div>
             `);
         });
     });
 
-    function eliminaPost(id) {
-        if(confirm("Vuoi davvero cancellare questo post?")) {
-            database.ref('archivioCentrale/' + id).remove();
-        }
+    function elimina(id) {
+        if(confirm("Vuoi eliminare?")) { database.ref('archivioFrancesco/' + id).remove(); }
     }
 </script>
 </body>
