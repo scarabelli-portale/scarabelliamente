@@ -4,27 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCHIVIO FRANCESCO</title>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-        
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; padding-bottom: 100px; }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; padding-bottom: 100px; }
         .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #143ca0; background: #000; }
         .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        
-        #contenitore-titolo { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; width: 100%; }
-        
-        .firma-francesco { font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); }
-
-        .btn-nav { position: absolute; top: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 20; border: none; cursor: pointer; }
-        .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
-
+        .firma-francesco { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); width: 100%; text-align: center; }
+        .btn-nav { position: absolute; top: 15px; left: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; background: rgba(0,0,0,0.6); color: white; z-index: 20; }
         .container-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 30px; max-width: 1300px; margin: auto; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; display: flex; flex-direction: column; min-height: 250px; padding: 15px; }
-        .card img, .card iframe { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; }
-        .card h3 { font-size: 0.9rem; font-weight: bold; color: #143ca0; text-transform: uppercase; margin-top: 15px; text-align: center; }
-
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; padding: 15px; display: flex; flex-direction: column; }
+        .card img, .card iframe { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; border: none; }
+        .card h3 { font-size: 0.9rem; font-weight: bold; color: #143ca0; text-transform: uppercase; margin: 15px 0 5px 0; text-align: center; }
+        .card p { font-size: 0.9rem; color: #555; text-align: center; margin: 0; }
         .footer-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000; }
         .btn-footer { text-decoration: none; color: #333; font-weight: bold; font-size: 0.9rem; }
     </style>
@@ -32,11 +23,9 @@
 <body>
 
     <div class="copertina-container">
-        <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
+        <a href="index.html" class="btn-nav">⬅ HOME</a>
         <img src="immagini/scuola.jpg" class="foto-scuola">
-        <div id="contenitore-titolo">
-            <div class="firma-francesco">Archivio Francesco</div>
-        </div>
+        <div class="firma-francesco">Archivio Francesco</div>
     </div>
 
     <div id="gallery" class="container-gallery"></div>
@@ -49,46 +38,42 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
- <script>
+    <script>
         const firebaseConfig = { 
             apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
             databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" 
         };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         
-        const db = firebase.database().ref('archivio_francesco');
-
-        db.on('value', snap => {
+        firebase.database().ref('archivio_francesco').on('value', (snap) => {
             const container = document.getElementById('gallery');
             container.innerHTML = "";
             const dati = snap.val();
-            if(dati) {
-                Object.keys(dati).reverse().forEach(id => {
+            if (dati) {
+                Object.keys(dati).reverse().forEach((id) => {
                     const post = dati[id];
                     let visual = "";
                     
-                    // Gestione intelligente dell'immagine o del video
-                    if(post.immagine && post.immagine.trim() !== "") {
-                        if(post.immagine.includes('youtube.com') || post.immagine.includes('youtu.be')) {
+                    if (post.immagine && post.immagine.trim() !== "") {
+                        if (post.immagine.includes('youtube.com') || post.immagine.includes('youtu.be')) {
                             const vId = post.immagine.split('v=')[1]?.split('&')[0] || post.immagine.split('/').pop();
-                            visual = `<iframe src="https://www.youtube.com/embed/${vId}" allowfullscreen frameborder="0"></iframe>`;
+                            visual = `<iframe src="https://www.youtube.com/embed/${vId}" allowfullscreen></iframe>`;
                         } else { 
-                            visual = `<img src="${post.immagine}" alt="foto">`; 
+                           visual = `<img src="${post.immagine}" style="width:100%">`;
                         }
                     }
-                    
-                    // Costruzione della card senza simboli extra
-                    container.innerHTML += `
-                        <div class="card">
-                            ${visual}
-                            <h3>${post.titolo}</h3>
-                            <p style="font-size:0.9rem; color:#555; text-align:center;">${post.testo || ''}</p>
-                        </div>`;
+
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        ${visual}
+                        <h3>${post.titolo || ''}</h3>
+                        <p>${post.testo || ''}</p>
+                    `;
+                    container.appendChild(card);
                 });
-            } else {
-                container.innerHTML = "<p style='color:#333; text-align:center;'>Nessun post presente.</p>";
             }
         });
-    </script>   
+    </script>
 </body>
 </html>
