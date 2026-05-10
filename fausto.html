@@ -44,22 +44,30 @@
         </div>
     </div>
 
-   <div class="sezione-radar">
-        <span class="titolo-monitor">📡 MONITOR SATELLITE & RADAR INTERATTIVO ZOOMABILE</span>
+  <div class="sezione-radar">
+        <span class="titolo-monitor">📡 MONITOR SATELLITE & CENTRALE RADAR LIVE</span>
         <div class="monitor-cornice" style="display: flex; background: #000; gap: 5px; flex-wrap: wrap;">
             
             <div style="flex: 1; min-width: 300px; height: 500px;">
                 <iframe src="sat.html" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
 
-            <div style="flex: 1; min-width: 300px; height: 500px; border-left: 2px solid #143ca0;">
-                <iframe src="https://www.windy.com/it/-Radar-meteo-radar?radar,44.449,11.799,7" 
-                        style="width: 100%; height: 100%; border: none;"></iframe>
+            <div style="flex: 1; min-width: 300px; height: 500px; border-left: 2px solid #143ca0; position: relative; background: #111; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden; cursor: pointer;" onclick="window.open('https://www.windy.com/it/-Radar-meteo-radar?radar,44.449,11.799,7', '_blank')">
+                
+                <img src="https://www.windy.com/img/share-v2.jpg" style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.4;">
+
+                <div style="z-index: 10; text-align: center; padding: 20px; background: rgba(0,0,0,0.6); border-radius: 15px; border: 1px solid #143ca0;">
+                    <h3 style="color: #00a8e8; margin: 0 0 10px 0;">RADAR INTERATTIVO</h3>
+                    <p style="color: white; font-size: 0.85rem; margin-bottom: 15px;">Clicca per attivare la mappa<br>zoomabile a tutto schermo</p>
+                    <div style="background: #27ae60; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; display: inline-block;">
+                       🌍 APRI RADAR LIVE
+                    </div>
+                </div>
             </div>
 
         </div>
         <p style="text-align:center; font-size:0.8rem; color:#666; margin-top: 10px;">
-            A sinistra: Satellite Live | A destra: Radar Windy (Zoomabile e Interattivo)
+            A sinistra: Satellite in tempo reale | A destra: Clicca per il Radar Zoomabile
         </p>
     </div>
 
