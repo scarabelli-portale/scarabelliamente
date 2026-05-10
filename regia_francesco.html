@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGIA EDITORIALE - FRANCESCO</title>
+    <style>
+        body { font-family: sans-serif; background: #002244; color: white; text-align: center; padding: 10px; margin: 0; }
+        .box-regia { width: 95%; max-width: 800px; margin: 20px auto; background: white; color: #333; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-top: 8px solid #FFD700; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 2px solid #eee; background: #f9f9f9; margin-bottom: 10px; border-radius: 8px; }
+        .info-post { text-align: left; flex-grow: 1; }
+        .autore-label { font-size: 0.7rem; font-weight: bold; color: #e67e22; text-transform: uppercase; }
+        .titolo-post { font-size: 1.1rem; font-weight: bold; color: #003366; display: block; }
+        .area-bottoni { display: flex; gap: 10px; }
+        .btn-home { background: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .badge-home { background: #FFD700; color: #333; padding: 5px 10px; border-radius: 5px; font-weight: bold; margin-bottom: 20px; display: inline-block; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+
+<div class="box-regia">
+    <h1 style="color:#003366; margin-bottom:5px;">⚓ Regia di Francesco</h1>
+    <p>Gestione flussi redazionali e Prima Pagina</p>
+    
+    <div id="stato-home">
+        <div class="badge-home">ATTUALMENTE IN PRIMA PAGINA: <span id="titolo-attuale">Caricamento...</span></div>
+    </div>
+
+    <div id="flusso-totale">
+        <h3 style="border-bottom: 2px solid #003366; padding-bottom: 10px; color: #003366;">ULTIMI POST DALLA REDAZIONE</h3>
+        <div id="lista-globale"></div>
+    </div>
+
+    <button onclick="location.href='index.html'" style="background:#888; color:white; border:none; padding:15px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;">VAI ALLA HOME DEL SITO</button>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        authDomain: "sito-sergio-b19ce.firebaseapp.com",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "sito-sergio-b19ce"
+    };
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const database = firebase.database();
+
+    // 1. LEGGI COSA C'È IN PRIMA PAGINA ADESSO
+    database.ref('ultimoArticolo').on('value', (snapshot) => {
+        const d = snapshot.val();
+        document.getElementById('titolo-attuale').innerText = d ? d.titolo : "Nessun articolo";
+    });
+
+    // 2. MONITORAGGIO DI TUTTI GLI ARCHIVI
+    const archivi = [
+        { nome: 'archivio_francesco', etichetta: 'Francesco' },
+        { nome: 'archivioSergio', etichetta: 'Sergio' },
+        { nome: 'archivioCinzia', etichetta: 'Cinzia' },
+        { nome: 'archivioCarlo', etichetta: 'Carlo' },
+        { nome: 'archivioFausto', etichetta: 'Fausto' }
+    ];
+
+    function caricaFlusso() {
+        const contenitore = document.getElementById('lista-globale');
+        contenitore.innerHTML = "";
+
+        archivi.forEach(arc => {
+            database.ref(arc.nome).limitToLast(5).on('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                    const post = child.val();
+                    const id = child.key;
+                    const htmlPost = `
+                        <div class="riga-post" id="post-${id}">
+                            <div class="info-post">
+                                <span class="autore-label">${arc.etichetta}</span>
+                                <span class="titolo-post">${post.titolo}</span>
+                                <small>${post.data || ''}</small>
+                            </div>
+                            <div class="area-bottoni">
+                                <button class="btn-home" onclick="mettiInHome('${arc.nome}', '${id}')">VAI IN HOME</button>
+                                <button class="btn-elimina" onclick="eliminaPost('${arc.nome}', '${id}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                    contenitore.insertAdjacentHTML('afterbegin', htmlPost);
+                });
+            });
+        });
+    }
+
+    // 3. FUNZIONE PER PORTARE IN PRIMA PAGINA (IL "POTERE")
+    function mettiInHome(archivio, id) {
+        database.ref(archivio + '/' + id).once('value').then((snapshot) => {
+            const dati = snapshot.val();
+            database.ref('ultimoArticolo').set({
+                titolo: dati.titolo,
+                testo: dati.testo,
+                foto: dati.immagine, // Usiamo 'foto' perché la index probabilmente cerca quella
+                autore: dati.autore || "Redazione",
+                data: dati.data,
+                video: dati.video || ""
+            }).then(() => {
+                alert("🚀 NOTIZIA LANCIATA IN PRIMA PAGINA!");
+            });
+        });
+    }
+
+    // 4. ELIMINAZIONE
+    function eliminaPost(archivio, id) {
+        if(confirm("Vuoi cancellare definitivamente questo post da " + archivio + "?")) {
+            database.ref(archivio + '/' + id).remove();
+            location.reload();
+        }
+    }
+
+    caricaFlusso();
+</script>
+</body>
+</html>
