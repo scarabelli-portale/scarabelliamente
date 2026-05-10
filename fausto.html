@@ -3,68 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archivio Fausto</title>
+    <title>ARCHIVIO METEO - FAUSTO</title>
+
     <style>
-        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; padding: 20px; }
-        .header { background: #00a8e8; color: white; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .container-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px; }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-        .btn-home { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #00a8e8; font-weight: bold; }
-        /* Stili per il login se necessario */
-        .login-box { display: none; background: white; padding: 30px; border-radius: 20px; max-width: 400px; margin: 50px auto; text-align: center; border: 1px solid #ddd; }
-        input { width: 80%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; }
-        .btn-entra { background: #00a8e8; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; padding-bottom: 100px; }
+
+        /* TESTATA STILE SERGIO */
+        .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #143ca0; background: #000; }
+        .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        #contenitore-titolo { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; width: 100%; }
+        .firma-fausto { font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); }
+
+        .btn-nav { position: absolute; top: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 20; border: none; cursor: pointer; }
+        .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
+
+        /* --- IL GRANDE MONITOR RADAR/SATELLITE --- */
+        .sezione-radar { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+        .monitor-cornice { background: #000; border: 5px solid #143ca0; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .monitor-radar { width: 100%; height: 500px; border: none; }
+        .titolo-monitor { color: #143ca0; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; display: block; text-align: center; }
+
+        /* GALLERIA FOTO (I TUOI POST) */
+        .container-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; padding: 15px; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+        .card h3 { font-size: 1rem; color: #143ca0; margin-top: 10px; text-align: center; }
+
+        .footer-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000; }
+        .btn-footer { text-decoration: none; color: #333; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div id="area-gallery">
-        <a href="index.html" class="btn-home">⬅ TORNA ALLA HOME</a>
-        <div class="header">
-            <h1>Archivio Meteo & Satellite</h1>
-            <p>I post di Fausto</p>
+    <div class="copertina-container">
+        <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
+        <img src="immagini/scuola.jpg" class="foto-scuola">
+        <div id="contenitore-titolo">
+            <div class="firma-fausto">Archivio Fausto</div>
         </div>
-        <div id="gallery" class="container-gallery"></div>
     </div>
 
-    <div id="area-login" class="login-box">
-        <h2>Accesso Riservato Fausto</h2>
-        <input type="password" id="pass" placeholder="Inserisci Password">
-        <br>
-        <button class="btn-entra" onclick="check()">ENTRA NELLA GESTIONE</button>
+   <div class="sezione-radar">
+        <span class="titolo-monitor">📡 MONITOR SATELLITE & RADAR INTERATTIVO ZOOMABILE</span>
+        <div class="monitor-cornice" style="display: flex; background: #000; gap: 5px; flex-wrap: wrap;">
+            
+            <div style="flex: 1; min-width: 300px; height: 500px;">
+                <iframe src="sat.html" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+
+            <div style="flex: 1; min-width: 300px; height: 500px; border-left: 2px solid #143ca0;">
+                <iframe src="https://www.windy.com/it/-Radar-meteo-radar?radar,44.449,11.799,7" 
+                        style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+
+        </div>
+        <p style="text-align:center; font-size:0.8rem; color:#666; margin-top: 10px;">
+            A sinistra: Satellite Live | A destra: Radar Windy (Zoomabile e Interattivo)
+        </p>
+    </div>
+
+    <hr style="max-width: 1200px; margin: 40px auto; border: 0; border-top: 1px solid #ccc;">
+    <span style="display:block; text-align:center; color:#666; font-weight:bold; text-transform:uppercase;">Le tue foto archiviate</span>
+
+    <div id="gallery" class="container-gallery"></div>
+
+    <div class="footer-nav">
+        <a href="index.html" class="btn-footer">🏠 Home</a>
+        <a href="fausto.html" class="btn-footer">📚 Archivio</a>
+        <a href="gestione_fausto.html" class="btn-footer">⚙️ Gestione</a>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
+        const firebaseConfig = { 
+            apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+            databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" 
+        };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-        const db = firebase.database().ref('archivioFausto');
-
-        // Controllo: se nell'URL c'è scritto ?login allora mostro la password
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('login')) {
-            document.getElementById('area-gallery').style.display = 'none';
-            document.getElementById('area-login').style.display = 'block';
-        }
-
-        function check() {
-            if (document.getElementById('pass').value === '123') { // Metti la tua pass
-                sessionStorage.setItem('accesso_fausto', 'ok');
-                window.location.href = 'gestione_fausto.html';
-            } else { alert("Password errata!"); }
-        }
-
-        // Caricamento galleria
+        
+        const db = firebase.database().ref('archivioFausto'); 
         db.on('value', snap => {
             const container = document.getElementById('gallery');
-            container.innerHTML = "";
             const dati = snap.val();
             if(dati) {
+                container.innerHTML = "";
                 Object.keys(dati).reverse().forEach(id => {
                     const post = dati[id];
-                    container.innerHTML += `<div class="card">${post.immagine ? `<img src="${post.immagine}">` : ''}<h3>${post.titolo}</h3></div>`;
+                    let visual = post.immagine ? `<img src="${post.immagine}">` : '';
+                    container.innerHTML += `
+                        <div class="card">
+                            ${visual}
+                            <h3>${post.titolo}</h3>
+                            <p style="text-align:center; font-size:0.9rem;">${post.testo || ''}</p>
+                        </div>`;
                 });
             }
         });
