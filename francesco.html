@@ -56,19 +56,26 @@
                     
                     if (post.immagine && post.immagine.trim() !== "") {
                         let input = post.immagine.trim();
-                        
-                        // FILTRO AUTOMATICO: Estrae il link tra virgolette se incollano tutto il codice HTML
                         let linkPulito = input;
+
+                        // 1. Prova a vedere se è un codice HTML (da ImgBB)
                         const regexImg = /src="([^"]+)"/;
                         const match = input.match(regexImg);
                         if (match && match[1]) {
                             linkPulito = match[1];
                         }
 
+                        // 2. Gestione YouTube
                         if (linkPulito.includes('youtube.com') || linkPulito.includes('youtu.be')) {
-                            const vId = linkPulito.split('v=')[1]?.split('&')[0] || linkPulito.split('/').pop();
+                            let vId = "";
+                            if (linkPulito.includes('v=')) {
+                                vId = linkPulito.split('v=')[1].split('&')[0];
+                            } else {
+                                vId = linkPulito.split('/').pop().split('?')[0];
+                            }
                             visual = `<iframe src="https://www.youtube.com/embed/${vId}" allowfullscreen></iframe>`;
                         } else { 
+                            // 3. Gestione Immagine normale
                             visual = `<img src="${linkPulito}" alt="Foto">`; 
                         }
                     }
