@@ -1,117 +1,44 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REDAZIONE FRANCESCO - GESTIONE</title>
-    <style>
-        body { font-family: sans-serif; background: #003366; color: white; text-align: center; padding: 10px; margin: 0; }
-        .box { width: 95%; max-width: 550px; margin: 20px auto; background: white; color: #333; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #FFD700; box-sizing: border-box; }
-        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
-        .box-foto { background: #fff5eb; border: 2px dashed #e67e22; padding: 15px; border-radius: 12px; margin: 15px 0; }
-        .btn-carica { background: #e67e22; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; }
-        #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; }
-        .sezione-lista { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; text-align: left; }
-        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; color: #333; }
-        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        #area-login { margin-top: 50px; }
-        .login-box { background: white; padding: 25px; border-radius: 15px; display: block; width: 90%; max-width: 400px; margin: auto; color: #333; box-sizing: border-box; }
-    </style>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-</head>
-<body>
+<div class="form-container" style="max-width: 650px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: 'Segoe UI', Arial, sans-serif;">
+    
+    <h2 style="color: #143ca0; text-align: center; margin-bottom: 25px;">✍️ Pubblica nell'Archivio</h2>
 
-<div id="area-login">
-    <div class="login-box">
-        <h2 style="color:#003366; margin-top:0;">Area Francesco ⚓</h2>
-        <p style="font-size:0.9rem;">Password per gestire i post</p>
-        <input type="password" id="pass" placeholder="Password di accesso">
-        <button onclick="login()" style="background:#003366; color:white; border:none; padding:15px; border-radius:8px; width:100%; cursor:pointer; font-weight:bold; font-size:1.1rem;">ENTRA</button>
-    </div>
-</div>
-
-<div id="redazione" style="display:none;">
-    <div class="box">
-        <h2 style="color:#003366; margin-top:0; text-align:center;">✍️ Redazione di Francesco</h2>
-        <input type="text" id="tit" placeholder="TITOLO">
-        <textarea id="tes" rows="6" placeholder="SCRIVI QUI IL TESTO..."></textarea>
+    <div style="margin-bottom: 25px;">
+        <p style="font-weight: bold; color: #2c3e50; font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+            Compila i dati del ricordo:
+        </p>
         
-        <div class="box-foto">
-            <p style="color:#e67e22; font-weight:bold; margin-top:0;">📸 CARICA FOTO</p>
-            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
-            <input type="text" id="img" placeholder="Incolla link foto qui">
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">TITOLO:</label>
+            <input type="text" id="titolo" placeholder="Esempio: Classe 1950" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px;">
+
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">TESTO:</label>
+            <textarea id="testo" placeholder="Scrivi qui il tuo messaggio..." style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; height: 100px;"></textarea>
         </div>
-        
-        <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
-
-        <div class="sezione-lista">
-            <h3 style="color:#003366; text-align:center;">🗑️ POST ONLINE (CANCELLA)</h3>
-            <div id="lista-post"></div>
-        </div>
-        
-        <button onclick="location.href='francesco.html'" style="background:#888; color:white; border:none; padding:15px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;">TORNA AL SITO</button>
     </div>
-</div>
 
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
-        authDomain: "sito-sergio-b19ce.firebaseapp.com",
-        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
-        projectId: "sito-sergio-b19ce"
-    };
-    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-    const database = firebase.database();
+    <div style="background: #fff4e6; padding: 20px; border-radius: 12px; border: 2px solid #e67e22; margin-bottom: 25px;">
+        <p style="font-weight: bold; color: #d35400; font-size: 1.1rem; margin-top: 0;">
+            1. In questa pagina attiva la trasmissione al tuo archivio di foto, prese dal PC o dal telefonino.
+        </p>
+        
+       <a href="https://imgbb.com/upload?auto_click=1" target="_blank" style="display: block; text-align: center; background: #e67e22; color: white; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1rem; line-height: 1.4;">
+    Clicca qui, si aprirà il sito per trasferire foto dal PC e dal telefonino sul tuo archivio.<br>
+    <small style="font-weight: normal; opacity: 0.9;">(Poi copia il link prodotto dal programma)</small>
+</a>
+    </div>
 
-    function login() {
-        var p = document.getElementById('pass').value;
-        if (p === "123") {
-            document.getElementById('area-login').style.display = 'none';
-            document.getElementById('redazione').style.display = 'block';
-        } else { alert("Password Errata!"); }
-    }
+    <div style="margin-bottom: 25px;">
+        <p style="font-weight: bold; color: #2c3e50; font-size: 1.1rem;">
+            2. Una volta copiato il link prodotto dal programma di trasferimento copialo qui sotto per essere poi liberato dalla pubblicità.
+        </p>
+        
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Incolla qui il link della FOTO o del video YOUTUBE:</label>
+            <input type="text" id="foto" placeholder="https://..." style="width: 100%; padding: 12px; border: 2px solid #143ca0; border-radius: 8px; background: #f0f7ff; font-size: 1rem;">
+        </div>
+    </div>
 
-    // 1. FUNZIONE PER PUBBLICARE
-    function invia() {
-        let t = document.getElementById('tit').value;
-        let s = document.getElementById('tes').value;
-        let i = document.getElementById('img').value.trim();
-        if(!t) { alert("Metti un titolo!"); return; }
-
-        database.ref('archivio_francesco').push({
-            titolo: t, 
-            testo: s, 
-            immagine: i, 
-            data: new Date().toLocaleString()
-        }).then(() => { 
-            alert("✅ PUBBLICATO SU ARCHIVIO FRANCESCO!"); 
-            location.reload(); 
-        });
-    }
-
-    // 2. FUNZIONE PER LEGGERE LA LISTA (Sotto il cesto da basket)
-    database.ref('archivio_francesco').on('value', (snapshot) => {
-        const contenitore = document.getElementById('lista-post');
-        contenitore.innerHTML = "";
-        snapshot.forEach((child) => {
-            const post = child.val();
-            const id = child.key;
-            contenitore.insertAdjacentHTML('afterbegin', `
-                <div class="riga-post">
-                    <span>• ${post.titolo}</span>
-                    <button class="btn-elimina" onclick="eliminaPost('${id}')">ELIMINA</button>
-                </div>
-            `);
-        });
-    });
-
-    // 3. FUNZIONE PER ELIMINARE
-    function eliminaPost(id) {
-        if(confirm("Vuoi cancellare questo post?")) {
-            database.ref('archivio_francesco/' + id).remove();
-        }
-    }
-</script>
-</body>
-</html>
+    <button onclick="pubblica()" style="width: 100%; padding: 18px; background-color: #28a745; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 0 #1e7e34;">
+        ✅ CLICCA PER PUBBLICARE
+    </button>
+</div>+F

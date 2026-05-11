@@ -55,28 +55,27 @@
                     let visual = "";
                     
                     if (post.immagine && post.immagine.trim() !== "") {
-                        let input = post.immagine.trim();
-                        let linkPulito = input;
+                        let linkRaw = post.immagine.trim();
+                        let finalLink = linkRaw;
 
-                        // 1. Prova a vedere se è un codice HTML (da ImgBB)
-                        const regexImg = /src="([^"]+)"/;
-                        const match = input.match(regexImg);
-                        if (match && match[1]) {
-                            linkPulito = match[1];
+                        // SE è un codice ImgBB con <img src="...">, estraiamo solo l'URL
+                        if (linkRaw.includes('<img src=')) {
+                            const match = linkRaw.match(/src="([^"]+)"/);
+                            if (match) finalLink = match[1];
                         }
 
-                        // 2. Gestione YouTube
-                        if (linkPulito.includes('youtube.com') || linkPulito.includes('youtu.be')) {
-                            let vId = "";
-                            if (linkPulito.includes('v=')) {
-                                vId = linkPulito.split('v=')[1].split('&')[0];
+                        // GESTIONE YOUTUBE
+                        if (finalLink.includes('youtube.com') || finalLink.includes('youtu.be')) {
+                            let videoId = "";
+                            if (finalLink.includes('v=')) {
+                                videoId = finalLink.split('v=')[1].split('&')[0];
                             } else {
-                                vId = linkPulito.split('/').pop().split('?')[0];
+                                videoId = finalLink.split('/').pop().split('?')[0];
                             }
-                            visual = `<iframe src="https://www.youtube.com/embed/${vId}" allowfullscreen></iframe>`;
+                            visual = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
                         } else { 
-                            // 3. Gestione Immagine normale
-                            visual = `<img src="${linkPulito}" alt="Foto">`; 
+                            // GESTIONE FOTO NORMALE
+                            visual = `<img src="${finalLink}" alt="Foto">`; 
                         }
                     }
 
