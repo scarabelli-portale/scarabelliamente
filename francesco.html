@@ -55,7 +55,16 @@
                     let visual = "";
                     
                     if (post.immagine && post.immagine.trim() !== "") {
-                        const linkPulito = post.immagine.trim();
+                        let input = post.immagine.trim();
+                        
+                        // FILTRO AUTOMATICO: Estrae il link tra virgolette se incollano tutto il codice HTML
+                        let linkPulito = input;
+                        const regexImg = /src="([^"]+)"/;
+                        const match = input.match(regexImg);
+                        if (match && match[1]) {
+                            linkPulito = match[1];
+                        }
+
                         if (linkPulito.includes('youtube.com') || linkPulito.includes('youtu.be')) {
                             const vId = linkPulito.split('v=')[1]?.split('&')[0] || linkPulito.split('/').pop();
                             visual = `<iframe src="https://www.youtube.com/embed/${vId}" allowfullscreen></iframe>`;
