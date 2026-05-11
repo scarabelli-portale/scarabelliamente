@@ -1,44 +1,93 @@
-<div class="form-container" style="max-width: 650px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: 'Segoe UI', Arial, sans-serif;">
-    
-    <h2 style="color: #143ca0; text-align: center; margin-bottom: 25px;">✍️ Pubblica nell'Archivio</h2>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Archivio Francesco</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f2; padding: 20px; }
+        .form-container { max-width: 650px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { color: #143ca0; text-align: center; margin-bottom: 25px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .box-istruzioni { background: #fff4e6; padding: 20px; border-radius: 12px; border: 2px solid #e67e22; margin-bottom: 25px; }
+        .btn-arancio { display: block; text-align: center; background: #e67e22; color: white; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1rem; line-height: 1.4; }
+        .btn-pubblica { width: 100%; padding: 18px; background-color: #28a745; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 0 #1e7e34; }
+        .btn-pubblica:active { transform: translateY(4px); box-shadow: none; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>✍️ Pubblica nell'Archivio</h2>
 
     <div style="margin-bottom: 25px;">
         <p style="font-weight: bold; color: #2c3e50; font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 10px;">
             Compila i dati del ricordo:
         </p>
-        
-        <div style="margin-top: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: bold;">TITOLO:</label>
-            <input type="text" id="titolo" placeholder="Esempio: Classe 1950" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px;">
+        <label>TITOLO:</label>
+        <input type="text" id="titolo" placeholder="Esempio: Classe 1950">
 
-            <label style="display: block; margin-bottom: 5px; font-weight: bold;">TESTO:</label>
-            <textarea id="testo" placeholder="Scrivi qui il tuo messaggio..." style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; height: 100px;"></textarea>
-        </div>
+        <label>TESTO:</label>
+        <textarea id="testo" placeholder="Scrivi qui il tuo messaggio..." style="height: 100px;"></textarea>
     </div>
 
-    <div style="background: #fff4e6; padding: 20px; border-radius: 12px; border: 2px solid #e67e22; margin-bottom: 25px;">
+    <div class="box-istruzioni">
         <p style="font-weight: bold; color: #d35400; font-size: 1.1rem; margin-top: 0;">
             1. In questa pagina attiva la trasmissione al tuo archivio di foto, prese dal PC o dal telefonino.
         </p>
-        
-       <a href="https://imgbb.com/upload?auto_click=1" target="_blank" style="display: block; text-align: center; background: #e67e22; color: white; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1rem; line-height: 1.4;">
-    Clicca qui, si aprirà il sito per trasferire foto dal PC e dal telefonino sul tuo archivio.<br>
-    <small style="font-weight: normal; opacity: 0.9;">(Poi copia il link prodotto dal programma)</small>
-</a>
+        <a href="https://imgbb.com/upload?auto_click=1" target="_blank" class="btn-arancio">
+            Clicca qui, si aprirà il sito per trasferire foto dal PC e dal telefonino sul tuo archivio.<br>
+            <small style="font-weight: normal; opacity: 0.9;">(Poi copia il link prodotto dal programma)</small>
+        </a>
     </div>
 
     <div style="margin-bottom: 25px;">
         <p style="font-weight: bold; color: #2c3e50; font-size: 1.1rem;">
             2. Una volta copiato il link prodotto dal programma di trasferimento copialo qui sotto per essere poi liberato dalla pubblicità.
         </p>
-        
-        <div style="margin-top: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Incolla qui il link della FOTO o del video YOUTUBE:</label>
-            <input type="text" id="foto" placeholder="https://..." style="width: 100%; padding: 12px; border: 2px solid #143ca0; border-radius: 8px; background: #f0f7ff; font-size: 1rem;">
-        </div>
+        <label>Incolla qui il link della FOTO o del video YOUTUBE:</label>
+        <input type="text" id="foto" placeholder="https://..." style="border: 2px solid #143ca0; background: #f0f7ff;">
     </div>
 
-    <button onclick="pubblica()" style="width: 100%; padding: 18px; background-color: #28a745; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 0 #1e7e34;">
-        ✅ CLICCA PER PUBBLICARE
-    </button>
-</div>+F
+    <button onclick="pubblica()" class="btn-pubblica">✅ CLICCA PER PUBBLICARE</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+    const firebaseConfig = { 
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" 
+    };
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const database = firebase.database();
+
+    function pubblica() {
+        const tit = document.getElementById('titolo').value;
+        const tes = document.getElementById('testo').value;
+        const img = document.getElementById('foto').value;
+
+        if (tit === "" || img === "") {
+            alert("Per favore, inserisci almeno il Titolo e il Link della foto/video!");
+            return;
+        }
+
+        database.ref('archivio_francesco').push({
+            titolo: tit,
+            testo: tes,
+            immagine: img,
+            data: new Date().toISOString()
+        }).then(() => {
+            alert("✅ Pubblicazione avvenuta con successo!");
+            document.getElementById('titolo').value = "";
+            document.getElementById('testo').value = "";
+            document.getElementById('foto').value = "";
+        }).catch((error) => {
+            alert("Errore durante la pubblicazione: " + error.message);
+        });
+    }
+</script>
+
+</body>
+</html>
