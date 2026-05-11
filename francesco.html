@@ -59,7 +59,7 @@
                             const vId = post.immagine.split('v=')[1]?.split('&')[0] || post.immagine.split('/').pop();
                             visual = `<iframe src="https://www.youtube.com/embed/${vId}" allowfullscreen></iframe>`;
                         } else { 
-                           visual = `<img src="${post.immagine}" style="width:100%">`;
+                            visual = `<img src="${post.immagine.trim()}">`; 
                         }
                     }
 
