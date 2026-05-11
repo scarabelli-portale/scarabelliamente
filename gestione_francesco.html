@@ -5,52 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Archivio Francesco</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f2; padding: 20px; }
-        .form-container { max-width: 650px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2 { color: #143ca0; text-align: center; margin-bottom: 25px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f2; padding: 20px; padding-bottom: 100px; }
+        .form-container { max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; }
+        .login-container { max-width: 400px; margin: 100px auto; background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        h2 { color: #143ca0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
         input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
         .box-istruzioni { background: #fff4e6; padding: 20px; border-radius: 12px; border: 2px solid #e67e22; margin-bottom: 25px; }
-        .btn-arancio { display: block; text-align: center; background: #e67e22; color: white; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1rem; line-height: 1.4; }
-        .btn-pubblica { width: 100%; padding: 18px; background-color: #28a745; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 0 #1e7e34; }
-        .btn-pubblica:active { transform: translateY(4px); box-shadow: none; }
+        .btn-arancio { display: block; text-align: center; background: #e67e22; color: white; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; }
+        .btn-pubblica { width: 100%; padding: 18px; background-color: #28a745; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 1.3rem; cursor: pointer; }
+        
+        /* Tabella Eliminazione */
+        .admin-table { width: 100%; margin-top: 40px; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; font-size: 0.9rem; }
+        .admin-table th { background: #143ca0; color: white; padding: 10px; text-align: left; }
+        .admin-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .btn-elimina { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+
+        /* BARRA DI NAVIGAZIONE FISSA (Sempre visibile) */
+        .footer-nav { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background: white; 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 15px 0; 
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1); 
+            z-index: 9999; 
+        }
+        .btn-footer { 
+            text-decoration: none; 
+            color: #143ca0; 
+            font-weight: bold; 
+            font-size: 0.9rem; 
+            border: 1px solid #143ca0; 
+            padding: 8px 15px; 
+            border-radius: 20px; 
+            background: #f0f7ff; 
+        }
+        
+        .btn-login { background: #143ca0; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="form-container">
-    <h2>✍️ Pubblica nell'Archivio</h2>
+<div id="login-box" class="login-container">
+    <h2>Accesso Riservato</h2>
+    <p>Inserisci la password per gestire l'archivio:</p>
+    <input type="password" id="pass-input" placeholder="Password">
+    <button onclick="checkPass()" class="btn-login">ENTRA</button>
+</div>
 
-    <div style="margin-bottom: 25px;">
-        <p style="font-weight: bold; color: #2c3e50; font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 10px;">
-            Compila i dati del ricordo:
-        </p>
-        <label>TITOLO:</label>
-        <input type="text" id="titolo" placeholder="Esempio: Classe 1950">
+<div id="main-content" class="form-container">
+    <h2>✍️ Gestione Archivio Francesco</h2>
 
-        <label>TESTO:</label>
-        <textarea id="testo" placeholder="Scrivi qui il tuo messaggio..." style="height: 100px;"></textarea>
-    </div>
+    <label>TITOLO:</label>
+    <input type="text" id="titolo">
+
+    <label>TESTO:</label>
+    <textarea id="testo" style="height: 80px;"></textarea>
 
     <div class="box-istruzioni">
-        <p style="font-weight: bold; color: #d35400; font-size: 1.1rem; margin-top: 0;">
-            1. In questa pagina attiva la trasmissione al tuo archivio di foto, prese dal PC o dal telefonino.
-        </p>
-        <a href="https://imgbb.com/upload?auto_click=1" target="_blank" class="btn-arancio">
-            Clicca qui, si aprirà il sito per trasferire foto dal PC e dal telefonino sul tuo archivio.<br>
-            <small style="font-weight: normal; opacity: 0.9;">(Poi copia il link prodotto dal programma)</small>
-        </a>
+        <p style="font-weight: bold; color: #d35400; margin-top: 0;">1. Invia la foto dal PC o Telefonino:</p>
+        <a href="https://imgbb.com/upload?auto_click=1" target="_blank" class="btn-arancio">CLICCA QUI PER TRASFERIRE LA FOTO</a>
     </div>
 
-    <div style="margin-bottom: 25px;">
-        <p style="font-weight: bold; color: #2c3e50; font-size: 1.1rem;">
-            2. Una volta copiato il link prodotto dal programma di trasferimento copialo qui sotto per essere poi liberato dalla pubblicità.
-        </p>
-        <label>Incolla qui il link della FOTO o del video YOUTUBE:</label>
-        <input type="text" id="foto" placeholder="https://..." style="border: 2px solid #143ca0; background: #f0f7ff;">
-    </div>
+    <label>2. Incolla il link della FOTO o di YOUTUBE:</label>
+    <input type="text" id="foto" style="border: 2px solid #143ca0; background: #f0f7ff;">
 
     <button onclick="pubblica()" class="btn-pubblica">✅ CLICCA PER PUBBLICARE</button>
+
+    <h3 style="margin-top: 50px; color: #d35400; border-bottom: 2px solid #d35400;">🗑️ Gestione Messaggi Pubblicati</h3>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Titolo</th>
+                <th>Azione</th>
+            </tr>
+        </thead>
+        <tbody id="lista-cancella"></tbody>
+    </table>
+</div>
+
+<div class="footer-nav">
+    <a href="index.html" class="btn-footer">🏠 Home</a>
+    <a href="francesco.html" class="btn-footer">📚 Archivio</a>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -63,31 +103,51 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
+    function checkPass() {
+        const p = document.getElementById('pass-input').value;
+        if (p === "123") {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            caricaLista();
+        } else { alert("Password Errata!"); }
+    }
+
     function pubblica() {
         const tit = document.getElementById('titolo').value;
         const tes = document.getElementById('testo').value;
         const img = document.getElementById('foto').value;
-
-        if (tit === "" || img === "") {
-            alert("Per favore, inserisci almeno il Titolo e il Link della foto/video!");
-            return;
-        }
+        if (tit === "" || img === "") { alert("Manca Titolo o Foto!"); return; }
 
         database.ref('archivio_francesco').push({
-            titolo: tit,
-            testo: tes,
-            immagine: img,
-            data: new Date().toISOString()
+            titolo: tit, testo: tes, immagine: img
         }).then(() => {
-            alert("✅ Pubblicazione avvenuta con successo!");
+            alert("Pubblicato!");
             document.getElementById('titolo').value = "";
             document.getElementById('testo').value = "";
             document.getElementById('foto').value = "";
-        }).catch((error) => {
-            alert("Errore durante la pubblicazione: " + error.message);
         });
     }
-</script>
 
+    function caricaLista() {
+        database.ref('archivio_francesco').on('value', (snap) => {
+            const tbody = document.getElementById('lista-cancella');
+            tbody.innerHTML = "";
+            const dati = snap.val();
+            if (dati) {
+                Object.keys(dati).reverse().forEach((id) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${dati[id].titolo}</td><td><button class="btn-elimina" onclick="elimina('${id}')">Elimina</button></td>`;
+                    tbody.appendChild(tr);
+                });
+            }
+        });
+    }
+
+    function elimina(id) {
+        if (confirm("Vuoi eliminare questo file?")) {
+            database.ref('archivio_francesco').child(id).remove();
+        }
+    }
+</script>
 </body>
 </html>

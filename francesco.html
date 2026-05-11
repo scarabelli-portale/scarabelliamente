@@ -6,125 +6,19 @@
     <title>ARCHIVIO FRANCESCO</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-        
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            background-color: #f4f4f2; 
-            padding-bottom: 100px; 
-        }
-
-        /* Copertina */
-        .copertina-container { 
-            position: relative; 
-            width: 100%; 
-            height: 280px; 
-            overflow: hidden; 
-            border-bottom: 5px solid #143ca0; 
-            background: #000; 
-        }
-        .foto-scuola { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            opacity: 0.7; 
-        }
-        .firma-francesco { 
-            position: absolute; 
-            bottom: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            font-family: 'Dancing Script', cursive; 
-            font-size: 2.5rem; 
-            color: white; 
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.8); 
-            width: 100%; 
-            text-align: center; 
-        }
-
-        /* Navigazione */
-        .btn-nav { 
-            position: absolute; 
-            top: 15px; 
-            left: 15px; 
-            padding: 8px 18px; 
-            border-radius: 5px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            font-size: 0.8rem; 
-            background: rgba(0,0,0,0.6); 
-            color: white; 
-            z-index: 20; 
-        }
-
-        /* Galleria Card */
-        .container-gallery { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 25px; 
-            padding: 30px; 
-            max-width: 1300px; 
-            margin: auto; 
-        }
-        .card { 
-            background: white; 
-            border-radius: 15px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            border: 1px solid #ddd; 
-            padding: 15px; 
-            display: flex; 
-            flex-direction: column; 
-            transition: transform 0.3s;
-        }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: #f4f4f2; padding-bottom: 100px; }
+        .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #143ca0; background: #000; }
+        .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        .firma-francesco { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); width: 100%; text-align: center; }
+        .btn-nav { position: absolute; top: 15px; left: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.8rem; background: rgba(0,0,0,0.6); color: white; z-index: 20; }
+        .container-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding: 30px; max-width: 1300px; margin: auto; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; padding: 15px; transition: transform 0.3s; }
         .card:hover { transform: translateY(-5px); }
-
-        /* Media: Immagini e Video */
-        .card img, .card iframe { 
-            width: 100%; 
-            height: 200px; 
-            object-fit: cover; 
-            border-radius: 10px; 
-            border: none; 
-            background: #eee; 
-        }
-
-        /* Testi nelle Card */
-        .card h3 { 
-            font-size: 1rem; 
-            font-weight: bold; 
-            color: #143ca0; 
-            text-transform: uppercase; 
-            margin: 15px 0 8px 0; 
-            text-align: center; 
-        }
-        .card p { 
-            font-size: 0.95rem; 
-            color: #444; 
-            text-align: center; 
-            margin: 0; 
-            line-height: 1.4;
-        }
-
-        /* Menu Fisso in Basso */
-        .footer-nav { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            background: white; 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 15px 0; 
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1); 
-            z-index: 1000; 
-        }
-        .btn-footer { 
-            text-decoration: none; 
-            color: #333; 
-            font-weight: bold; 
-            font-size: 0.9rem; 
-        }
+        .card img, .card iframe { width: 100%; height: 200px; border-radius: 10px; border: none; background: #000; }
+        .card h3 { font-size: 1rem; font-weight: bold; color: #143ca0; text-transform: uppercase; margin: 15px 0 8px 0; text-align: center; }
+        .card p { font-size: 0.95rem; color: #444; text-align: center; margin: 0; line-height: 1.4; }
+        .footer-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000; }
+        .btn-footer { text-decoration: none; color: #333; font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -161,37 +55,40 @@
             const dati = snap.val();
             
             if (dati) {
-                // Ordiniamo dal più recente al più vecchio
                 Object.keys(dati).reverse().forEach((id) => {
                     const post = dati[id];
                     let visualContent = "";
-                    
-                    if (post.immagine && post.immagine.trim() !== "") {
-                        let rawUrl = post.immagine.trim();
-                        let cleanUrl = rawUrl;
+                    let rawUrl = post.immagine ? post.immagine.trim() : "";
 
-                        // 1. FILTRO PER IMGBB (Estrae l'immagine se incollano tutto il codice html)
-                        if (rawUrl.includes('<img src=')) {
-                            const match = rawUrl.match(/src="([^"]+)"/);
-                            if (match) cleanUrl = match[1];
-                        }
-
-                        // 2. FILTRO PER YOUTUBE
-                        if (cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be')) {
+                    if (rawUrl !== "") {
+                        // FILTRO YOUTUBE CORAZZATO (Anti Error 153)
+                        if (rawUrl.includes('youtube.com') || rawUrl.includes('youtu.be')) {
                             let videoId = "";
-                            if (cleanUrl.includes('v=')) {
-                                videoId = cleanUrl.split('v=')[1].split('&')[0];
-                            } else {
-                                videoId = cleanUrl.split('/').pop().split('?')[0];
+                            try {
+                                if (rawUrl.includes('v=')) {
+                                    videoId = rawUrl.split('v=')[1].split('&')[0];
+                                } else if (rawUrl.includes('youtu.be/')) {
+                                    videoId = rawUrl.split('youtu.be/')[1].split('?')[0].split('&')[0];
+                                } else if (rawUrl.includes('embed/')) {
+                                    videoId = rawUrl.split('embed/')[1].split('?')[0];
+                                }
+                            } catch (e) { console.error("Errore ID Video"); }
+
+                            if (videoId) {
+                                // Usiamo youtube-nocookie per massima compatibilità
+                                visualContent = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                             }
-                            visualContent = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
                         } else { 
-                            // 3. SE È UNA FOTO NORMALE
+                            // FILTRO FOTO
+                            let cleanUrl = rawUrl;
+                            if (rawUrl.includes('<img src=')) {
+                                const match = rawUrl.match(/src="([^"]+)"/);
+                                if (match) cleanUrl = match[1];
+                            }
                             visualContent = `<img src="${cleanUrl}" alt="Ricordo">`; 
                         }
                     }
 
-                    // Creazione della Card
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
