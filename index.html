@@ -9,17 +9,11 @@
         .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 220px; overflow: hidden; border-bottom: 4px solid #0056b3; }
         .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
         
-        /* --- ANIMAZIONI --- */
-        #farfalla-animata { position: absolute; width: 80px; z-index: 999; bottom: -30px; left: 5%; opacity: 0; pointer-events: none; mix-blend-mode: multiply; }
-        .volo-farfalla { animation: volaViaPro 14s forwards ease-in-out, batteAli 0.15s infinite alternate; }
-        @keyframes batteAli { from { transform: scaleX(1); } to { transform: scaleX(0.2); } }
-        @keyframes volaViaPro { 0% { bottom: -20px; left: 5%; opacity: 0; } 5% { opacity: 1; } 30% { bottom: 150px; left: 35%; transform: rotate(30deg); } 60% { bottom: 120px; left: 60%; transform: rotate(-20deg); } 100% { bottom: 800px; left: 110%; opacity: 0; } }
         #fondalino-animato { position: absolute; bottom: 0; left: -100%; width: 100%; height: 60px; background: linear-gradient(to bottom, rgba(173, 216, 230, 0.5) 0%, rgba(173, 216, 230, 0.5) 50%, rgba(135, 206, 235, 0.6) 50%, rgba(135, 206, 235, 0.6) 100%); z-index: 9; animation: entraFondale 9s forwards ease-in-out; }
         #scritta-fiori { position: absolute; bottom: 15px; right: -100%; width: 100%; text-align: center; font-size: 1.9rem; font-weight: 900; color: #ffffff; text-transform: uppercase; letter-spacing: 3px; text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7); z-index: 10; animation: entraTitolo 9s forwards ease-in-out; }
         @keyframes entraFondale { 0% { left: -100%; } 12% { left: 0; } 88% { left: 0; } 100% { left: 110%; } }
         @keyframes entraTitolo { 0% { right: -100%; } 12% { right: 0; } 88% { right: 0; } 100% { right: 110%; } }
         
-        /* --- LAYOUT --- */
         .main-container { max-width: 1300px; margin: 20px auto; display: flex; flex-direction: column; gap: 20px; padding: 0 15px; }
         @media (min-width: 900px) {
             .main-container { flex-direction: row; justify-content: center; align-items: flex-start; }
@@ -45,53 +39,46 @@
     </style>
 </head>
 
-<body onclick="avviaTutto()" onmouseover="avviaTutto()">
+<body>
 
     <div class="copertina-container">
         <img src="immagini/scuola.jpg" class="foto-scuola">
-        <img src="farfalla.png" id="farfalla-animata">
         <div id="fondalino-animato"></div>
         <div id="scritta-fiori">SCARABELLIAMENTE</div>
     </div>
 
-    <audio id="audio-uccellini" src="uccellini.mp3" preload="auto"></audio>
-
     <div class="main-container">
-        
        <div class="colonna-centro">
-    <div class="box" style="min-height: 550px; border-top: 4px solid #0056b3;">
-        <div style="background: #0056b3; color: white; text-align: center; padding: 5px; border-radius: 20px; font-weight: bold; margin-bottom: 15px;">Pres. Francesco Mariani</div>
-        <div style="display:flex; gap:15px; align-items: flex-start; margin-bottom: 15px;">
-            <img src="immagini/francesco.jpg" class="foto-profilo" style="border-color: #0056b3;">
-            <div style="background: #fcfcfc; border: 1px solid #eee; padding: 8px; flex-grow: 1; height: 120px; overflow-y: auto;">
-                <ul id="lista-home-francesco" style="list-style:none; padding:0; margin:0;"></ul>
+            <div class="box" style="min-height: 550px; border-top: 4px solid #0056b3;">
+                <div style="background: #0056b3; color: white; text-align: center; padding: 5px; border-radius: 20px; font-weight: bold; margin-bottom: 15px;">Pres. Francesco Mariani</div>
+                <div style="display:flex; gap:15px; align-items: flex-start; margin-bottom: 15px;">
+                    <img src="immagini/francesco.jpg" class="foto-profilo" style="border-color: #0056b3;">
+                    <div style="background: #fcfcfc; border: 1px solid #eee; padding: 8px; flex-grow: 1; height: 120px; overflow-y: auto;">
+                        <ul id="lista-home-francesco" style="list-style:none; padding:0; margin:0;"></ul>
+                    </div>
+                </div>
+                <div class="monitor-anteprima" style="border: 3px solid #0056b3;">
+                    <img id="img-francesco-dinamica" src="immagini/francesco.jpg">
+                </div>
+                <div class="container-pulsanti">
+                    <a href="francesco.html" class="btn-link bg-blue">ARCHIVIO</a>
+                    <a href="gestione_francesco.html" class="btn-link bg-gestione">GESTIONE</a>
+                </div>
             </div>
         </div>
-        <div class="monitor-anteprima" style="border: 3px solid #0056b3;">
-            <img id="img-francesco-dinamica" src="immagini/francesco.jpg">
-        </div>
-        <div class="container-pulsanti">
-            <a href="francesco.html" class="btn-link bg-blue">ARCHIVIO</a>
-            <a href="gestione_francesco.html" class="btn-link bg-gestione">GESTIONE</a>
-        </div>
-    </div>
-</div>
 
-    <div class="colonna-sinistra">
+        <div class="colonna-sinistra">
             <div class="box" style="border-top: 4px solid #00a8e8;">
                 <h3 style="color:#00a8e8; text-align:center; font-size:1rem; text-transform:uppercase; margin:0 0 10px 0;">Meteo & Satellite</h3>
                 <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
                     <img src="immagini/fausto.jpg" class="foto-profilo" style="border-color:#00a8e8">
-                    
                     <div style="flex: 1; border: 1px solid #eee; border-radius: 6px; overflow: hidden; height: 100px; background:#000; cursor: pointer;" onclick="window.location.href='fausto.html'">
                         <iframe src="sat.html" style="width: 100%; height: 100%; border: none; pointer-events: none;" scrolling="no"></iframe>
                     </div>
                 </div>
-                
                 <div style="background: #fdfdfd; padding: 8px; height: 100px; overflow-y: auto; border: 1px solid #eee;">
                     <ul id="lista-titoli-fausto" style="list-style: none; padding: 0; margin:0;"></ul>
                 </div>
-                
                 <div class="container-pulsanti">
                     <a href="fausto.html" class="btn-link bg-sky">ARCHIVIO</a>
                     <a href="gestione_fausto.html" class="btn-link bg-gestione">GESTIONE</a>
@@ -160,32 +147,17 @@
         const db = firebase.database();
 
         function getYTThumb(url) {
-            if (url && url.includes('youtube.com')) {
-                const vid = url.split('v=')[1]?.split('&')[0];
+            if (url && (url.includes('youtube.com') || url.includes('youtu.be'))) {
+                let vid = "";
+                if (url.includes('v=')) { vid = url.split('v=')[1].split('&')[0]; }
+                else { vid = url.split('/').pop().split('?')[0]; }
                 return vid ? `https://img.youtube.com/vi/${vid}/hqdefault.jpg` : null;
             }
             return null;
         }
 
-        let attivaMusica = false;
-        function avviaTutto() {
-            if (attivaMusica) return;
-            attivaMusica = true;
-            const audio = document.getElementById('audio-uccellini');
-            audio.volume = 0.4;
-            audio.play().then(() => {
-                setTimeout(() => {
-                    let fade = setInterval(() => {
-                        if (audio.volume > 0.05) audio.volume -= 0.05;
-                        else { audio.pause(); clearInterval(fade); }
-                    }, 100);
-                }, 4000);
-            }).catch(e => { attivaMusica = false; });
-            document.getElementById('farfalla-animata').classList.add('volo-farfalla');
-        }
-
         const archivi = [
-            { ref: 'archivioCentrale', lista: 'lista-home-francesco', monitor: 'img-francesco-dinamica', def: 'immagini/francesco.jpg', link: 'francesco.html' },
+            { ref: 'archivio_francesco', lista: 'lista-home-francesco', monitor: 'img-francesco-dinamica', def: 'immagini/francesco.jpg', link: 'francesco.html' },
             { ref: 'archivioCinzia', lista: 'lista-home-cinzia', monitor: 'img-cinzia-dinamica', def: 'immagini/cinzia.jpg', link: 'cinzia.html' },
             { ref: 'archivioFausto', lista: 'lista-titoli-fausto', monitor: null, link: 'fausto.html' },
             { ref: 'archivioCarlo', lista: 'lista-titoli-carlo', monitor: null, link: 'carlo.html' },
@@ -201,23 +173,46 @@
                 snap.forEach(c => { articoli.push({ id: c.key, ...c.val() }); });
                 articoli.reverse();
 
+                // FUNZIONE PER CARICARE IMMAGINE CON FILTRO "SUPER-PULITORE"
+                const setMonitor = (post, targetImg) => {
+                    const monitor = document.getElementById(targetImg);
+                    if (!monitor) return;
+
+                    let sorgente = post.immagine || "";
+
+                    // 1. FILTRO HTML: Estrae il link se l'utente incolla il codice ImgBB completo
+                    if (sorgente.includes('<img')) {
+                        const regex = /src="([^"]+)"/;
+                        const match = sorgente.match(regex);
+                        if (match) sorgente = match[1];
+                    }
+                    
+                    // 2. FILTRO PULIZIA: Rimuove eventuali spazi bianchi ai lati
+                    sorgente = sorgente.trim();
+
+                    // 3. LOGICA DI VISUALIZZAZIONE
+                    const yt = getYTThumb(sorgente);
+                    if (yt) {
+                        monitor.src = yt;
+                    } else if (sorgente.length > 10) {
+                        monitor.src = sorgente;
+                    } else {
+                        monitor.src = area.def;
+                    }
+                };
+
                 if (articoli.length > 0 && area.monitor) {
-                    const ultimo = articoli[0];
-                    const yt = getYTThumb(ultimo.immagine);
-                    document.getElementById(area.monitor).src = yt || (ultimo.immagine && ultimo.immagine.length > 5 ? ultimo.immagine : area.def);
+                    setMonitor(articoli[0], area.monitor);
                 }
 
                 articoli.forEach(art => {
                     const li = document.createElement('li');
                     li.className = 'riga-titolo';
                     li.innerHTML = art.titolo;
-                    // Questo link apre la galleria corretta quando clicchi sul titolo
-                    li.onclick = () => { window.location.href = area.link; };
+                    li.onclick = () => { window.location.href = area.link + '?id=' + art.id; };
+                    
                     if(area.monitor) {
-                        li.onmouseenter = () => {
-                            const ytThumb = getYTThumb(art.immagine);
-                            document.getElementById(area.monitor).src = ytThumb || (art.immagine && art.immagine.length > 5 ? art.immagine : area.def);
-                        };
+                        li.onmouseenter = () => setMonitor(art, area.monitor);
                     }
                     listEl.appendChild(li);
                 });
