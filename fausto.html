@@ -26,9 +26,17 @@
 
         /* GALLERIA FOTO (I TUOI POST) */
         .container-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; padding: 15px; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; padding: 15px; cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
         .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
         .card h3 { font-size: 1rem; color: #143ca0; margin-top: 10px; text-align: center; }
+
+        /* --- FINESTRA MAGICA (MODAL) PER INGRANDIMENTO --- */
+        .modal { display: none; position: fixed; z-index: 10001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow-y: auto; }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 800px; position: relative; }
+        .close { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 35px; font-weight: bold; cursor: pointer; }
+        .modal-media img { width: 100%; border-radius: 10px; display: block; }
+        .modal-text { margin-top: 20px; line-height: 1.6; color: #333; white-space: pre-wrap; font-size: 1.1rem; }
 
         .footer-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000; }
         .btn-footer { text-decoration: none; color: #333; font-weight: bold; }
@@ -60,7 +68,7 @@
                     <h3 style="color: #00a8e8; margin: 0 0 10px 0;">RADAR INTERATTIVO</h3>
                     <p style="color: white; font-size: 0.85rem; margin-bottom: 15px;">Clicca per attivare la mappa<br>zoomabile a tutto schermo</p>
                     <div style="background: #27ae60; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; display: inline-block;">
-                       🌍 APRI RADAR LIVE
+                        🌍 APRI RADAR LIVE
                     </div>
                 </div>
             </div>
@@ -75,6 +83,16 @@
     <span style="display:block; text-align:center; color:#666; font-weight:bold; text-transform:uppercase;">Le tue foto archiviate</span>
 
     <div id="gallery" class="container-gallery"></div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="chiudiModal()">&times;</span>
+            <div id="modal-media" class="modal-media"></div>
+            <h2 id="modal-titolo" style="text-align:left; margin-top:20px; color:#143ca0;"></h2>
+            <div id="modal-testo" class="modal-text"></div>
+            <button onclick="chiudiModal()" style="margin-top:20px; padding:12px; background:#143ca0; color:white; border:none; border-radius:8px; width:100%; cursor:pointer; font-weight:bold;">TORNA ALL'ARCHIVIO</button>
+        </div>
+    </div>
 
     <div class="footer-nav">
         <a href="index.html" class="btn-footer">🏠 Home</a>
@@ -99,16 +117,44 @@
                 container.innerHTML = "";
                 Object.keys(dati).reverse().forEach(id => {
                     const post = dati[id];
-                    let visual = post.immagine ? `<img src="${post.immagine}">` : '';
-                    container.innerHTML += `
-                        <div class="card">
-                            ${visual}
-                            <h3>${post.titolo}</h3>
-                            <p style="text-align:center; font-size:0.9rem;">${post.testo || ''}</p>
-                        </div>`;
+                    
+                    // Pulizia link ImgBB se necessario
+                    let imgLink = post.immagine || '';
+                    if (imgLink.includes('<img')) {
+                        const m = imgLink.match(/src="([^"]+)"/);
+                        if (m) imgLink = m[1];
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.onclick = () => apriModal(post.titolo, post.testo, imgLink);
+                    
+                    card.innerHTML = `
+                        <img src="${imgLink}" onerror="this.src='immagini/fausto.jpg'">
+                        <h3>${post.titolo}</h3>
+                        <p style="text-align:center; font-size:0.9rem; color:#555;">${post.testo || ''}</p>
+                    `;
+                    container.appendChild(card);
                 });
             }
         });
+
+        function apriModal(titolo, testo, immagine) {
+            const modal = document.getElementById("myModal");
+            const mMedia = document.getElementById("modal-media");
+            document.getElementById("modal-titolo").innerText = titolo;
+            document.getElementById("modal-testo").innerText = testo || "";
+            mMedia.innerHTML = `<img src="${immagine}">`;
+            modal.style.display = "block";
+        }
+
+        function chiudiModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("myModal")) { chiudiModal(); }
+        }
     </script>
 </body>
 </html>
