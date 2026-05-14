@@ -5,93 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archivio Francesco - SCARABELLIAMENTE</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        h1 { text-align: center; color: #0056b3; text-transform: uppercase; }
-        .griglia-archivio { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
-        .card { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f2; margin: 0; padding: 20px; padding-bottom: 80px; }
+        h2 { text-align: center; color: #143ca0; margin-bottom: 30px; }
+        
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: auto; }
+        
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; cursor: pointer; }
         .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 200px; object-fit: cover; background: #000; }
-        .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; color: #333; }
-        .card-text { font-size: 0.9rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
-        .btn-apri { background: #0056b3; color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; }
-        .nav-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #0056b3; font-weight: bold; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-bottom: 2px solid #143ca0; }
+        .card-content { padding: 15px; }
+        .card-content h3 { margin: 0 0 10px; color: #143ca0; font-size: 1.2rem; }
+        .card-content p { color: #555; font-size: 0.9rem; height: 40px; overflow: hidden; }
+
+        /* --- FINESTRA MAGICA (MODAL) STILE SERGIO --- */
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow-y: auto; }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border-radius: 15px; width: 90%; max-width: 800px; position: relative; }
+        .close { position: absolute; top: 10px; right: 20px; color: #aaa; font-size: 35px; font-weight: bold; cursor: pointer; }
+        .modal-media img, .modal-media iframe { width: 100%; border-radius: 10px; }
+        .modal-text { margin-top: 20px; line-height: 1.6; color: #333; white-space: pre-wrap; }
+
+        /* BARRA NAVIGAZIONE */
+        .footer-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 999; }
+        .btn-footer { text-decoration: none; color: #143ca0; font-weight: bold; padding: 8px 15px; border: 1px solid #143ca0; border-radius: 20px; background: #f0f7ff; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <a href="index.html" class="nav-link">← Torna alla Home</a>
-    <h1>Archivio Francesco Mariani</h1>
-    <div id="griglia-archivio" class="griglia-archivio">
-        </div>
+<h2>📚 Archivio Storico Francesco</h2>
+
+<div class="container" id="archivio-grid">
+    </div>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="chiudiModal()">&times;</span>
+        <div id="modal-media" class="modal-media"></div>
+        <h2 id="modal-titolo" style="text-align:left; margin-top:20px;"></h2>
+        <div id="modal-testo" class="modal-text"></div>
+        <button onclick="chiudiModal()" style="margin-top:20px; padding:10px; background:#143ca0; color:white; border:none; border-radius:5px; width:100%; cursor:pointer; font-weight:bold;">CHIUDI</button>
+    </div>
+</div>
+
+<div class="footer-nav">
+    <a href="index.html" class="btn-footer">🏠 Home</a>
+    <a href="gestione_francesco.html" class="btn-footer">✍️ Scrivi</a>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-    const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
+    const firebaseConfig = { 
+        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
+        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" 
+    };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-    const db = firebase.database();
+    const database = firebase.database();
 
-    // Funzione per ripulire i link (YouTube, ImgBB o link diretti)
-    function pulisciImmagine(sorgente) {
-        if (!sorgente) return "immagini/francesco.jpg";
-        
-        let link = sorgente.trim();
+    function caricaArchivio() {
+        database.ref('archivio_francesco').on('value', (snap) => {
+            const grid = document.getElementById('archivio-grid');
+            grid.innerHTML = "";
+            const dati = snap.val();
+            if (dati) {
+                Object.keys(dati).reverse().forEach((id) => {
+                    const post = dati[id];
+                    let imgPura = post.immagine;
+                    // Pulizia link ImgBB
+                    if (imgPura.includes('<img')) {
+                        const m = imgPura.match(/src="([^"]+)"/);
+                        if (m) imgPura = m[1];
+                    }
 
-        // 1. Gestione YouTube: estrae la miniatura
-        if (link.includes('youtube.com') || link.includes('youtu.be')) {
-            let vid = "";
-            if (link.includes('v=')) { vid = link.split('v=')[1].split('&')[0]; }
-            else { vid = link.split('/').pop().split('?')[0]; }
-            return `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
-        }
-
-        // 2. Gestione ImgBB: estrae il link dal codice HTML
-        if (link.includes('<img')) {
-            const match = link.match(/src="([^"]+)"/);
-            if (match) return match[1];
-        }
-
-        return link;
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.onclick = () => apriModal(post.titolo, post.testo, imgPura);
+                    
+                    card.innerHTML = `
+                        <img src="${imgPura}" onerror="this.src='immagini/francesco.jpg'">
+                        <div class="card-content">
+                            <h3>${post.titolo}</h3>
+                            <p>${post.testo || ""}</p>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        });
     }
 
-   db.ref('archivio_francesco').on('value', snap => {
-        const griglia = document.getElementById('griglia-archivio');
-        griglia.innerHTML = "";
-        
-        let postArray = [];
-        snap.forEach(child => { postArray.push({id: child.key, ...child.val()}); });
-        postArray.reverse();
+    function apriModal(titolo, testo, media) {
+        const modal = document.getElementById("myModal");
+        const mMedia = document.getElementById("modal-media");
+        document.getElementById("modal-titolo").innerText = titolo;
+        document.getElementById("modal-testo").innerText = testo || "";
 
-        postArray.forEach(post => {
-            const foto = pulisciImmagine(post.immagine);
-            
-            // CONTROLLO: Se il link originale è YouTube, prepariamo l'apertura esterna
-            const isYouTube = post.immagine.includes('youtube.com') || post.immagine.includes('youtu.be');
-            const linkAzione = isYouTube ? post.immagine : `view.html?id=${post.id}&area=archivio_francesco`;
-            const target = isYouTube ? 'target="_blank"' : '';
+        if (media.includes('youtube.com') || media.includes('youtu.be')) {
+            let vid = media.includes('v=') ? media.split('v=')[1].split('&')[0] : media.split('/').pop();
+            mMedia.innerHTML = `<iframe height="315" src="https://www.youtube.com/embed/${vid}" frameborder="0" allowfullscreen></iframe>`;
+        } else {
+            mMedia.innerHTML = `<img src="${media}">`;
+        }
+        modal.style.display = "block";
+    }
 
-            const card = `
-                <div class="card">
-                    <a href="${linkAzione}" ${target} style="display:block; line-height:0;">
-                        <img src="${foto}" onerror="this.src='immagini/francesco.jpg'">
-                    </a>
-                    <div class="card-body">
-                        <div class="card-title">${post.titolo}</div>
-                        <div class="card-text">${post.testo || ""}</div>
-                        <a href="${linkAzione}" ${target} class="btn-apri">
-                            ${isYouTube ? 'GUARDA VIDEO' : 'LEGGI TUTTO'}
-                        </a>
-                    </div>
-                </div>
-            `;
-            griglia.innerHTML += card;
-        });
-    });
+    function chiudiModal() {
+        document.getElementById("myModal").style.display = "none";
+        document.getElementById("modal-media").innerHTML = "";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("myModal")) { chiudiModal(); }
+    }
+
+    caricaArchivio();
 </script>
 
 </body>
