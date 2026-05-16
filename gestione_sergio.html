@@ -3,46 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GESTIONE</title>
+    <title>GESTIONE SERGIO</title>
     <style>
-        body { font-family: sans-serif; background: #143ca0; color: white; text-align: center; padding: 0; margin: 0; overflow-x: hidden; }
+        body { font-family: sans-serif; background: #143ca0; color: white; text-align: center; padding: 0; margin: 0; }
         
-        /* LOGIN - RIDOTTO */
-        #area-login { padding-top: 30px; }
-        .login-box { width: 90%; max-width: 350px; background: white; padding: 15px; border-radius: 10px; display: inline-block; color: #333; }
-        .login-box input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
-        .btn-entra { background: #143ca0; color: white; border: none; padding: 12px; border-radius: 5px; width: 100%; font-weight: bold; }
-
-        /* PANNELLO ULTRA COMPATTO */
-        .box { width: 96%; max-width: 450px; margin: 5px auto; background: white; color: #333; padding: 8px; border-radius: 10px; border-top: 4px solid #143ca0; box-sizing: border-box; }
+        /* LOGIN */
+        #area-login { padding-top: 50px; }
+        .login-box { width: 90%; max-width: 400px; background: white; padding: 20px; border-radius: 12px; display: inline-block; color: #333; }
+        .login-box input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1.2rem; }
         
-        /* Input Titolo e Testo */
+        /* PANNELLO */
+        .box { width: 98%; max-width: 550px; margin: 5px auto; background: white; color: #333; padding: 15px; border-radius: 12px; border-top: 6px solid #143ca0; box-sizing: border-box; min-height: 98vh; display: flex; flex-direction: column; }
+        
         input[type="text"], textarea { 
-            width: 100%; margin-bottom: 5px; padding: 8px; border-radius: 5px; 
-            border: 1px solid #ccc; box-sizing: border-box; font-size: 0.9rem; font-family: inherit;
+            width: 100%; margin-bottom: 10px; padding: 15px; border-radius: 8px; 
+            border: 2px solid #ccc; box-sizing: border-box; font-size: 1.2rem; font-family: inherit;
         }
         
-        /* Area Foto/Video */
-        .box-foto { background: #fff9f2; border: 1px dashed #e67e22; padding: 5px; border-radius: 8px; margin-bottom: 5px; }
-        
+        /* UNICO TASTO COLORATO: FOTO */
+        .box-foto { background: #fff9f2; border: 2px dashed #e67e22; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
         .btn-carica { 
-            background: #e67e22; color: white; padding: 6px; display: block; text-decoration: none; 
-            border-radius: 5px; font-size: 0.65rem; line-height: 1.1; font-weight: bold; margin-bottom: 5px;
+            background: #e67e22; color: white; padding: 12px; display: block; text-decoration: none; 
+            border-radius: 8px; font-size: 0.85rem; line-height: 1.2; font-weight: bold; margin-bottom: 8px;
         }
 
-        .label-istruzioni { font-size: 0.65rem; color: #666; display: block; margin-bottom: 3px; line-height: 1; }
-
-        /* Pulsante Pubblica rimpicciolito */
+        /* TASTO PUBBLICA: SENZA COLORE */
         #pubblica { 
-            background: #27ae60; color: white; border: none; padding: 10px; width: 100%; 
-            cursor: pointer; font-weight: bold; border-radius: 5px; font-size: 0.9rem;
+            background: white; color: #27ae60; border: 2px solid #27ae60; padding: 12px; width: 100%; 
+            cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.1rem; text-transform: uppercase;
         }
         
-        /* Archivio sotto (si vede solo l'inizio) */
-        .lista-titolo { color:#143ca0; font-size:0.75rem; font-weight:bold; margin: 5px 0; }
-        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 5px; border-bottom: 1px solid #eee; font-size: 0.75rem; }
-        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; }
-        .btn-esci { background:#888; color:white; border:none; padding:5px; border-radius:5px; width:100%; margin-top:5px; font-size:0.7rem; }
+        /* Archivio */
+        .lista-titolo { color:#143ca0; font-size:1.1rem; font-weight:bold; margin: 15px 0 10px 0; border-bottom: 2px solid #143ca0; }
+        #lista-post { flex-grow: 1; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 1.1rem; background: #f9f9f9; margin-bottom: 5px; border-radius: 6px; }
+        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        
+        .btn-esci { background:#888; color:white; border:none; padding:12px; border-radius:8px; width:100%; margin-top:15px; font-size: 1rem; cursor:pointer; }
     </style>
 </head>
 <body>
@@ -50,25 +47,25 @@
 <div id="area-login">
     <div class="login-box">
         <input type="password" id="pass" placeholder="Password">
-        <button class="btn-entra" onclick="login()">ENTRA</button>
+        <button style="background:#143ca0; color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold;" onclick="login()">ENTRA</button>
     </div>
 </div>
 
 <div id="redazione" style="display:none;">
     <div class="box">
         <input type="text" id="tit" placeholder="TITOLO">
-        <textarea id="tes" rows="3" placeholder="TESTO"></textarea>
+        <textarea id="tes" rows="4" placeholder="TESTO"></textarea>
         
         <div class="box-foto">
             <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">
                 PULSANTE PER TRASFERIRE FOTO ED IMMAGINI.<br>
-                SEGUIRE LE ISTRUZIONI INTERNO AL SITO IMGBB
+                SEGUIRE LE ISTRUZIONI INTERNO AL SITO IMGBB<br>
+                <small>(Chiudi la scheda per tornare qui)</small>
             </a>
-            <span class="label-istruzioni">INCOLLA IL LINK PRODOTTO DA IMGBB O L'INDIRIZZO YOUTUBE SOTTO:</span>
-            <input type="text" id="img" placeholder="Incolla link qui..." style="margin-bottom:0; padding:5px; font-size:0.8rem;">
+            <input type="text" id="img" placeholder="INCOLLA IN QUESTO SPAZIO IL LINK PRODOTTO DA IMGBB O L'INDIRIZZO YOUTUBE" style="margin-bottom:0; font-size:0.9rem;">
         </div>
         
-        <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
+        <button id="pubblica" onclick="invia()">PUBBLICA ORA SULLA TUA PAGINA</button>
 
         <div class="lista-titolo">POST ONLINE</div>
         <div id="lista-post"></div>
@@ -87,18 +84,24 @@
     function login() {
         if (document.getElementById('pass').value === "123") { 
             document.getElementById('area-login').style.display = 'none';
-            document.getElementById('redazione').style.display = 'block';
-        } else { alert("Errata"); }
+            document.getElementById('redazione').style.display = 'flex';
+        } else { alert("Password Errata"); }
     }
 
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
         let i = document.getElementById('img').value.trim();
-        if(!t) return;
+        if(!t) { alert("Inserisci un titolo!"); return; }
         database.ref('archivioSergio').push({
             titolo: t, testo: s, immagine: i, data: new Date().toLocaleString('it-IT')
-        }).then(() => { window.location.href = "sergio.html"; });
+        }).then(() => { alert("Pubblicato con successo!"); location.reload(); });
+    }
+
+    function confermaElimina(id) {
+        if (confirm("Attenzione! Sei sicuro di voler cancellare definitivamente questo post?")) {
+            database.ref('archivioSergio/' + id).remove();
+        }
     }
 
     database.ref('archivioSergio').on('value', (snapshot) => {
@@ -107,8 +110,8 @@
         snapshot.forEach((child) => {
             c.insertAdjacentHTML('afterbegin', `
                 <div class="riga-post">
-                    <span>${child.val().titolo.substring(0,25)}...</span>
-                    <button class="btn-elimina" onclick="database.ref('archivioSergio/${child.key}').remove()">X</button>
+                    <span>${child.val().titolo}</span>
+                    <button class="btn-elimina" onclick="confermaElimina('${child.key}')">X</button>
                 </div>
             `);
         });
