@@ -2,177 +2,117 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REDAZIONE SERGIO - GESTIONE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GESTIONE</title>
     <style>
-        body { font-family: sans-serif; background: #003366; color: white; text-align: center; padding: 10px; margin: 0; }
+        body { font-family: sans-serif; background: #143ca0; color: white; text-align: center; padding: 0; margin: 0; overflow-x: hidden; }
         
-        /* Box adattabile: 90% su cellulare, max 550px su PC */
-        .box { 
-            width: 95%;
-            max-width: 550px; 
-            margin: 20px auto; 
-            background: white; 
-            color: #333; 
-            padding: 20px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
-            border-top: 6px solid #FFD700; 
-            box-sizing: border-box;
+        /* LOGIN - RIDOTTO */
+        #area-login { padding-top: 30px; }
+        .login-box { width: 90%; max-width: 350px; background: white; padding: 15px; border-radius: 10px; display: inline-block; color: #333; }
+        .login-box input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+        .btn-entra { background: #143ca0; color: white; border: none; padding: 12px; border-radius: 5px; width: 100%; font-weight: bold; }
+
+        /* PANNELLO ULTRA COMPATTO */
+        .box { width: 96%; max-width: 450px; margin: 5px auto; background: white; color: #333; padding: 8px; border-radius: 10px; border-top: 4px solid #143ca0; box-sizing: border-box; }
+        
+        /* Input Titolo e Testo */
+        input[type="text"], textarea { 
+            width: 100%; margin-bottom: 5px; padding: 8px; border-radius: 5px; 
+            border: 1px solid #ccc; box-sizing: border-box; font-size: 0.9rem; font-family: inherit;
+        }
+        
+        /* Area Foto/Video */
+        .box-foto { background: #fff9f2; border: 1px dashed #e67e22; padding: 5px; border-radius: 8px; margin-bottom: 5px; }
+        
+        .btn-carica { 
+            background: #e67e22; color: white; padding: 6px; display: block; text-decoration: none; 
+            border-radius: 5px; font-size: 0.65rem; line-height: 1.1; font-weight: bold; margin-bottom: 5px;
         }
 
-        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
-        
-        .box-foto { background: #fff5eb; border: 2px dashed #e67e22; padding: 15px; border-radius: 12px; margin: 15px 0; }
-        
-        .btn-carica { background: #e67e22; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; transition: 0.3s; }
-        
-        #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; }
-        
-        .sezione-lista { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; text-align: left; }
-        
-        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; color: #333; }
-        
-        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
-        
-        /* Area Login migliorata per cellulare */
-        #area-login { margin-top: 50px; }
-        .login-box { 
-            background: white; 
-            padding: 25px; 
-            border-radius: 15px; 
-            display: block; 
-            width: 90%; 
-            max-width: 400px; 
-            margin: auto; 
-            color: #333; 
-            box-sizing: border-box;
+        .label-istruzioni { font-size: 0.65rem; color: #666; display: block; margin-bottom: 3px; line-height: 1; }
+
+        /* Pulsante Pubblica rimpicciolito */
+        #pubblica { 
+            background: #27ae60; color: white; border: none; padding: 10px; width: 100%; 
+            cursor: pointer; font-weight: bold; border-radius: 5px; font-size: 0.9rem;
         }
+        
+        /* Archivio sotto (si vede solo l'inizio) */
+        .lista-titolo { color:#143ca0; font-size:0.75rem; font-weight:bold; margin: 5px 0; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 5px; border-bottom: 1px solid #eee; font-size: 0.75rem; }
+        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; }
+        .btn-esci { background:#888; color:white; border:none; padding:5px; border-radius:5px; width:100%; margin-top:5px; font-size:0.7rem; }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
 
 <div id="area-login">
     <div class="login-box">
-        <h2 style="color:#003366; margin-top:0;">Area Sergio ⚓</h2>
-        <p style="font-size:0.9rem;">Inserisci la password per gestire i tuoi post</p>
-        <input type="password" id="pass" placeholder="Password di accesso">
-        <button onclick="login()" style="background:#003366; color:white; border:none; padding:15px; border-radius:8px; width:100%; cursor:pointer; font-weight:bold; font-size:1.1rem;">ENTRA</button>
+        <input type="password" id="pass" placeholder="Password">
+        <button class="btn-entra" onclick="login()">ENTRA</button>
     </div>
 </div>
 
 <div id="redazione" style="display:none;">
     <div class="box">
-        <h2 style="color:#003366; margin-top:0; text-align:center;">✍️ Redazione di Sergio</h2>
-        
-        <label style="font-size:0.8rem; font-weight:bold; color:#003366;">TITOLO:</label>
-        <input type="text" id="tit" placeholder="TITOLO DEL RACCONTO">
-        
-        <label style="font-size:0.8rem; font-weight:bold; color:#003366;">TESTO:</label>
-        <textarea id="tes" rows="6" placeholder="SCRIVI QUI IL TUO TESTO..."></textarea>
+        <input type="text" id="tit" placeholder="TITOLO">
+        <textarea id="tes" rows="3" placeholder="TESTO"></textarea>
         
         <div class="box-foto">
-            <p style="color:#e67e22; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
-            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
-            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA IL LINK QUI SOTTO:</p>
-            <input type="text" id="img" placeholder="Incolla link foto o video Youtube">
+            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">
+                PULSANTE PER TRASFERIRE FOTO ED IMMAGINI.<br>
+                SEGUIRE LE ISTRUZIONI INTERNO AL SITO IMGBB
+            </a>
+            <span class="label-istruzioni">INCOLLA IL LINK PRODOTTO DA IMGBB O L'INDIRIZZO YOUTUBE SOTTO:</span>
+            <input type="text" id="img" placeholder="Incolla link qui..." style="margin-bottom:0; padding:5px; font-size:0.8rem;">
         </div>
         
         <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
 
-        <div class="sezione-lista">
-            <h3 style="color:#003366; text-align:center;">🗑️ I TUOI POST ONLINE</h3>
-            <div id="lista-post"></div>
-        </div>
+        <div class="lista-titolo">POST ONLINE</div>
+        <div id="lista-post"></div>
         
-        <button onclick="location.href='sergio.html'" style="background:#888; color:white; border:none; padding:15px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;">TORNA AL SITO PUBBLICO</button>
-        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.8rem; margin-top:20px; display:block; width:100%;">Esci e chiedi password la prossima volta</button>
+        <button onclick="location.href='sergio.html'" class="btn-esci">ESCI</button>
     </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
-        authDomain: "sito-sergio-b19ce.firebaseapp.com",
-        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
-        projectId: "sito-sergio-b19ce"
-    };
+    const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    window.onload = function() {
-        if (sessionStorage.getItem("sergioAmmesso") === "si") {
-            mostraRedazione();
-        }
-    }
-
     function login() {
-        const p = document.getElementById('pass').value.toLowerCase();
-        if (p === "123") { 
-            sessionStorage.setItem("sergioAmmesso", "si");
-            mostraRedazione();
-        } else { alert("Password Errata"); }
-    }
-
-    function mostraRedazione() {
-        document.getElementById('area-login').style.display = 'none';
-        document.getElementById('redazione').style.display = 'block';
-    }
-
-    function logout() {
-        sessionStorage.removeItem("sergioAmmesso");
-        location.reload();
+        if (document.getElementById('pass').value === "123") { 
+            document.getElementById('area-login').style.display = 'none';
+            document.getElementById('redazione').style.display = 'block';
+        } else { alert("Errata"); }
     }
 
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
-        let iRaw = document.getElementById('img').value.trim();
-
-        if(!t) { alert("Inserisci un titolo!"); return; }
-
-        let immaginePulita = iRaw;
-        if (!iRaw.includes("youtube.com") && !iRaw.includes("youtu.be")) {
-            if (immaginePulita.includes('<img src="')) {
-                immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
-            } else if (immaginePulita.includes('[img]')) {
-                immaginePulita = immaginePulita.split('[img]')[1].split('[/img]')[0];
-            }
-        }
-
+        let i = document.getElementById('img').value.trim();
+        if(!t) return;
         database.ref('archivioSergio').push({
-            titolo: t, 
-            testo: s, 
-            immagine: immaginePulita, 
-            data: new Date().toLocaleString()
-        }).then(() => {
-            alert("✅ POST PUBBLICATO!");
-            window.location.href = "sergio.html"; 
-        });
+            titolo: t, testo: s, immagine: i, data: new Date().toLocaleString('it-IT')
+        }).then(() => { window.location.href = "sergio.html"; });
     }
 
     database.ref('archivioSergio').on('value', (snapshot) => {
-        const contenitore = document.getElementById('lista-post');
-        contenitore.innerHTML = "";
+        const c = document.getElementById('lista-post');
+        c.innerHTML = "";
         snapshot.forEach((child) => {
-            const post = child.val();
-            const id = child.key;
-            contenitore.insertAdjacentHTML('afterbegin', `
+            c.insertAdjacentHTML('afterbegin', `
                 <div class="riga-post">
-                    <span>• ${post.titolo}</span>
-                    <button class="btn-elimina" onclick="eliminaPost('${id}')">ELIMINA</button>
+                    <span>${child.val().titolo.substring(0,25)}...</span>
+                    <button class="btn-elimina" onclick="database.ref('archivioSergio/${child.key}').remove()">X</button>
                 </div>
             `);
         });
     });
-
-    function eliminaPost(id) {
-        if(confirm("Vuoi davvero cancellare questo post?")) {
-            database.ref('archivioSergio/' + id).remove();
-        }
-    }
 </script>
 </body>
 </html>
