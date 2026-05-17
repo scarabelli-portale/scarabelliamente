@@ -11,14 +11,14 @@
         .login-box input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1.2rem; }
         .box { width: 98%; max-width: 550px; margin: 5px auto; background: white; color: #333; padding: 15px; border-radius: 12px; border-top: 6px solid #143ca0; box-sizing: border-box; min-height: 98vh; display: flex; flex-direction: column; }
         
-        /* Campi Titolo e Testo ulteriormente ridotti */
+        /* Campi Titolo e Testo ridotti per recuperare spazio */
         input[type="text"]#tit { width: 100%; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; box-sizing: border-box; font-size: 1rem; }
         textarea#tes { width: 100%; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; box-sizing: border-box; font-size: 1rem; font-family: inherit; resize: none; }
         
         .box-foto { background: #fff9f2; border: 2px dashed #e67e22; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
         .btn-carica { background: #e67e22; color: white; padding: 10px; display: block; text-decoration: none; border-radius: 8px; font-size: 0.85rem; line-height: 1.2; font-weight: bold; margin-bottom: 8px; }
         
-        /* Campo Link su due righe */
+        /* Campo Link su due righe per massima leggibilità */
         textarea#img { 
             width: 100%; 
             margin-bottom: 0; 
@@ -30,7 +30,7 @@
             text-align: center;
             font-family: inherit;
             resize: none;
-            height: 50px; /* Altezza per due righe */
+            height: 50px; 
         }
         
         #pubblica { background: white; color: #27ae60; border: 2px solid #27ae60; padding: 12px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 0.85rem; text-transform: uppercase; }
@@ -67,13 +67,37 @@
         <button onclick="location.href='sergio.html'" class="btn-esci">ESCI</button>
     </div>
 </div>
+
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
 <script>
     const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
-    function login() { if (document.getElementById('pass').value === "123") { document.getElementById('area-login').style.display = 'none'; document.getElementById('redazione').style.display = 'flex'; } else { alert("Password Errata"); } }
+
+    // --- LOGICA DI ACCESSO CON MEMORIA ---
+    function login() {
+        const p = document.getElementById('pass').value;
+        if (p === "123") { 
+            sessionStorage.setItem("accesso_sergio", "ok"); // Salva l'autorizzazione nel browser
+            mostraRedazione();
+        } else { 
+            alert("Password Errata"); 
+        }
+    }
+
+    function mostraRedazione() {
+        document.getElementById('area-login').style.display = 'none';
+        document.getElementById('redazione').style.display = 'flex';
+    }
+
+    // Controllo automatico: se sei già passato di qui, entra subito
+    if (sessionStorage.getItem("accesso_sergio") === "ok") {
+        mostraRedazione();
+    }
+    // -------------------------------------
+
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
@@ -81,7 +105,13 @@
         if(!t) { alert("Inserisci un titolo!"); return; }
         database.ref('archivioSergio').push({ titolo: t, testo: s, immagine: i, data: new Date().toLocaleString('it-IT') }).then(() => { alert("Pubblicato con successo!"); location.reload(); });
     }
-    function confermaElimina(id) { if (confirm("Attenzione! Sei sicuro di voler cancellare definitivamente questo post?")) { database.ref('archivioSergio/' + id).remove(); } }
+
+    function confermaElimina(id) { 
+        if (confirm("Attenzione! Sei sicuro di voler cancellare definitivamente questo post?")) { 
+            database.ref('archivioSergio/' + id).remove(); 
+        } 
+    }
+
     database.ref('archivioSergio').on('value', (snapshot) => {
         const c = document.getElementById('lista-post');
         c.innerHTML = "";
@@ -89,7 +119,7 @@
             const post = child.val();
             c.insertAdjacentHTML('afterbegin', `
                 <div class="riga-post">
-                    <span style="cursor:pointer; flex-grow:1; margin-right:10px;" onclick="window.location.href='sergio.html?id=${child.key}'">${post.titolo}</span>
+                    <span style="cursor:pointer; flex-grow:1; margin-right:10px; font-weight:bold;" onclick="window.location.href='sergio.html?id=${child.key}'">${post.titolo}</span>
                     <button class="btn-elimina" onclick="confermaElimina('${child.key}')">X</button>
                 </div>
             `);
