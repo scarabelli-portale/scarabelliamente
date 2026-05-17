@@ -11,34 +11,21 @@
         .login-box input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1.2rem; }
         .box { width: 98%; max-width: 550px; margin: 5px auto; background: white; color: #333; padding: 15px; border-radius: 12px; border-top: 6px solid #143ca0; box-sizing: border-box; min-height: 98vh; display: flex; flex-direction: column; }
         
-        /* Campi Titolo e Testo ridotti per recuperare spazio */
         input[type="text"]#tit { width: 100%; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; box-sizing: border-box; font-size: 1rem; }
         textarea#tes { width: 100%; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; box-sizing: border-box; font-size: 1rem; font-family: inherit; resize: none; }
         
         .box-foto { background: #fff9f2; border: 2px dashed #e67e22; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
         .btn-carica { background: #e67e22; color: white; padding: 10px; display: block; text-decoration: none; border-radius: 8px; font-size: 0.85rem; line-height: 1.2; font-weight: bold; margin-bottom: 8px; }
         
-        /* Campo Link su due righe per massima leggibilità */
-        textarea#img { 
-            width: 100%; 
-            margin-bottom: 0; 
-            padding: 8px; 
-            font-size: 0.8rem; 
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            text-align: center;
-            font-family: inherit;
-            resize: none;
-            height: 50px; 
-        }
+        textarea#img { width: 100%; margin-bottom: 0; padding: 8px; font-size: 0.8rem; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; text-align: center; font-family: inherit; resize: none; height: 50px; }
         
-        #pubblica { background: white; color: #27ae60; border: 2px solid #27ae60; padding: 12px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 0.85rem; text-transform: uppercase; }
+        #pubblica { background: white; color: #27ae60; border: 2px solid #27ae60; padding: 12px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
         
         .lista-titolo { color:#143ca0; font-size:1.1rem; font-weight:bold; margin: 15px 0 10px 0; border-bottom: 2px solid #143ca0; }
         #lista-post { flex-grow: 1; }
         .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 1.1rem; background: #f9f9f9; margin-bottom: 5px; border-radius: 6px; }
         .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-modifica { background: #f1c40f; color: #333; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 5px; }
         .btn-esci { background:#888; color:white; border:none; padding:12px; border-radius:8px; width:100%; margin-top:15px; font-size: 1rem; cursor:pointer; }
     </style>
 </head>
@@ -54,14 +41,10 @@
         <input type="text" id="tit" placeholder="TITOLO">
         <textarea id="tes" rows="2" placeholder="TESTO"></textarea>
         <div class="box-foto">
-            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">
-                PULSANTE PER TRASFERIRE FOTO ED IMMAGINI.<br>
-                SEGUIRE LE ISTRUZIONI INTERNO AL SITO IMGBB<br>
-                <small>(Chiudi la scheda per tornare qui)</small>
-            </a>
-            <textarea id="img" placeholder="INCOLLA IN QUESTO SPAZIO IL LINK COMPLETO PRODOTTO DA IMGBB oppure il link DI YOUTUBE"></textarea>
+            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">PULSANTE PER TRASFERIRE FOTO ED IMMAGINI.<br>SEGUIRE LE ISTRUZIONI INTERNO AL SITO IMGBB</a>
+            <textarea id="img" placeholder="INCOLLA IL LINK DI IMGBB o YOUTUBE"></textarea>
         </div>
-        <button id="pubblica" onclick="invia()">CLICCA SU QUESTO PULSANTE PER PUBBLICARE SULLA TUA PAGINA</button>
+        <button id="pubblica" onclick="invia()">CLICCA PER PUBBLICARE</button>
         <div class="lista-titolo">POST ONLINE</div>
         <div id="lista-post"></div>
         <button onclick="location.href='sergio.html'" class="btn-esci">ESCI</button>
@@ -76,15 +59,14 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    // --- LOGICA DI ACCESSO CON MEMORIA ---
+    let idInModifica = null; // Memoria per capire se stiamo modificando
+
     function login() {
         const p = document.getElementById('pass').value;
         if (p === "123") { 
-            sessionStorage.setItem("accesso_sergio", "ok"); // Salva l'autorizzazione nel browser
+            sessionStorage.setItem("accesso_sergio", "ok");
             mostraRedazione();
-        } else { 
-            alert("Password Errata"); 
-        }
+        } else { alert("Password Errata"); }
     }
 
     function mostraRedazione() {
@@ -92,18 +74,43 @@
         document.getElementById('redazione').style.display = 'flex';
     }
 
-    // Controllo automatico: se sei già passato di qui, entra subito
-    if (sessionStorage.getItem("accesso_sergio") === "ok") {
-        mostraRedazione();
+    if (sessionStorage.getItem("accesso_sergio") === "ok") { mostraRedazione(); }
+
+    // --- FUNZIONE PER CARICARE I DATI DA MODIFICARE ---
+    function preparaModifica(id) {
+        database.ref('archivioSergio/' + id).once('value', (snapshot) => {
+            const post = snapshot.val();
+            document.getElementById('tit').value = post.titolo;
+            document.getElementById('tes').value = post.testo;
+            document.getElementById('img').value = post.immagine || "";
+            idInModifica = id;
+            
+            const btn = document.getElementById('pubblica');
+            btn.innerText = "SALVA MODIFICHE ✅";
+            btn.style.background = "#143ca0";
+            btn.style.color = "white";
+            window.scrollTo(0,0); 
+        });
     }
-    // -------------------------------------
 
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
         let i = document.getElementById('img').value.trim();
         if(!t) { alert("Inserisci un titolo!"); return; }
-        database.ref('archivioSergio').push({ titolo: t, testo: s, immagine: i, data: new Date().toLocaleString('it-IT') }).then(() => { alert("Pubblicato con successo!"); location.reload(); });
+
+        if (idInModifica) {
+            // SALVA MODIFICA
+            database.ref('archivioSergio/' + idInModifica).update({
+                titolo: t, testo: s, immagine: i
+            }).then(() => { alert("Modifica salvata!"); location.reload(); });
+        } else {
+            // PUBBLICA NUOVO
+            database.ref('archivioSergio').push({
+                titolo: t, testo: s, immagine: i, 
+                data: new Date().toLocaleString('it-IT')
+            }).then(() => { alert("Pubblicato con successo!"); location.reload(); });
+        }
     }
 
     function confermaElimina(id) { 
@@ -119,8 +126,11 @@
             const post = child.val();
             c.insertAdjacentHTML('afterbegin', `
                 <div class="riga-post">
-                    <span style="cursor:pointer; flex-grow:1; margin-right:10px; font-weight:bold;" onclick="window.location.href='sergio.html?id=${child.key}'">${post.titolo}</span>
-                    <button class="btn-elimina" onclick="confermaElimina('${child.key}')">X</button>
+                    <span style="cursor:pointer; flex-grow:1; margin-right:10px; font-weight:bold; font-size:0.9rem;" onclick="window.location.href='sergio.html?id=${child.key}'">${post.titolo}</span>
+                    <div style="display:flex;">
+                        <button class="btn-modifica" onclick="preparaModifica('${child.key}')">✏️</button>
+                        <button class="btn-elimina" onclick="confermaElimina('${child.key}')">X</button>
+                    </div>
                 </div>
             `);
         });
