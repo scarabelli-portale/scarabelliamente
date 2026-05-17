@@ -173,24 +173,16 @@
                 snap.forEach(c => { articoli.push({ id: c.key, ...c.val() }); });
                 articoli.reverse();
 
-                // FUNZIONE PER CARICARE IMMAGINE CON FILTRO "SUPER-PULITORE"
                 const setMonitor = (post, targetImg) => {
                     const monitor = document.getElementById(targetImg);
                     if (!monitor) return;
-
                     let sorgente = post.immagine || "";
-
-                    // 1. FILTRO HTML: Estrae il link se l'utente incolla il codice ImgBB completo
                     if (sorgente.includes('<img')) {
                         const regex = /src="([^"]+)"/;
                         const match = sorgente.match(regex);
                         if (match) sorgente = match[1];
                     }
-                    
-                    // 2. FILTRO PULIZIA: Rimuove eventuali spazi bianchi ai lati
                     sorgente = sorgente.trim();
-
-                    // 3. LOGICA DI VISUALIZZAZIONE
                     const yt = getYTThumb(sorgente);
                     if (yt) {
                         monitor.src = yt;
@@ -209,7 +201,15 @@
                     const li = document.createElement('li');
                     li.className = 'riga-titolo';
                     li.innerHTML = art.titolo;
-                    li.onclick = () => { window.location.href = area.link + '?id=' + art.id; };
+                    
+                    // CORREZIONE PUNTERIA: Gestione click per aprire il link con l'ID corretto
+                    li.onclick = () => { 
+                        if (art.id) {
+                            window.location.href = area.link + '?id=' + art.id; 
+                        } else {
+                            window.location.href = area.link;
+                        }
+                    };
                     
                     if(area.monitor) {
                         li.onmouseenter = () => setMonitor(art, area.monitor);
