@@ -92,13 +92,14 @@
                 
                 const urlSito = "https://scarabelli-portale.github.io/sergio.html?id=" + id;
 
-                const msgTutti = encodeURIComponent(
-                    "🚀 *VIENI A VEDERE SUL SITO IL POST AMPLIATO, DURATURO E STABILE.*\n" +
-                    "Cosa che purtroppo non succede su WhatsApp dove tutto scorre via.\n\n" +
-                    "📖 Titolo: *" + data.titolo + "*\n" +
-                    "Apri l'archivio qui: " + urlSito
-                );
-                
+               // --- VERSIONE DEFINITIVA: GRANDE, COMPLETA E D'IMPATTO ---
+const msgTutti = encodeURIComponent(
+    "🚀 *VIENI A VEDERE SUL SITO IL POST AMPLIATO, DURATURO E STABILE.*\n\n" +
+    "📢 *Cosa che purtroppo non succede su WhatsApp dove tutto scorre via.*\n\n" +
+    "📖 Titolo: *" + data.titolo + "*\n" +
+    "🔗 Apri l'archivio qui: " + urlSito
+);
+                             
                 const msgMe = encodeURIComponent(
                     "📌 ARCHIVIO PERSONALE:\n" +
                     "Post: " + data.titolo + "\n" +
