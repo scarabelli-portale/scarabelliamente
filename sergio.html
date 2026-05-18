@@ -90,14 +90,21 @@
                     display.innerHTML = `<img src="${linkPulito}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`; 
                 }
                 
-                const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
+                // --- LOGICA LINK: PRENDE L'INDIRIZZO REALE DEL SITO ---
+                const urlSito = "https://scarabelli-portale.github.io/sergio.html?id=" + id;
+
                 const msgTutti = encodeURIComponent(
-                    "🚀 *Post ampliato e archiviato stabilmente sul sito.*\n" +
-                    "A differenza della chat, qui il contenuto resta fisso, ordinato e sempre disponibile.\n\n" +
+                    "🚀 *VIENI A VEDERE SUL SITO IL POST AMPLIATO, DURATURO E STABILE.*\n" +
+                    "Cosa che purtroppo non succede su WhatsApp dove tutto scorre via.\n\n" +
                     "📖 Titolo: *" + data.titolo + "*\n" +
-                    "Vai all'archivio: " + urlSito
+                    "Apri l'archivio qui: " + urlSito
                 );
-                const msgMe = encodeURIComponent("📌 ARCHIVIO PERSONALE:\nPost: " + data.titolo + "\nLink: " + urlSito); 
+                
+                const msgMe = encodeURIComponent(
+                    "📌 ARCHIVIO PERSONALE:\n" +
+                    "Post: " + data.titolo + "\n" +
+                    "Link: " + urlSito
+                ); 
 
                 const logoWzBlu = `<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:24px; height:24px; vertical-align:middle; margin-right:10px; filter: invert(18%) sepia(88%) saturate(3000%) hue-rotate(215deg);">`;
                 const logoWzBianco = `<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:24px; height:24px; vertical-align:middle; margin-right:10px; filter: brightness(0) invert(1);">`;
