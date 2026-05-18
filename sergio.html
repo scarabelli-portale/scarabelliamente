@@ -49,7 +49,7 @@
             <div id="container-wz"></div>
             <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem;"></h2>
             <div id="testo-view" class="testo-storia"></div>
-            <button class="chiudi-btn" onclick="chiudiTutto()">CHIUDI X</button>
+            <button class="chiudi-btn" onclick="onclick=chiudiTutto()">CHIUDI X</button>
         </div>
     </div>
 
@@ -90,7 +90,6 @@
                     display.innerHTML = `<img src="${linkPulito}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`; 
                 }
                 
-                // --- QUESTA È LA PARTE IMPORTANTE CON LA FRASE CONCORDATA ---
                 const urlSito = "https://scarabelli-portale.github.io/sergio.html?id=" + id;
 
                 const msgTutti = encodeURIComponent(
@@ -106,19 +105,16 @@
                     "Link: " + urlSito
                 ); 
 
-                const logoWzBlu = `<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:24px; height:24px; vertical-align:middle; margin-right:10px; filter: invert(18%) sepia(88%) saturate(3000%) hue-rotate(215deg);">`;
-                const logoWzBianco = `<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:24px; height:24px; vertical-align:middle; margin-right:10px; filter: brightness(0) invert(1);">`;
-
                 document.getElementById('container-wz').innerHTML = `
                     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 25px 0;">
                         <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: white; color: #143ca0 !important; border: 3px solid #143ca0;">
-                            ${logoWzBlu} Consiglio Scarabelli
+                            <b style="margin-right:10px;">WZ</b> Consiglio Scarabelli
                         </a>
                         <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: white; color: #143ca0 !important; border: 3px solid #143ca0;">
-                            ${logoWzBlu} Tutti gli ex allievi
+                            <b style="margin-right:10px;">WZ</b> Tutti gli ex allievi
                         </a>
                         <a href="https://wa.me/393398329580?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E; color: white !important; border: none;">
-                            ${logoWzBianco} Archivio Personale
+                            <b style="margin-right:10px;">WZ</b> Archivio Personale
                         </a>
                     </div>`;
                 
