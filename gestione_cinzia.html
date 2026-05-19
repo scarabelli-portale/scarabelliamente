@@ -2,19 +2,61 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>REDAZIONE CINZIA - GESTIONE</title>
     <style>
-        body { font-family: sans-serif; background: #1b5e20; color: white; text-align: center; padding: 20px; }
-        .box { max-width: 550px; margin: auto; background: white; color: #333; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #27ae60; text-align: left; }
-        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        body { font-family: sans-serif; background: #1b5e20; color: white; text-align: center; padding: 10px; margin: 0; }
+        
+        /* BOX LOGIN INGRANDITO PER CELLULARE */
+        #area-login { margin-top: 80px; text-align: center; }
+        .login-box { 
+            width: 90%; 
+            max-width: 450px; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            display: inline-block; 
+            color: #333; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
+            box-sizing: border-box;
+        }
+        .login-box h2 { color: #1b5e20; margin-top: 0; }
+        .login-box input { 
+            width: 100%; 
+            padding: 15px; 
+            margin: 15px 0; 
+            border-radius: 8px; 
+            border: 1px solid #ccc; 
+            font-size: 1.2rem; 
+            box-sizing: border-box; 
+            text-align: center;
+        }
+        .btn-entra { 
+            background: #1b5e20; 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 8px; 
+            width: 100%; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+        }
+
+        /* BOX REDAZIONE */
+        .box { width: 95%; max-width: 550px; margin: 20px auto; background: white; color: #333; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 6px solid #27ae60; text-align: left; box-sizing: border-box; }
+        label { font-weight: bold; color: #1b5e20; display: block; margin-top: 15px; }
+        input, textarea { width: 100%; margin: 5px 0 15px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
+        
         .box-foto { background: #e8f5e9; border: 2px dashed #27ae60; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
-        .btn-carica { background: #27ae60; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; transition: 0.3s; }
+        .btn-carica { background: #27ae60; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; margin-bottom: 10px; }
+        
+        /* INTERVENTO CHIRURGICO FIX: Textarea alta, comoda, che manda a capo il testo e non lo taglia */
+        textarea#img { width: 100%; height: 75px; margin-top: 5px; margin-bottom: 12px; padding: 10px; font-size: 0.95rem; border: 2px solid #1b5e20; border-radius: 8px; box-sizing: border-box; text-align: left; font-family: inherit; resize: none; }
+        
         #pubblica { background: #2e7d32; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.2rem; }
-        .sezione-lista { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; text-align: left; }
-        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; color: #333; font-size: 0.8rem;}
-        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        #area-login { margin-top: 100px; text-align: center; }
-        .login-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; color: #333; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; color: #333; background: #f9f9f9; margin-bottom: 5px; border-radius: 5px; }
+        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; }
     </style>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -23,9 +65,9 @@
 
 <div id="area-login">
     <div class="login-box">
-        <h2 style="color:#1b5e20;">Area Cinzia 📚</h2>
-        <input type="password" id="pass" placeholder="Password di accesso">
-        <button onclick="login()" style="background:#1b5e20; color:white; border:none; padding:10px; border-radius:5px; width:100%; cursor:pointer; font-weight:bold;">ENTRA</button>
+        <h2>Area Cinzia 📚</h2>
+        <input type="password" id="pass" placeholder="Password (123)">
+        <button class="btn-entra" onclick="login()">ENTRA</button>
     </div>
 </div>
 
@@ -33,45 +75,41 @@
     <div class="box">
         <h2 style="color:#1b5e20; margin-top:0; text-align:center;">✍️ Redazione di Cinzia</h2>
         
-        <input type="text" id="tit" placeholder="TITOLO DEL RACCONTO">
-        <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TESTO..."></textarea>
+        <label>✍️ Titolo Notizia</label>
+        <input type="text" id="tit" placeholder="Titolo del racconto...">
+        
+        <label>📝 Racconto</label>
+        <textarea id="tes" rows="5" placeholder="Scrivi qui il testo..."></textarea>
         
         <div class="box-foto">
-            <p style="color:#27ae60; font-weight:bold; margin-top:0;">📸 1. CARICA LA FOTO</p>
-            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
-            <p style="font-size: 0.75rem; color: #666; margin: 15px 0 5px 0;">📸 2. INCOLLA IL LINK QUI SOTTO:</p>
-            <input type="text" id="img" placeholder="Incolla link foto o video Youtube">
+            <p style="color:#27ae60; font-weight:bold; margin-top:0;">📸 GESTIONE IMMAGINE</p>
+            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">1. CARICA SU IMGBB</a>
+            <textarea id="img" placeholder="Copia il link prodotto da IMGBB ed incollalo in questo spazio. Per i video su YouTube, dopo aver copiato il relativo indirizzo, incollalo in questo spazio."></textarea>
         </div>
         
         <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
 
-        <div class="sezione-lista">
-            <h3 style="color:#1b5e20; text-align:center;">🗑️ I TUOI POST ONLINE</h3>
+        <div style="margin-top:30px; border-top:1px solid #ddd; padding-top:15px;">
+            <h3 style="color:#1b5e20; text-align:center;">🗑️ I TUOI POST</h3>
             <div id="lista-post"></div>
         </div>
         
-        <button onclick="location.href='cinzia.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer;">TORNA AL SITO PUBBLICO</button>
-        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.7rem; margin-top:10px; width:100%;">Esci</button>
+        <button onclick="location.href='cinzia.html'" style="background:#888; color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:20px; cursor:pointer;">TORNA AL SITO</button>
+        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.7rem; margin-top:15px; width:100%;">Esci (Logout)</button>
     </div>
 </div>
 
 <script>
-    const firebaseConfig = {
-        databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/"
-    };
+    const firebaseConfig = { databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/" };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
     window.onload = function() {
-        if (sessionStorage.getItem("cinziaAmmesso") === "si") {
-            mostraRedazione();
-        }
+        if (sessionStorage.getItem("cinziaAmmesso") === "si") { mostraRedazione(); }
     }
 
-    // LOGIN CON PASSWORD 123
     function login() {
-        const p = document.getElementById('pass').value;
-        if (p === "123") { 
+        if (document.getElementById('pass').value === "123") {
             sessionStorage.setItem("cinziaAmmesso", "si");
             mostraRedazione();
         } else { alert("Password Errata"); }
@@ -91,10 +129,10 @@
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
         let i = document.getElementById('img').value.trim();
-        if(!t) { alert("Inserisci un titolo!"); return; }
+        if(!t) { alert("Metti un titolo!"); return; }
 
         database.ref('archivioCinzia').push({
-            titolo: t, testo: s, immagine: i, data: new Date().toLocaleString()
+            titolo: t, testo: s, immagine: i, data: new Date().toLocaleString('it-IT')
         }).then(() => {
             alert("✅ PUBBLICATO!");
             window.location.href = "cinzia.html";
@@ -102,13 +140,13 @@
     }
 
     database.ref('archivioCinzia').on('value', (snapshot) => {
-        const contenitore = document.getElementById('lista-post');
-        contenitore.innerHTML = "";
+        const c = document.getElementById('lista-post');
+        c.innerHTML = "";
         snapshot.forEach((child) => {
-            contenitore.insertAdjacentHTML('afterbegin', `
+            c.insertAdjacentHTML('afterbegin', `
                 <div class="riga-post">
-                    <span>• ${child.val().titolo}</span>
-                    <button class="btn-elimina" onclick="database.ref('archivioCinzia/${child.key}').remove()">ELIMINA</button>
+                    <span style="cursor:pointer; flex-grow:1; margin-right:10px; font-weight:bold; font-size:0.9rem;" onclick="window.location.href='cinzia.html?id=${child.key}'">• ${child.val().titolo}</span>
+                    <button class="btn-elimina" onclick="database.ref('archivioCinzia/${child.key}').remove()">X</button>
                 </div>
             `);
         });

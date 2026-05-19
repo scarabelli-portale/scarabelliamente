@@ -17,7 +17,8 @@
         .box-foto { background: #fff9f2; border: 2px dashed #e67e22; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
         .btn-carica { background: #e67e22; color: white; padding: 10px; display: block; text-decoration: none; border-radius: 8px; font-size: 0.85rem; line-height: 1.2; font-weight: bold; margin-bottom: 8px; }
         
-        textarea#img { width: 100%; margin-bottom: 0; padding: 8px; font-size: 0.8rem; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; text-align: center; font-family: inherit; resize: none; height: 50px; }
+        /* INTERVENTO CHIRURGICO: Rettangolo più alto, testo leggibile e distanziamento di sicurezza */
+        textarea#img { width: 100%; margin-bottom: 12px; padding: 10px; font-size: 0.95rem; border: 2px solid #143ca0; border-radius: 8px; box-sizing: border-box; text-align: left; font-family: inherit; resize: none; height: 75px; }
         
         #pubblica { background: white; color: #27ae60; border: 2px solid #27ae60; padding: 12px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
         
@@ -42,7 +43,7 @@
         <textarea id="tes" rows="2" placeholder="TESTO"></textarea>
         <div class="box-foto">
             <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">PULSANTE PER TRASFERIRE FOTO ED IMMAGINI.<br>SEGUIRE LE ISTRUZIONI INTERNO AL SITO IMGBB</a>
-            <textarea id="img" placeholder="INCOLLA IL LINK DI IMGBB o YOUTUBE"></textarea>
+            <textarea id="img" placeholder="Copia il link prodotto da IMGBB ed incollalo in questo spazio. Per i video su YouTube, dopo aver copiato il relativo indirizzo, incollalo in questo spazio."></textarea>
         </div>
         <button id="pubblica" onclick="invia()">CLICCA PER PUBBLICARE</button>
         <div class="lista-titolo">POST ONLINE</div>
@@ -59,7 +60,7 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    let idInModifica = null; // Memoria per capire se stiamo modificando
+    let idInModifica = null;
 
     function login() {
         const p = document.getElementById('pass').value;
@@ -76,7 +77,6 @@
 
     if (sessionStorage.getItem("accesso_sergio") === "ok") { mostraRedazione(); }
 
-    // --- FUNZIONE PER CARICARE I DATI DA MODIFICARE ---
     function preparaModifica(id) {
         database.ref('archivioSergio/' + id).once('value', (snapshot) => {
             const post = snapshot.val();
@@ -100,12 +100,10 @@
         if(!t) { alert("Inserisci un titolo!"); return; }
 
         if (idInModifica) {
-            // SALVA MODIFICA
             database.ref('archivioSergio/' + idInModifica).update({
                 titolo: t, testo: s, immagine: i
             }).then(() => { alert("Modifica salvata!"); location.reload(); });
         } else {
-            // PUBBLICA NUOVO
             database.ref('archivioSergio').push({
                 titolo: t, testo: s, immagine: i, 
                 data: new Date().toLocaleString('it-IT')
