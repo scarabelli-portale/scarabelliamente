@@ -2,15 +2,15 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ARCHIVIO SCARABELLI - Carlo</title>
     <style>
-        body { font-family: 'Times New Roman', serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
+        body { font-family: sans-serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
         .copertina-container { position: relative; width: 100%; max-width: 1300px; margin: 0 auto; height: 280px; overflow: hidden; border-bottom: 5px solid #0056b3; }
         .foto-scuola { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
         #scritta-animata { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 2.2rem; font-weight: 900; color: #ffffff; text-shadow: 2px 2px 10px rgba(0,0,0,1); text-transform: uppercase; letter-spacing: 4px; white-space: nowrap; z-index: 10; }
         
-        .nav-bar { max-width: 900px; margin: 15px auto; display: flex; align-items: center; background: white; padding: 0 20px; border-radius: 50px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative; height: 50px; justify-content: space-between; }
+        .nav-bar { max-width: 1200px; margin: 15px auto; display: flex; align-items: center; background: white; padding: 0 20px; border-radius: 50px; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative; height: 50px; justify-content: space-between; box-sizing: border-box; }
         .identita-redattore { display: flex; align-items: center; gap: 10px; }
         .foto-redattore-mini { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #0056b3; object-fit: cover; }
         .nome-redattore { font-size: 0.8rem; font-weight: bold; color: #0056b3; text-transform: uppercase; }
@@ -18,16 +18,42 @@
         .btn-home { background: #0056b3; color: white; padding: 4px 12px; text-decoration: none; border-radius: 20px; font-weight: bold; font-size: 0.6rem; text-transform: uppercase; }
         .btn-gest { background: none; border: none; cursor: pointer; font-size: 1.2rem; filter: grayscale(1); }
 
-        .main-container { max-width: 900px; margin: 0 auto; padding: 10px 20px; }
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 10px 20px; box-sizing: border-box; }
         
         .area-trading { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
         .box-widget { background: white; border: 1px solid #ddd; border-top: 4px solid #0056b3; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
-        .box-articolo { background: white; border: 1px solid #ddd; border-left: 6px solid #0056b3; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        h1 { color: #0056b3; font-size: 1.7rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .img-articolo { max-width: 100%; border-radius: 8px; margin-bottom: 15px; display: block; }
+        /* STRUTTURA A GRIGLIA MOSAICO (Vista d'insieme) */
+        .griglia-articoli { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+        
+        /* BOX STILE CARD (Come quello di Sergio) */
+        .box-articolo { background: white; border: 1px solid #ddd; border-top: 6px solid #0056b3; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); box-sizing: border-box; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; word-wrap: break-word; }
+        .box-articolo:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        /* ARTICOLO SINGOLO APERTO (Prende tutta la larghezza) */
+        .box-articolo.singolo-aperto { grid-column: span 3; max-width: 800px; margin: 0 auto; cursor: default; border-left: 6px solid #0056b3; border-top: none; padding: 25px; }
+        .box-articolo.singolo-aperto:hover { transform: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
-        @media (max-width: 850px) { .copertina-container { height: 160px; } #scritta-animata { font-size: 1.2rem; } .area-trading { flex-direction: column; } }
+        h1 { color: #0056b3; font-size: 1.3rem; margin: 10px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; line-height: 1.2; }
+        .box-articolo.singolo-aperto h1 { font-size: 2rem; }
+        
+        .img-articolo { width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; display: block; }
+        .box-articolo.singolo-aperto .img-articolo { height: auto; max-height: 500px; object-fit: contain; margin: 15px 0; }
+
+        .testo-articolo { font-size: 0.95rem; text-align: justify; white-space: pre-wrap; color: #333; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .box-articolo.singolo-aperto .testo-articolo { font-size: 1.15rem; display: block; overflow: visible; color: #1a1a1a; }
+
+        @media (max-width: 900px) { 
+            .griglia-articoli { grid-template-columns: repeat(2, 1fr); } 
+            .box-articolo.singolo-aperto { grid-column: span 2; }
+        }
+        @media (max-width: 600px) { 
+            .copertina-container { height: 160px; } 
+            #scritta-animata { font-size: 1.2rem; } 
+            .area-trading { flex-direction: column; } 
+            .griglia-articoli { grid-template-columns: 1fr; }
+            .box-articolo.singolo-aperto { grid-column: span 1; }
+        }
     </style>
 </head>
 <body>
@@ -39,29 +65,28 @@
             <span class="nome-redattore">Carlo</span>
         </div>
         <a href="index.html" class="btn-home">Home Page</a>
-        <button class="btn-gest" onclick="location.href='gestione_carlo.html'">⚙️</button>
-    </div>
+           </div>
 
     <div class="main-container">
         
-        <div style="margin-bottom: 20px; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: white;">
-            <iframe src="https://s.tradingview.com/embed-widget/ticker-tape/?locale=it#%7B%22symbols%22%3A%5B%7B%22proName%22%3A%22FOREXCOM%3ASPX500%22%2C%22title%22%3A%22S%26P%20500%22%7D%2C%7B%22proName%22%3A%22FX_IDC%3AEURUSD%22%2C%22title%22%3A%22EUR%2FUSD%22%7D%2C%7B%22proName%22%3A%22BITSTAMP%3ABTCUSD%22%2C%22title%22%3A%22Bitcoin%22%7D%2C%7B%22proName%22%3A%22INDEX%3AFTSEMIB%22%2C%22title%22%3A%22Borsa%20Milano%22%7D%5D%2C%22showSymbolLogo%22%3Atrue%2C%22colorTheme%22%3A%22light%22%2C%22isTransparent%22%3Afalse%2C%22displayMode%22%3A%22adaptive%22%7D" width="100%" height="46" frameborder="0" scrolling="no"></iframe>
-        </div>
-
-        <div class="area-trading" id="sezione-trading">
-            <div class="box-widget" style="flex: 1; min-width: 300px; height: 400px;">
-                <iframe src="https://s.tradingview.com/embed-widget/technical-analysis/?locale=it#%7B%22interval%22%3A%221D%22%2C%22width%22%3A%22100%25%22%2C%22isTransparent%22%3Afalse%2C%22height%22%3A%22400%22%2C%22symbol%22%3A%22BINANCE%3ABTCUSDT%22%2C%22showIntervalTabs%22%3Atrue%2C%22displayMode%22%3A%22single%22%2C%22colorTheme%22%3A%22light%22%7D" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+        <div id="sezione-trading">
+            <div style="margin-bottom: 20px; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; background: white;">
+                <iframe src="https://s.tradingview.com/embed-widget/ticker-tape/?locale=it" width="100%" height="46" frameborder="0" scrolling="no"></iframe>
             </div>
 
-            <div class="box-widget" style="flex: 1; min-width: 300px; height: 400px; padding: 10px; background: white;">
-                <h4 style="text-align:center; margin: 0 0 10px 0; color:#0056b3; font-size:0.8rem; text-transform:uppercase;">Trend di Mercato</h4>
-                <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=it#%7B%22symbol%22%3A%22NYMEX%3ACL1!%22%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22110%22%2C%22dateRange%22%3A%221D%22%2C%22colorTheme%22%3A%22light%22%2C%22trendLineColor%22%3A%22rgba(41%2C%2098%2C%20255%2C%201)%22%2C%22underLineColor%22%3A%22rgba(41%2C%2098%2C%20255%2C%200.3)%22%2C%22isTransparent%22%3Afalse%2C%22autosize%22%3Afalse%7D" width="100%" height="110" frameborder="0" scrolling="no"></iframe>
-                <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=it#%7B%22symbol%22%3A%22TVC%3AGOLD%22%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22110%22%2C%22dateRange%22%3A%221D%22%2C%22colorTheme%22%3A%22light%22%2C%22trendLineColor%22%3A%22rgba(255%2C%20152%2C%200%2C%201)%22%2C%22underLineColor%22%3A%22rgba(255%2C%20152%2C%200%2C%200.3)%22%2C%22isTransparent%22%3Afalse%2C%22autosize%22%3Afalse%7D" width="100%" height="110" frameborder="0" scrolling="no"></iframe>
-                <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=it#%7B%22symbol%22%3A%22FX%3AEURUSD%22%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22110%22%2C%22dateRange%22%3A%221D%22%2C%22colorTheme%22%3A%22light%22%2C%22trendLineColor%22%3A%22rgba(76%2C%20175%2C%2080%2C%201)%22%2C%22underLineColor%22%3A%22rgba(76%2C%20175%2C%2080%2C%200.3)%22%2C%22isTransparent%22%3Afalse%2C%22autosize%22%3Afalse%7D" width="100%" height="110" frameborder="0" scrolling="no"></iframe>
+            <div class="area-trading">
+                <div class="box-widget" style="flex: 1; min-width: 300px; height: 400px;">
+                    <iframe src="https://s.tradingview.com/embed-widget/technical-analysis/?locale=it" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+                </div>
+
+                <div class="box-widget" style="flex: 1; min-width: 300px; height: 400px; padding: 10px; background: white;">
+                    <h4 style="text-align:center; margin: 0 0 10px 0; color:#0056b3; font-size:0.8rem; text-transform:uppercase;">Trend di Mercato</h4>
+                    <iframe src="https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=it" width="100%" height="330" frameborder="0" scrolling="no"></iframe>
+                </div>
             </div>
         </div>
 
-        <div id="lista-articoli"></div>
+        <div id="lista-articoli" class="griglia-articoli"></div>
 
     </div>
 
@@ -84,26 +109,34 @@
             if (data) { 
                 Object.keys(data).reverse().forEach(id => { 
                     const art = data[id];
-                    const displayStyle = idDaAprire ? (id === idDaAprire ? 'block' : 'none') : 'block';
                     
-                    if(idDaAprire) {
+                    // Se c'è un ID specifico da aprire, mostra solo quello, altrimenti mostra tutti nella griglia
+                    if (idDaAprire && id !== idDaAprire) return;
+                    
+                    if(idDaAprire && id === idDaAprire) {
                         const sez = document.getElementById('sezione-trading');
                         if(sez) sez.style.display = 'none';
                     }
 
-                    let htmlArt = '<div class="box-articolo" style="display: ' + displayStyle + '">';
-                    htmlArt += '<span style="font-size:0.75rem; color:#888;">Data: ' + (art.data || '') + '</span>';
-                    htmlArt += '<h1>' + art.titolo + '</h1>';
+                    let classeCard = idDaAprire ? "box-articolo singolo-aperto" : "box-articolo";
+                    let azioneClick = idDaAprire ? "" : `onclick="window.location.href='carlo.html?id=${id}'"`;
+
+                    let htmlArt = `<div class="${classeCard}" ${azioneClick}>`;
                     
                     if (art.urlImmagine) {
-                        htmlArt += '<img src="' + art.urlImmagine + '" class="img-articolo">';
+                        let trovato = art.urlImmagine.match(/https?:\/\/[^"'>\s]+\.(?:jpg|jpeg|gif|png|webp)/i);
+                        let urlPulito = trovato ? trovato[0] : art.urlImmagine;
+                        htmlArt += `<img src="${urlPulito}" class="img-articolo" onerror="this.style.display='none'">`;
                     }
                     
-                    htmlArt += '<div style="font-size:1.1rem; text-align:justify; white-space:pre-wrap;">' + art.testo + '</div>';
+                    htmlArt += `<span style="font-size:0.75rem; color:#888;">Data: ${art.data || ''}</span>`;
+                    htmlArt += `<h1>${art.titolo}</h1>`;
+                    htmlArt += `<div class="testo-articolo">${art.testo}</div>`;
+                    
                     if (idDaAprire) {
-                        htmlArt += '<br><a href="carlo.html" style="color:#0056b3; font-weight:bold; text-decoration:none;">← Torna all\'archivio</a>';
+                        htmlArt += `<br><a href="carlo.html" style="color:#0056b3; font-weight:bold; text-decoration:none; display:inline-block; margin-top:15px;">← Torna all'archivio</a>`;
                     }
-                    htmlArt += '</div>';
+                    htmlArt += `</div>`;
                     container.innerHTML += htmlArt;
                 }); 
             }
