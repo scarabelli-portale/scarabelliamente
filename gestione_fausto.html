@@ -2,94 +2,55 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>REDAZIONE FAUSTO - GESTIONE</title>
     <style>
-        body { font-family: sans-serif; background: #004d66; color: white; text-align: center; padding: 10px; margin: 0; }
-        
-        /* Box adattabile per cellulare */
-        .box { 
-            width: 95%; 
-            max-width: 550px; 
-            margin: 20px auto; 
-            background: white; 
-            color: #333; 
-            padding: 20px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
-            border-top: 6px solid #00a8e8; 
-            box-sizing: border-box; 
-        }
-
-        input, textarea { width: 100%; margin: 10px 0; padding: 12px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
-        
-        .box-foto { background: #e0f7fa; border: 2px dashed #00a8e8; padding: 15px; border-radius: 12px; margin: 15px 0; }
-        
-        .btn-carica { background: #00a8e8; color: white; padding: 15px; display: block; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem; }
-        
-        #pubblica { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 1.3rem; }
-        
-        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; color: #333; text-align: left; }
-        
-        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
-        
-        /* Area Login CORRETTA per cellulare */
-        #area-login { margin-top: 50px; }
-        .login-box { 
-            background: white; 
-            padding: 25px; 
-            border-radius: 15px; 
-            display: block; 
-            width: 90%; 
-            max-width: 400px; 
-            margin: auto; 
-            color: #333; 
-            box-sizing: border-box; 
-        }
+        body { font-family: sans-serif; background: #004d66; color: white; text-align: center; padding: 0; margin: 0; }
+        #area-login { padding-top: 50px; }
+        .login-box { width: 90%; max-width: 400px; background: white; padding: 20px; border-radius: 12px; display: inline-block; color: #333; }
+        .login-box input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1.2rem; }
+        .box { width: 98%; max-width: 550px; margin: 5px auto; background: white; color: #333; padding: 15px; border-radius: 12px; border-top: 6px solid #00a8e8; box-sizing: border-box; min-height: 98vh; display: flex; flex-direction: column; }
+        input[type="text"]#tit { width: 100%; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; box-sizing: border-box; font-size: 1rem; }
+        textarea#tes { width: 100%; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; box-sizing: border-box; font-size: 1rem; font-family: inherit; resize: none; }
+        .box-foto { background: #fff9f2; border: 2px dashed #e67e22; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+        .btn-carica { background: #e67e22; color: white; padding: 10px; display: block; text-decoration: none; border-radius: 8px; font-size: 0.85rem; line-height: 1.2; font-weight: bold; margin-bottom: 8px; }
+        textarea#img { width: 100%; margin-bottom: 12px; padding: 10px; font-size: 0.95rem; border: 2px solid #004d66; border-radius: 8px; box-sizing: border-box; text-align: left; font-family: inherit; resize: none; height: 90px; }
+        #pubblica { background: white; color: #27ae60; border: 2px solid #27ae60; padding: 12px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
+        .lista-titolo { color:#004d66; font-size:1.1rem; font-weight:bold; margin: 15px 0 10px 0; border-bottom: 2px solid #004d66; }
+        #lista-post { flex-grow: 1; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 1.1rem; background: #f9f9f9; margin-bottom: 5px; border-radius: 6px; }
+        .btn-elimina { background: #ff4d4d; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-modifica { background: #f1c40f; color: #333; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 5px; }
+        .btn-esci { background:#888; color:white; border:none; padding:12px; border-radius:8px; width:100%; margin-top:15px; font-size: 1rem; cursor:pointer; }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
-
 <div id="area-login">
     <div class="login-box">
-        <h2 style="color:#004d66; margin-top:0;">Area Fausto ⚓</h2>
-        <p style="font-size:0.9rem;">Inserisci password per accedere</p>
-        <input type="password" id="pass" placeholder="Password di accesso">
-        <button onclick="login()" style="background:#004d66; color:white; border:none; padding:15px; border-radius:8px; width:100%; cursor:pointer; font-weight:bold; font-size:1.1rem;">ENTRA</button>
+        <input type="password" id="pass" placeholder="Password">
+        <button style="background:#004d66; color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold;" onclick="login()">ENTRA</button>
     </div>
 </div>
-
 <div id="redazione" style="display:none;">
     <div class="box">
-        <h2 style="color:#004d66; margin-top:0; text-align:center;">✍️ Redazione Fausto</h2>
-        
         <input type="text" id="tit" placeholder="TITOLO">
-        <textarea id="tes" rows="5" placeholder="SCRIVI QUI IL TESTO..."></textarea>
-        
+        <textarea id="tes" rows="2" placeholder="TESTO"></textarea>
         <div class="box-foto">
-            <p style="color:#00a8e8; font-weight:bold; margin-top:0;">📸 CARICA FOTO</p>
-            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">VAI SU IMGBB</a>
-            <p style="font-size: 0.75rem; color: #666; margin: 10px 0 5px 0;">INCOLLA IL LINK QUI SOTTO:</p>
-            <input type="text" id="img" placeholder="Link ImgBB o YouTube">
+            <a href="https://imgbb.com/upload" target="_blank" class="btn-carica">PULSANTE PER TRASFERIRE FOTO.<br>SEGUIRE LE ISTRUZIONI IMGBB</a>
+            <textarea id="img" placeholder="Copia il link prodotto da IMGBB ed incollalo in questo spazio. Per i video su YouTube, dopo aver copiato il relativo indirizzo, incollalo in questo spazio."></textarea>
         </div>
-        
-        <button id="pubblica" onclick="invia()">🚀 PUBBLICA ORA</button>
-
-        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
-            <h3 style="color:#004d66; text-align:center;">🗑️ GESTISCI POST</h3>
-            <div id="lista-post"></div>
-        </div>
-        
-        <button onclick="location.href='fausto.html'" style="background:#888; color:white; border:none; padding:15px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;">TORNA AL SITO</button>
-        <button onclick="logout()" style="background:transparent; color:#666; border:none; cursor:pointer; font-size:0.8rem; margin-top:20px; display:block; width:100%;">Esci (Chiedi password dopo)</button>
+        <button id="pubblica" onclick="invia()">CLICCA PER PUBBLICARE</button>
+        <div class="lista-titolo">POST ONLINE</div>
+        <div id="lista-post"></div>
+        <button onclick="location.href='fausto.html'" class="btn-esci">ESCI</button>
     </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
 <script>
-    // Configurazione Database (lo stesso di Sergio)
-    const firebaseConfig = {
+    const firebaseConfig = { 
         apiKey: "AIzaSyDoVrE-Tx0NL2UqDXAK0Z9EnZdjEVxZLIc",
         authDomain: "sito-sergio-b19ce.firebaseapp.com",
         databaseURL: "https://sito-sergio-b19ce-default-rtdb.europe-west1.firebasedatabase.app/",
@@ -98,12 +59,7 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
-    // Controllo se è già loggato
-    window.onload = function() {
-        if (sessionStorage.getItem("faustoAmmesso") === "si") {
-            mostraRedazione();
-        }
-    }
+    let idInModifica = null;
 
     function login() {
         const p = document.getElementById('pass').value.toLowerCase();
@@ -113,25 +69,40 @@
         } else { alert("Password Errata"); }
     }
 
-    function mostraRedazione() {
-        document.getElementById('area-login').style.display = 'none';
-        document.getElementById('redazione').style.display = 'block';
+    function montreRedazione() {
+        // Mantenuto compatibile con mostraRedazione chiamato sopra
     }
 
-    function logout() {
-        sessionStorage.removeItem("faustoAmmesso");
-        location.reload();
+    function mostraRedazione() {
+        document.getElementById('area-login').style.display = 'none';
+        document.getElementById('redazione').style.display = 'flex';
+    }
+
+    if (sessionStorage.getItem("faustoAmmesso") === "si") { mostraRedazione(); }
+
+    function preparaModifica(id) {
+        database.ref('archivioFausto/' + id).once('value', (snapshot) => {
+            const post = snapshot.val();
+            document.getElementById('tit').value = post.titolo;
+            document.getElementById('tes').value = post.testo;
+            document.getElementById('img').value = post.immagine || "";
+            idInModifica = id;
+            
+            const btn = document.getElementById('pubblica');
+            btn.innerText = "SALVA MODIFICHE ✅";
+            btn.style.background = "#004d66";
+            btn.style.color = "white";
+            window.scrollTo(0,0); 
+        });
     }
 
     function invia() {
         let t = document.getElementById('tit').value;
         let s = document.getElementById('tes').value;
         let iRaw = document.getElementById('img').value.trim();
-
         if(!t) { alert("Inserisci un titolo!"); return; }
 
         let immaginePulita = iRaw;
-        // Filtro per estrarre link pulito se si incolla codice ImgBB
         if (!iRaw.includes("youtube.com") && !iRaw.includes("youtu.be")) {
             if (immaginePulita.includes('<img src="')) {
                 immaginePulita = immaginePulita.split('<img src="')[1].split('"')[0];
@@ -140,38 +111,40 @@
             }
         }
 
-        database.ref('archivioFausto').push({
-            titolo: t, 
-            testo: s, 
-            immagine: immaginePulita, 
-            data: new Date().toLocaleString()
-        }).then(() => {
-            alert("✅ POST PUBBLICATO!");
-            window.location.href = "fausto.html"; 
-        });
+        if (idInModifica) {
+            database.ref('archivioFausto/' + idInModifica).update({
+                titolo: t, testo: s, immagine: immaginePulita
+            }).then(() => { alert("Modifica salvata!"); location.reload(); });
+        } else {
+            database.ref('archivioFausto').push({
+                titolo: t, testo: s, immagine: immaginePulita, 
+                data: new Date().toLocaleString('it-IT')
+            }).then(() => { alert("Pubblicato con successo!"); location.reload(); });
+        }
     }
 
-    // Carica la lista dei post per poterli eliminare
+    function confermaElimina(id) { 
+        if (confirm("Attenzione! Sei sicuro di voler cancellare definitivamente questo post?")) { 
+            database.ref('archivioFausto/' + id).remove(); 
+        } 
+    }
+
     database.ref('archivioFausto').on('value', (snapshot) => {
-        const contenitore = document.getElementById('lista-post');
-        contenitore.innerHTML = "";
+        const c = document.getElementById('lista-post');
+        c.innerHTML = "";
         snapshot.forEach((child) => {
             const post = child.val();
-            const id = child.key;
-            contenitore.insertAdjacentHTML('afterbegin', `
+            c.insertAdjacentHTML('afterbegin', `
                 <div class="riga-post">
-                    <span>• ${post.titolo}</span>
-                    <button class="btn-elimina" onclick="eliminaPost('${id}')">ELIMINA</button>
+                    <span style="cursor:pointer; flex-grow:1; margin-right:10px; font-weight:bold; font-size:0.9rem;" onclick="window.location.href='fausto.html?id=${child.key}'">• ${post.titolo}</span>
+                    <div style="display:flex;">
+                        <button class="btn-modifica" onclick="preparaModifica('${child.key}')">✏️</button>
+                        <button class="btn-elimina" onclick="confermaElimina('${child.key}')">X</button>
+                    </div>
                 </div>
             `);
         });
     });
-
-    function eliminaPost(id) {
-        if(confirm("Vuoi davvero cancellare questo post?")) {
-            database.ref('archivioFausto/' + id).remove();
-        }
-    }
 </script>
 </body>
 </html>
