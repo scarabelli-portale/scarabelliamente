@@ -2,50 +2,34 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gestione Archivio Francesco</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f2; padding: 20px; padding-bottom: 100px; }
-        .form-container { max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; }
-        .login-container { max-width: 400px; margin: 100px auto; background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        h2 { color: #143ca0; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        .box-istruzioni { background: #fff4e6; padding: 20px; border-radius: 12px; border: 2px solid #e67e22; margin-bottom: 25px; }
-        .btn-arancio { display: block; text-align: center; background: #e67e22; color: white; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .btn-pubblica { width: 100%; padding: 18px; background-color: #28a745; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 1.3rem; cursor: pointer; }
+        body { font-family: sans-serif; background-color: #002244; padding: 10px; margin: 0; color: white; text-align: center; }
+        #login-box { padding-top: 50px; }
+        .login-container { width: 90%; max-width: 400px; background: white; padding: 20px; border-radius: 12px; display: inline-block; color: #333; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .login-container input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1.2rem; }
+        .btn-login { background: #002244; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
-        /* Tabella Eliminazione */
-        .admin-table { width: 100%; margin-top: 40px; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; font-size: 0.9rem; }
-        .admin-table th { background: #143ca0; color: white; padding: 10px; text-align: left; }
-        .admin-table td { padding: 10px; border-bottom: 1px solid #eee; }
-        .btn-elimina { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-
-        /* BARRA DI NAVIGAZIONE FISSA */
-        .footer-nav { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            background: white; 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 15px 0; 
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1); 
-            z-index: 9999; 
-        }
-        .btn-footer { 
-            text-decoration: none; 
-            color: #143ca0; 
-            font-weight: bold; 
-            font-size: 0.9rem; 
-            border: 1px solid #143ca0; 
-            padding: 8px 15px; 
-            border-radius: 20px; 
-            background: #f0f7ff; 
-        }
+        .form-container { width: 98%; max-width: 550px; margin: 5px auto; background: white; color: #333; padding: 15px; border-radius: 12px; border-top: 6px solid #FFD700; box-sizing: border-box; min-height: 98vh; display: flex; flex-direction: column; text-align: left; }
+        h2 { color: #002244; margin-top: 0; text-align: center; }
+        input[type="text"]#titolo { width: 100%; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; box-sizing: border-box; font-size: 1rem; }
+        textarea#testo { width: 100%; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 2px solid #ccc; box-sizing: border-box; font-size: 1rem; font-family: inherit; resize: none; }
         
-        .btn-login { background: #143ca0; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .box-istruzioni { background: #fff9f2; border: 2px dashed #e67e22; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+        .btn-arancio { background: #e67e22; color: white; padding: 10px; display: block; text-decoration: none; border-radius: 8px; font-size: 0.85rem; line-height: 1.2; font-weight: bold; margin-bottom: 8px; text-align: center; }
+        textarea#foto { width: 100%; margin-bottom: 12px; padding: 10px; font-size: 0.95rem; border: 2px solid #002244; border-radius: 8px; box-sizing: border-box; text-align: left; font-family: inherit; resize: none; height: 90px; background: #f0f7ff; }
+        
+        .btn-pubblica { background: white; color: #28a745; border: 2px solid #28a745; padding: 12px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
+        
+        .lista-titolo { color:#002244; font-size:1.1rem; font-weight:bold; margin: 15px 0 10px 0; border-bottom: 2px solid #002244; }
+        #lista-cancella { flex-grow: 1; }
+        .riga-post { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 1.1rem; background: #f9f9f9; margin-bottom: 5px; border-radius: 6px; }
+        .btn-elimina { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-modifica { background: #f1c40f; color: #333; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 5px; }
+        
+        .footer-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 9999; }
+        .btn-footer { text-decoration: none; color: #002244; font-weight: bold; font-size: 0.9rem; border: 1px solid #002244; padding: 6px 15px; border-radius: 20px; background: #f0f7ff; }
     </style>
 </head>
 <body>
@@ -57,35 +41,21 @@
     <button onclick="checkPass()" class="btn-login">ENTRA</button>
 </div>
 
-<div id="main-content" class="form-container">
+<div id="main-content" class="form-container" style="display:none;">
     <h2>✍️ Gestione Archivio Francesco</h2>
 
-    <label>TITOLO:</label>
-    <input type="text" id="titolo">
-
-    <label>TESTO:</label>
-    <textarea id="testo" style="height: 80px;"></textarea>
+    <input type="text" id="titolo" placeholder="TITOLO">
+    <textarea id="testo" rows="2" placeholder="TESTO"></textarea>
 
     <div class="box-istruzioni">
-        <p style="font-weight: bold; color: #d35400; margin-top: 0;">1. Invia la foto (Scatta o Carica):</p>
-        <a href="https://imgbb.com/upload" target="_blank" class="btn-arancio">📸 CLICCA QUI PER SCATTARE LA FOTO</a>
+        <a href="https://imgbb.com/upload" target="_blank" class="btn-arancio">PULSANTE PER TRASFERIRE FOTO ED IMMAGINI.<br>SEGUIRE LE ISTRUZIONI INTERNO AL SITO IMGBB</a>
+        <textarea id="foto" placeholder="Copia il link prodotto da IMGBB ed incollalo in questo spazio. Per i video su YouTube, dopo aver copiato il relativo indirizzo, incollalo in questo spazio."></textarea>
     </div>
 
-    <label>2. Incolla il link della FOTO o di YOUTUBE:</label>
-    <input type="text" id="foto" style="border: 2px solid #143ca0; background: #f0f7ff;">
+    <button id="pubblica" onclick="pubblica()" class="btn-pubblica">CLICCA PER PUBBLICARE</button>
 
-    <button onclick="pubblica()" class="btn-pubblica">✅ CLICCA PER PUBBLICARE</button>
-
-    <h3 style="margin-top: 50px; color: #d35400; border-bottom: 2px solid #d35400;">🗑️ Gestione Messaggi Pubblicati</h3>
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>Titolo</th>
-                <th>Azione</th>
-            </tr>
-        </thead>
-        <tbody id="lista-cancella"></tbody>
-    </table>
+    <div class="lista-titolo">POST ONLINE</div>
+    <div id="lista-cancella"></div>
 </div>
 
 <div class="footer-nav">
@@ -103,49 +73,94 @@
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     const database = firebase.database();
 
+    let idInModifica = null;
+
     function checkPass() {
         const p = document.getElementById('pass-input').value;
         if (p === "123") {
-            document.getElementById('login-box').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-            caricaLista();
+            sessionStorage.setItem("accesso_francesco", "ok");
+            mostraGestione();
         } else { alert("Password Errata!"); }
     }
 
-    function pubblica() {
-        const tit = document.getElementById('titolo').value;
-        const tes = document.getElementById('testo').value;
-        const img = document.getElementById('foto').value;
-        if (tit === "" || img === "") { alert("Manca Titolo o Foto!"); return; }
+    function mostraGestione() {
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('main-content').style.display = 'flex';
+        caricaLista();
+    }
 
-        database.ref('archivio_francesco').push({
-            titolo: tit, testo: tes, immagine: img
-        }).then(() => {
-            alert("Pubblicato!");
-            document.getElementById('titolo').value = "";
-            document.getElementById('testo').value = "";
-            document.getElementById('foto').value = "";
+    if (sessionStorage.getItem("accesso_francesco") === "ok") { mostraGestione(); }
+
+    function preparaModifica(id) {
+        database.ref('archivioFrancesco/' + id).once('value', (snapshot) => {
+            const post = snapshot.val();
+            document.getElementById('titolo').value = post.titolo;
+            document.getElementById('testo').value = post.testo;
+            document.getElementById('foto').value = post.immagine || post.urlImmagine || "";
+            idInModifica = id;
+            
+            const btn = document.getElementById('pubblica');
+            btn.innerText = "SALVA MODIFICHE ✅";
+            btn.style.background = "#002244";
+            btn.style.color = "white";
+            window.scrollTo(0,0); 
         });
     }
 
+    function pubblica() {
+        let tit = document.getElementById('titolo').value;
+        let tes = document.getElementById('testo').value;
+        let img = document.getElementById('foto').value.trim();
+        if (tit === "") { alert("Manca il Titolo!"); return; }
+
+        if (img.includes('<img src="')) {
+            img = img.split('<img src="')[1].split('"')[0];
+        }
+
+        if (idInModifica) {
+            database.ref('archivioFrancesco/' + idInModifica).update({
+                titolo: tit, testo: tes, immagine: img, urlImmagine: img
+            }).then(() => { 
+                alert("Modifica salvata!"); 
+                location.reload(); 
+            });
+        } else {
+            database.ref('archivioFrancesco').push({
+                titolo: tit, testo: tes, immagine: img, urlImmagine: img,
+                autore: "Francesco",
+                data: new Date().toLocaleString('it-IT')
+            }).then(() => {
+                alert("Pubblicato!");
+                location.reload();
+            });
+        }
+    }
+
     function caricaLista() {
-        database.ref('archivio_francesco').on('value', (snap) => {
-            const tbody = document.getElementById('lista-cancella');
-            tbody.innerHTML = "";
+        database.ref('archivioFrancesco').on('value', (snap) => {
+            const container = document.getElementById('lista-cancella');
+            container.innerHTML = "";
             const dati = snap.val();
             if (dati) {
                 Object.keys(dati).reverse().forEach((id) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${dati[id].titolo}</td><td><button class="btn-elimina" onclick="elimina('${id}')">Elimina</button></td>`;
-                    tbody.appendChild(tr);
+                    const post = dati[id];
+                    container.insertAdjacentHTML('beforeend', `
+                        <div class="riga-post">
+                            <span style="cursor:pointer; flex-grow:1; margin-right:10px; font-weight:bold; font-size:0.9rem;" onclick="window.location.href='francesco.html?id=${id}'">• ${post.titolo}</span>
+                            <div style="display:flex;">
+                                <button class="btn-modifica" onclick="preparaModifica('${id}')">✏️</button>
+                                <button class="btn-elimina" onclick="elimina('${id}')">X</button>
+                            </div>
+                        </div>
+                    `);
                 });
             }
         });
     }
 
     function elimina(id) {
-        if (confirm("Vuoi eliminare questo file?")) {
-            database.ref('archivio_francesco').child(id).remove();
+        if (confirm("Attenzione! Sei sicuro di voler cancellare definitivamente questo post?")) {
+            database.ref('archivioFrancesco').child(id).remove();
         }
     }
 </script>
