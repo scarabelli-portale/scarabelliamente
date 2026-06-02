@@ -3,37 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="🚀 ARCHIVIO STORICO SERGIO SILVESTRINI">
-<meta property="og:description" content="Vieni a vedere il post ampliato, duraturo e stabile. Molto meglio di WhatsApp!">
+    <meta property="og:title" content="ARCHIVIO STORICO - SERGIO SILVESTRINI">
+    <meta property="og:description" content="Guarda i ricordi e i documenti dell'Archivio Scarabelli">
     <meta property="og:image" content="https://scarabelli-portale.github.io/scarabelliamente/immagini/scuola.jpg">
     <meta property="og:type" content="website">
     <title>ARCHIVIO STORICO - SERGIO SILVESTRINI</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f4f2; color: #1a1a1a; }
-        .copertina-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-bottom: 5px solid #143ca0; background: #000; }
-        .foto-scuola { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        #contenitore-titolo { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; width: 100%; }
-        .titolo-stampato { font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold; }
-        .firma-sergio { font-family: 'Dancing Script', cursive; font-size: 2.3rem; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,1); }
-        .btn-nav { position: absolute; top: 15px; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 20; border: none; cursor: pointer; }
-        .btn-home { left: 15px; background: rgba(0,0,0,0.6); color: white; }
-        .main-wrapper { display: flex; max-width: 1300px; margin: 30px auto; gap: 20px; padding: 0 15px; }
-        .griglia-multimedia { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .elemento-album { background: white; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; }
-        .elemento-album:hover { transform: translateY(-5px); }
-        .media-box { width: 100%; height: 160px; background: #f9f9f9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .media-box img { width: 100%; height: 100%; object-fit: cover; }
-        .info-box { padding: 15px; flex-grow: 1; text-align: center; }
-        .titolo-post { font-size: 0.9rem; font-weight: bold; color: #143ca0; text-transform: uppercase; }
-        #overlay-blu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 60, 160, 0.98); z-index: 9999; color: white; padding: 25px; box-sizing: border-box; overflow-y: auto; }
-        #box-contenuto { max-width: 850px; margin: auto; text-align: center; }
-        .testo-storia { text-align: justify; font-size: 1.2rem; line-height: 1.7; margin: 25px 0; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; white-space: pre-wrap; border-left: 6px solid #FFD700; }
-        .chiudi-btn { background: white; color: #143ca0; padding: 12px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
-        .btn-condividi-wz { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 0.75rem; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s; min-width: 200px; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background-color: #f4f4f2; 
+            color: #1a1a1a; 
+        }
+        
+        .copertina-container { 
+            position: relative; 
+            width: 100%; 
+            height: 280px; 
+            overflow: hidden; 
+            border-bottom: 5px solid #143ca0; 
+            background: #000; 
+        }
+        
+        .foto-scuola { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0.8; 
+        }
+        
+        #contenitore-titolo { 
+            position: absolute; 
+            bottom: 15px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            text-align: center; 
+            z-index: 10; 
+            width: 100%; 
+        }
+        
+        .titolo-stampato { 
+            font-size: 0.85rem; 
+            letter-spacing: 5px; 
+            text-transform: uppercase; 
+            color: white; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9); 
+            font-weight: bold; 
+        }
+        
+        .firma-sergio { 
+            font-family: 'Dancing Script', cursive; 
+            font-size: 2.3rem; 
+            color: white; 
+            text-shadow: 2px 2px 6px rgba(0,0,0,1); 
+        }
+        
+        .btn-nav { 
+            position: absolute; 
+            top: 15px; 
+            padding: 8px 18px; 
+            border-radius: 5px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 0.75rem; 
+            z-index: 20; 
+            border: none; 
+            cursor: pointer; 
+        }
+        
+        .btn-home { 
+            left: 15px; 
+            background: rgba(0,0,0,0.6); 
+            color: white; 
+        }
+        
+        .main-wrapper { 
+            display: flex; 
+            max-width: 1300px; 
+            margin: 30px auto; 
+            gap: 20px; 
+            padding: 0 15px; 
+        }
+        
+        .griglia-multimedia { 
+            flex-grow: 1; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+        }
+        
+        .elemento-album { 
+            background: white; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            border: 1px solid #ddd; 
+            transition: 0.3s; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 250px; 
+        }
+        
+        .elemento-album:hover { 
+            transform: translateY(-5px); 
+        }
+        
+        .media-box { 
+            width: 100%; 
+            height: 160px; 
+            background: #f9f9f9; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+        }
+        
+        .media-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        
+        .info-box { 
+            padding: 15px; 
+            flex-grow: 1; 
+            text-align: center; 
+        }
+        
+        .titolo-post { 
+            font-size: 0.9rem; 
+            font-weight: bold; 
+            color: #143ca0; 
+            text-transform: uppercase; 
+        }
+        
+        #overlay-blu { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(20, 60, 160, 0.98); 
+            z-index: 9999; 
+            color: white; 
+            padding: 25px; 
+            box-sizing: border-box; 
+            overflow-y: auto; 
+        }
+        
+        #box-contenuto { 
+            max-width: 850px; 
+            margin: auto; 
+            text-align: center; 
+        }
+        
+        .testo-storia { 
+            text-align: justify; 
+            font-size: 1.2rem; 
+            line-height: 1.7; 
+            margin: 25px 0; 
+            background: rgba(255,255,255,0.1); 
+            padding: 30px; 
+            border-radius: 15px; 
+            white-space: pre-wrap; 
+            border-left: 6px solid #FFD700; 
+        }
+
+        /* --- STILE NUOVO: PULSANTI DI PURO TESTO SENZA GRAFICA --- */
+        .piede-pulsantiera {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0;
+            width: 100%;
+        }
+
+        .riga-testo-pulsanti {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px; /* Spazio orizzontale tra le scritte */
+            width: 100%;
+        }
+
+        /* Rimuove sfondi, bordi, ombre e arrotondamenti */
+        .puro-testo-btn {
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 5px 0 !important;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: white !important;
+            cursor: pointer;
+            display: inline-block;
+            font-family: inherit;
+            transition: color 0.2s ease;
+        }
+
+        /* Semplice effetto visivo quando passi il mouse sopra */
+        .puro-testo-btn:hover {
+            color: #FFD700 !important; /* Diventa giallo oro al passaggio */
+        }
     </style>
 </head>
 <body>
+
     <div class="copertina-container">
         <a href="index.html" class="btn-nav btn-home">⬅ HOME</a>
         <img src="immagini/scuola.jpg" class="foto-scuola">
@@ -42,14 +224,20 @@
             <div class="firma-sergio">Sergio Silvestrini</div>
         </div>
     </div>
-    <div class="main-wrapper"><div class="griglia-multimedia" id="lista-multimedia"></div></div>
+
+    <div class="main-wrapper">
+        <div class="griglia-multimedia" id="lista-multimedia"></div>
+    </div>
+
     <div id="overlay-blu">
         <div id="box-contenuto">
+            <div id="titolo-view" style="text-align: center; font-size: 1.4rem; color: #FFD700; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; font-family: 'Arial Black', Gadget, sans-serif; letter-spacing: 1px; line-height: 1.3;"></div>
+            
             <div id="media-display"></div> 
-            <div id="container-wz"></div>
-            <h2 id="titolo-view" style="font-family: 'Dancing Script', cursive; color: #FFD700; font-size: 3rem;"></h2>
+            
             <div id="testo-view" class="testo-storia"></div>
-            <button class="chiudi-btn" onclick="onclick=chiudiTutto()">CHIUDI X</button>
+            
+            <div class="piede-pulsantiera" id="piede-pulsantiera-dinamica"></div>
         </div>
     </div>
 
@@ -60,71 +248,72 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
-        function pulisciLink(url) { if (!url) return ""; let trovato = url.match(/https?:\/\/[^"'>\s]+\.(?:jpg|jpeg|gif|png|webp)/i); return trovato ? trovato[0] : url.trim(); }
-        function ottieniYoutubeID(url) { if (!url) return null; const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/; const match = url.match(regExp); return (match && match[2].length == 11) ? match[2] : null; }
+        function pulisciLink(url) { 
+            if (!url) return ""; 
+            let trovato = url.match(/https?:\/\/[^"'>\s]+\.(?:jpg|jpeg|gif|png|webp)/i); 
+            return trovato ? trovato[0] : url.trim(); 
+        }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const postId = urlParams.get('id');
-        if (postId) { setTimeout(() => { apriContenuto(postId); }, 1000); }
+        function ottieniYoutubeID(url) { 
+            if (!url) return null; 
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/; 
+            const match = url.match(regExp); 
+            return (match && match[2].length == 11) ? match[2] : null; 
+        }
 
         database.ref('archivioSergio').on('value', (snapshot) => {
-            const lista = document.getElementById('lista-multimedia'); lista.innerHTML = "";
+            const lista = document.getElementById('lista-multimedia'); 
+            lista.innerHTML = "";
             snapshot.forEach((child) => {
-                const data = child.val(); const id = child.key; const linkPulito = pulisciLink(data.immagine || "");
+                const data = child.val(); 
+                const id = child.key; 
+                const linkPulito = pulisciLink(data.immagine || "");
                 lista.insertAdjacentHTML('afterbegin', `<div class="elemento-album" onclick="apriContenuto('${id}')"><div class="media-box"><img src="${linkPulito}" onerror="this.src='immagini/scuola.jpg'"></div><div class="info-box"><div class="titolo-post">${data.titolo}</div></div></div>`);
             });
         });
 
         window.apriContenuto = function(id) {
             database.ref('archivioSergio/' + id).once('value').then((snapshot) => {
-                const data = snapshot.val(); if(!data) return;
+                const data = snapshot.val(); 
+                if(!data) return;
+
                 document.getElementById('titolo-view').innerText = data.titolo || "";
                 document.getElementById('testo-view').innerText = data.testo || "";
+                
                 const display = document.getElementById('media-display');
                 const linkPulito = pulisciLink(data.immagine || "");
                 let vId = ottieniYoutubeID(linkPulito);
-                
+
                 if (vId) { 
                     display.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding:40px; border-radius:15px; border:2px dashed #FFD700; margin-bottom:25px;"><a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:inline-block; background:#FFD700; color:#143ca0; padding:15px 40px; border-radius:50px; text-decoration:none; font-weight:bold; font-size:1.2rem;">GUARDA IL VIDEO 🎥</a></div>`; 
                 } else { 
                     display.innerHTML = `<img src="${linkPulito}" style="max-width:100%; max-height:500px; border-radius:15px; border:3px solid #FFD700; margin-bottom:20px;" onerror="this.src='immagini/scuola.jpg'">`; 
                 }
-                
-                const urlSito = "https://scarabelli-portale.github.io/sergio.html?id=" + id;
 
-               // --- VERSIONE DEFINITIVA: GRANDE, COMPLETA E D'IMPATTO ---
-const msgTutti = encodeURIComponent(
-    "🚀 *VIENI A VEDERE SUL SITO IL POST AMPLIATO, DURATURO E STABILE.*\n\n" +
-    "📢 *Cosa che purtroppo non succede su WhatsApp dove tutto scorre via.*\n\n" +
-    "📖 Titolo: *" + data.titolo + "*\n" +
-    "🔗 Apri l'archivio qui: " + urlSito
-);
-                             
-                const msgMe = encodeURIComponent(
-                    "📌 ARCHIVIO PERSONALE:\n" +
-                    "Post: " + data.titolo + "\n" +
-                    "Link: " + urlSito
-                ); 
+                const urlSito = window.location.origin + window.location.pathname + "?id=" + id;
+                const msgTutti = encodeURIComponent("✨ Guarda questo ricordo:\n*" + data.titolo + "*\n\nLink:\n" + urlSito);
+                const msgMe = encodeURIComponent("Ciao Sergio, riguardo a: " + data.titolo + "\n" + urlSito); 
 
-                document.getElementById('container-wz').innerHTML = `
-                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 25px 0;">
-                        <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: white; color: #143ca0 !important; border: 3px solid #143ca0;">
-                            <b style="margin-right:10px;">WZ</b> Consiglio Scarabelli
-                        </a>
-                        <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="btn-condividi-wz" style="background: white; color: #143ca0 !important; border: 3px solid #143ca0;">
-                            <b style="margin-right:10px;">WZ</b> Tutti gli ex allievi
-                        </a>
-                        <a href="https://wa.me/393398329580?text=${msgMe}" target="_blank" class="btn-condividi-wz" style="background: #128C7E; color: white !important; border: none;">
-                            <b style="margin-right:10px;">WZ</b> Archivio Personale
-                        </a>
-                    </div>`;
-                
-                document.getElementById('overlay-blu').style.display = 'block'; document.body.style.overflow = 'hidden';
+                // --- AGGIORNAMENTO DINAMICO: Solo scritte e i quattro pulsanti richiesti ---
+                document.getElementById('piede-pulsantiera-dinamica').innerHTML = `
+                    <div class="riga-testo-pulsanti">
+                        <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="puro-testo-btn">WZ luoghi scarabelli</a>
+                        <a href="https://api.whatsapp.com/send?text=${msgTutti}" target="_blank" class="puro-testo-btn">WZ consiglio</a>
+                    </div>
+                    <div class="riga-testo-pulsanti">
+                        <a href="https://wa.me/393398329580?text=${msgMe}" target="_blank" class="puro-testo-btn">WZ a me privato</a>
+                        <button class="puro-testo-btn" onclick="chiudiTutto()">Chiudi x</button>
+                    </div>
+                `;
+
+                document.getElementById('overlay-blu').style.display = 'block'; 
+                document.body.style.overflow = 'hidden';
             });
         }
+
         window.chiudiTutto = function() { 
-            document.getElementById('overlay-blu').style.display = 'none'; document.body.style.overflow = 'auto';
-            window.history.replaceState({}, document.title, window.location.pathname);
+            document.getElementById('overlay-blu').style.display = 'none'; 
+            document.body.style.overflow = 'auto'; 
         }
     </script>
 </body>
